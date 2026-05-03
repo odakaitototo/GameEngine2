@@ -56,4 +56,17 @@
       <UniqueIdentifier>{ce76f179-e974-4c51-877a-bc4bd85a9da5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headerfile\Engine\Core\Application.h">
+      <Filter>ヘッダー ファイル\Engine\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
+      <Filter>ソース ファイル\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Main\Main.cpp">
+      <Filter>ソース ファイル\Main</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
