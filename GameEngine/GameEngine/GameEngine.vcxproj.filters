@@ -13,5 +13,47 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\Engine">
+      <UniqueIdentifier>{03018dcb-1897-46e1-b705-3da92e5b9026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game">
+      <UniqueIdentifier>{c16cfce2-14b5-437b-99ec-743c0b0c93ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine">
+      <UniqueIdentifier>{7bc75ffc-bbe2-482b-90bd-c593f56dfc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game">
+      <UniqueIdentifier>{f8ff9552-7ab5-4cd0-bb66-5f6aebab2082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\Input">
+      <UniqueIdentifier>{1b01d4f4-91f9-4563-9124-642552b55241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Input">
+      <UniqueIdentifier>{f31ecc67-46c4-4d91-a38b-6b9f2d94acdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Core">
+      <UniqueIdentifier>{e4468cc3-05bf-41cf-a869-4da7476d2e69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\Core">
+      <UniqueIdentifier>{e4fed768-2515-42df-b977-4c7cfd60b500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Scenes">
+      <UniqueIdentifier>{94c54a68-cdb2-4ee0-8e45-e5dce5925d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Scripts">
+      <UniqueIdentifier>{55acba9a-beb1-4e62-b7ba-1e66bf0a0c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Scripts">
+      <UniqueIdentifier>{ef86bd9f-0771-4127-82b4-5a3d7e7bee44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Scenes">
+      <UniqueIdentifier>{84c5ed93-363e-46df-a99e-9688481a7892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Main">
+      <UniqueIdentifier>{8f301057-50c7-44b5-8a0d-0891ac255ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Main">
+      <UniqueIdentifier>{ce76f179-e974-4c51-877a-bc4bd85a9da5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
