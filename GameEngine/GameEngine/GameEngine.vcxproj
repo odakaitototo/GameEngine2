@@ -128,9 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
+    <ClCompile Include="SourceFile\Engine\Graphics\DirectXManager.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

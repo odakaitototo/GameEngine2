@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include "Engine/Graphics/DirectXManager.h"
 
 class Application {
 public:
@@ -18,6 +19,8 @@ public:
 private:
     // Windowsのメッセージを処理する関数
     static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+    DirectXManager m_dx; // DirectX管理クラス
 
     HWND m_hWnd;
     HINSTANCE m_hInstance;

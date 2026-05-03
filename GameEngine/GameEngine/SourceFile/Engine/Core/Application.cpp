@@ -19,6 +19,12 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height) {
 
     if (!m_hWnd) return false;
 
+    // 3. DirectXの初期化
+    if (!m_dx.Initialize(m_hWnd, width, height)) 
+    {
+        return false; // 初期化に失敗したら起動しない
+    }
+
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
     UpdateWindow(m_hWnd);
 
@@ -34,7 +40,11 @@ void Application::Run() {
             DispatchMessage(&msg);
         }
         else {
+            // 描画開始
+			m_dx.BeginScene(0.1f, 0.1f, 0.3f, 1.0f); // 背景色を設定（例: 濃い青）
             // ここで今後のUpdateやDrawを呼び出します
+
+            m_dx.EndScene(); // 描画終了
         }
     }
 }
