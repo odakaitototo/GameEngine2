@@ -13,6 +13,11 @@ public:
 	bool Initialize(HWND hwnd, int width, int height);
 	void BeginScene(float r, float g, float b, float a); // 画面をクリア
 	void EndScene(); // 画面を表示
+
+
+	// ImGuiなどがDirectXの本体にアクセスするための窓口
+	ID3D11Device* GetDevice() const { return m_pDevice.Get(); }
+	ID3D11DeviceContext* GetContext() const { return m_pContext.Get(); }
 	
 private:
 	ComPtr<ID3D11Device> m_pDevice; // 設備
@@ -20,4 +25,5 @@ private:
 	ComPtr<IDXGISwapChain> m_pSwapChain; // 画面の入れ替え
 	ComPtr<ID3D11RenderTargetView> m_pRenderTarget; // 描画先
 
+	
 };

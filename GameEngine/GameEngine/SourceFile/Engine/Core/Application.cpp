@@ -1,4 +1,5 @@
 #include "Engine/Core/Application.h"
+#include <imgui.h>
 
 Application::Application() : m_hWnd(nullptr), m_hInstance(nullptr) {}
 
@@ -28,6 +29,9 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height) {
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
     UpdateWindow(m_hWnd);
 
+    // Imguiの初期化（DirectXのデバイス等を渡す）
+    m_imgui.Initialize(m_hWnd, m_dx.GetDevice(), m_dx.GetContext());
+
     return true;
 }
 
@@ -40,9 +44,20 @@ void Application::Run() {
             DispatchMessage(&msg);
         }
         else {
+            // ImGuiのフレーム開始
+            m_imgui.Begin();
+
+            // 操作パネルの描画
+			ImGui::Begin("Inspector"); // ウィンドウ名
+			ImGui::Text("Hello, Imgui!"); // テキストの表示
+            ImGui::End();
+
             // 描画開始
 			m_dx.BeginScene(0.1f, 0.1f, 0.3f, 1.0f); // 背景色を設定（例: 濃い青）
             // ここで今後のUpdateやDrawを呼び出します
+
+            // ImGuiをDirectXの上に重ねて描画
+            m_imgui.End();
 
             m_dx.EndScene(); // 描画終了
         }

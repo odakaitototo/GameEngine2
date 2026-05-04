@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "Engine/Graphics/DirectXManager.h"
+#include "Engine/Graphics/ImGuiManager.h"
 
 class Application {
 public:
@@ -24,4 +25,10 @@ private:
 
     HWND m_hWnd;
     HINSTANCE m_hInstance;
+
+private:
+    // ImGuiŠÖ˜A
+    ImGuiManager m_imgui;
+    float m_backgroundColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f }; // ”wŒiF‚ğ•Û‚·‚é•Ï”
+    
 };

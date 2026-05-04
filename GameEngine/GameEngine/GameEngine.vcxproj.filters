@@ -61,6 +61,12 @@
     <Filter Include="ヘッダー ファイル\Engine\Graphics">
       <UniqueIdentifier>{35119a5f-910b-4030-bcd4-855541687219}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\Graphics\ImGui">
+      <UniqueIdentifier>{f48d594b-b332-475e-a212-b87877d68806}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Graphics\ImGui">
+      <UniqueIdentifier>{f4160ea6-92d2-42c8-9f00-97138c7f0f6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -68,6 +74,33 @@
     </ClInclude>
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h">
       <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imconfig.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imgui.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imgui_internal.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imstb_rectpack.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imstb_textedit.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imstb_truetype.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imgui_impl_dx11.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\imgui_impl_win32.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +112,30 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Graphics\DirectXManager.cpp">
       <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_demo.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_draw.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_tables.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Graphics\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_impl_dx11.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\imgui_impl_win32.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
