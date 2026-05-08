@@ -46,9 +46,9 @@
               "Title": "Application.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAADoAAAAkAAAAAAAAAA==",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAqwFYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-05-03T07:57:03.837Z",
               "EditorCaption": ""
@@ -59,12 +59,11 @@
               "Title": "ImGuiManager.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp*",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp*",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-03T18:18:40.659Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T18:18:40.659Z"
             },
             {
               "$type": "Document",
@@ -76,8 +75,7 @@
               "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Graphics\\ImGuiManager.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-03T18:11:34.576Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T18:11:34.576Z"
             },
             {
               "$type": "Document",
@@ -89,8 +87,7 @@
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-03T09:04:34.467Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T09:04:34.467Z"
             },
             {
               "$type": "Document",
@@ -98,12 +95,11 @@
               "Title": "DirectXManager.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h*",
-              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h*",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
+              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-03T09:06:04.785Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T09:06:04.785Z"
             },
             {
               "$type": "Document",
@@ -111,12 +107,11 @@
               "Title": "Application.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h*",
-              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Core\\Application.h*",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
+              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-03T07:56:01.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T07:56:01.179Z"
             },
             {
               "$type": "Document",

@@ -47,13 +47,45 @@ void Application::Run() {
             // ImGuiのフレーム開始
             m_imgui.Begin();
 
-            // 操作パネルの描画
+            // Hierarchyウィンドウ（左側に配置）
+            ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
+            ImGui::Begin("Hierarchy");
+            ImGui::Text("Scene Objects");
+            ImGui::Separator(); // 区切るための線
+            if (ImGui::Selectable("Main Camera", true)) // メインのカメラ
+            {
+
+            }
+            if (ImGui::Selectable("Directional Light")) // 太陽の光のようなもの
+            {
+
+            }
+            if (ImGui::Selectable("Triangle")) // 三角形オブジェクト
+            {
+
+            }
+            ImGui::End();
+
+            // Inspectorウィンドウ（右側に配置）
+            ImGui::SetNextWindowPos(ImVec2(600, 0),ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
 			ImGui::Begin("Inspector"); // ウィンドウ名
-			ImGui::Text("Hello, Imgui!"); // テキストの表示
+			ImGui::Text("Transform"); // テキストの表示
+            static float pos[3] = { 0,0,0 };
+            ImGui::DragFloat3("Position", pos, 0.1f);
+            ImGui::Separator();
+            ImGui::ColorEdit4("Background", m_backgroundColor);
+            ImGui::End();
+
+            // FPSなどの統計情報(オーバーレイ表示)
+            ImGui::SetNextWindowPos(ImVec2(10, 570));
+            ImGui::Begin("Stats", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+			ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
             ImGui::End();
 
             // 描画開始
-			m_dx.BeginScene(0.1f, 0.1f, 0.3f, 1.0f); // 背景色を設定（例: 濃い青）
+            m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
             // ここで今後のUpdateやDrawを呼び出します
 
             // ImGuiをDirectXの上に重ねて描画
@@ -69,7 +101,12 @@ void Application::Terminate() {
 }
 
 // Windows OSからの通知（閉じるボタンなど）を処理する
-LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT mag, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) // ImGuiかWindowsのイベントかを判断
+        return true;
+
     switch (message) {
     case WM_DESTROY:
         PostQuitMessage(0);
