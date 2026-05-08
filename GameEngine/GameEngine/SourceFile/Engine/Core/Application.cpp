@@ -47,23 +47,40 @@ void Application::Run() {
             // ImGuiのフレーム開始
             m_imgui.Begin();
 
+
             // Hierarchyウィンドウ（左側に配置）
             ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
             ImGui::Begin("Hierarchy");
+
+            if (ImGui::Button("Save Scene"))
+            {
+                SaveScene("scene.txt"); // シーンを保存
+			}
+            if (ImGui::Button("Load Scene"))
+            {
+                LoadScene("scene.txt"); // シーンを読み込み
+			}
+            ImGui::Separator();
+            // オブジェクト作成ボタン
+            if (ImGui::Button("Create Emptty"))
+            {
+                // 新しいオブジェクトを作成してリストに追加
+                std::string name = "GaneObject" + std::to_string(m_gameObjects.size());
+                m_gameObjects.push_back(std::make_shared<GameObject>(name));
+            }
+
+            ImGui::Separator();
             ImGui::Text("Scene Objects");
             ImGui::Separator(); // 区切るための線
-            if (ImGui::Selectable("Main Camera", true)) // メインのカメラ
+            
+            for (int i = 0; i < m_gameObjects.size(); i++)
             {
-
-            }
-            if (ImGui::Selectable("Directional Light")) // 太陽の光のようなもの
-            {
-
-            }
-            if (ImGui::Selectable("Triangle")) // 三角形オブジェクト
-            {
-
+                bool isSelected = (m_selectedObjectIndex == i);
+                if (ImGui::Selectable(m_gameObjects[i]->GetName().c_str(), isSelected))
+                {
+                    m_selectedObjectIndex = i; // 選択したオブジェクトの番号を保存
+                }
             }
             ImGui::End();
 
@@ -71,11 +88,36 @@ void Application::Run() {
             ImGui::SetNextWindowPos(ImVec2(600, 0),ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
 			ImGui::Begin("Inspector"); // ウィンドウ名
-			ImGui::Text("Transform"); // テキストの表示
-            static float pos[3] = { 0,0,0 };
-            ImGui::DragFloat3("Position", pos, 0.1f);
-            ImGui::Separator();
-            ImGui::ColorEdit4("Background", m_backgroundColor);
+            if (m_selectedObjectIndex != -1 && m_selectedObjectIndex < m_gameObjects.size())
+            {
+                auto& obj = m_gameObjects[m_selectedObjectIndex];
+
+                // 名前編集
+                char buf[128];
+                strcpy_s(buf, obj->GetName().c_str());
+                if (ImGui::InputText("Name", buf, sizeof(buf)))
+                {
+                    obj -> SetName(buf);
+                }
+                ImGui::Separator();
+
+                // Transform編集（ここが保存対象になる重要なデータ）
+                auto& trans = obj->GetTransform();
+                ImGui::DragFloat3("Position", &trans.position.x, 0.1f);
+                ImGui::DragFloat3("Rotation", &trans.rotation.x, 0.1f);
+				ImGui::DragFloat3("Scale",    &trans.scale.x,    0.01f);
+            }
+            else
+            {
+                ImGui::Text("The object is not selected..."); // オブジェクトが選択されていない場合のメッセージ
+            }
+            ImGui::End();
+
+            ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(400, 100), ImGuiCond_FirstUseEver);
+            ImGui::Begin("Engine Tuner"); // ウィンドウ名
+            ImGui::Text("Transform"); // テキストの表示
+            ImGui::ColorEdit4("BackgroundColor", m_backgroundColor);
             ImGui::End();
 
             // FPSなどの統計情報(オーバーレイ表示)
@@ -113,4 +155,61 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam,
         return 0;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+
+//////////////////////////////////////
+// 
+// シーンの保存（ファイルに書き出す）
+//
+//////////////////////////////////////
+void Application::SaveScene(const std::string& filename)
+{
+    std::ofstream ofs(filename);
+    if (!ofs)
+    {
+		return; // ファイルが開けなかったら保存しない
+    }
+
+	for (const auto& obj : m_gameObjects)// ゲームオブジェクトの数だけループ
+    {
+		auto& t = obj->GetTransform(); // Transform情報を取得
+		// 名前、PosX、PosY、PosZ、RotX、RotY、RotZ、ScaleX、ScaleY、ScaleZの順で保存
+        ofs << obj -> GetName() << " "
+            << t.position.x << " " << t.position.y << " " << t.position.z << " "
+            << t.rotation.x << " " << t.rotation.y << " " << t.rotation.z << " "
+			<< t.scale.x    << " " << t.scale.y    << " " << t.scale.z    << "\n";
+    }
+    std::cout << "Scene Saved:" << filename << std::endl;
+}
+
+//////////////////////////////////////
+// 
+// シーンの読み込み（ファイルから読み込む）
+//
+//////////////////////////////////////
+void Application::LoadScene(const std::string& filename)
+{
+    std::ifstream ifs(filename);
+    if (!ifs)
+    {
+        return; // ファイルが開けなかったら読み込まない
+    }
+
+    m_gameObjects.clear(); // 既存のオブジェクトを全て削除
+    m_selectedObjectIndex = -1; // 選択もリセット
+
+    std::string name;
+    float posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ;
+
+    while (ifs >> name >> posX >> posY >> posZ >> rotX >> rotY >> rotZ >> scaleX >> scaleY >> scaleZ)
+    {
+        auto obj = std::make_shared<GameObject>(name); // オブジェクトを作成
+        auto& t = obj->GetTransform(); // Transform情報を取得して設定
+        t.position = { posX, posY, posZ };
+        t.rotation = { rotX, rotY, rotZ };
+        t.scale = { scaleX, scaleY, scaleZ };
+        m_gameObjects.push_back(obj); // リストに追加
+    }
+    std::cout << "Scene Loaded:" << filename << std::endl;
 }

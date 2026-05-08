@@ -138,6 +138,7 @@
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h" />
+    <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\ImGui\imgui.cpp" />
