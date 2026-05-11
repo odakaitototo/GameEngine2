@@ -63,13 +63,17 @@ void Application::Run() {
 			}
             ImGui::Separator();
             // オブジェクト作成ボタン
-            if (ImGui::Button("Create Emptty"))
+            if (ImGui::Button("Create Empty"))
             {
                 // 新しいオブジェクトを作成してリストに追加
-                std::string name = "GaneObject" + std::to_string(m_gameObjects.size());
+                std::string name = "GameObject" + std::to_string(m_gameObjects.size());
                 m_gameObjects.push_back(std::make_shared<GameObject>(name));
             }
-
+            ImGui::Separator();
+            if (ImGui::Button("Instantiate Prefab"))
+            {
+                InstantiatePrefab("GameObject0.pfb"); // プレハブを読み込んでシーンに追加
+            }
             ImGui::Separator();
             ImGui::Text("Scene Objects");
             ImGui::Separator(); // 区切るための線
@@ -110,6 +114,15 @@ void Application::Run() {
             else
             {
                 ImGui::Text("The object is not selected..."); // オブジェクトが選択されていない場合のメッセージ
+            }
+
+            if (m_selectedObjectIndex != -1)
+            {
+                if (ImGui::Button("Make Prefab"))
+                {
+                    std::string path = m_gameObjects[m_selectedObjectIndex]->GetName() + ".pfb";
+                    SavePrefab(m_selectedObjectIndex, path); // プレハブとして保存
+                }
             }
             ImGui::End();
 
@@ -212,4 +225,50 @@ void Application::LoadScene(const std::string& filename)
         m_gameObjects.push_back(obj); // リストに追加
     }
     std::cout << "Scene Loaded:" << filename << std::endl;
+}
+
+void Application::SavePrefab(int index, const std::string& filename)
+{
+    if (index < 0 || index >= m_gameObjects.size())
+    {
+        return;
+    }
+
+    std::ofstream ofs(filename);
+    auto& obj = m_gameObjects[index];
+    auto& t = obj->GetTransform();
+
+	// 1つ分のデータだけを書き出す（名前、PosX、PosY、PosZ、RotX、RotY、RotZ、ScaleX、ScaleY、ScaleZの順）
+    ofs << obj->GetName() << " "
+        << t.position.x << " " << t.position.y << " " << t.position.z << " "
+        << t.rotation.x << " " << t.rotation.y << " " << t.rotation.z << " "
+        << t.scale.x    << " " << t.scale.y    << " " << t.scale.z    << "\n";
+	std::cout << "Prefab Saved:" << filename << std::endl;
+}
+
+void Application::InstantiatePrefab(const std::string& filename)
+{
+    std::ifstream ifs(filename);
+    if (!ifs)
+    {
+        return;
+    }
+
+    std::string name;
+    float posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ;
+
+    if (ifs >> name >> posX >> posY >> posZ >> rotX >> rotY >> rotZ >> scaleX >> scaleY  >> scaleZ)
+    {
+        // 新しいオブジェクトとしてシーンに追加（名前の重複を避けるために"(Clone)"を付与）
+        auto obj = std::make_shared<GameObject>(name + "(Clone)");
+        auto& t = obj->GetTransform();
+        t.position = { posX, posY, posZ };
+        t.rotation = { rotX, rotY, rotZ };
+        t.scale = { scaleX, scaleY, scaleZ };
+        m_gameObjects.push_back(obj);
+    }
+    else
+    {
+		std::cout << "Failed to load prefab:" << filename << std::endl;
+    }
 }

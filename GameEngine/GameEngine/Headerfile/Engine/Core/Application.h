@@ -27,6 +27,10 @@ public: // 保存と読み込みの関数
     void SaveScene(const std::string& filename);
 	void LoadScene(const std::string& filename);
 
+public: // プレハブの保存と読み込みの関数
+    void SavePrefab(int index, const std::string& filename);
+    void InstantiatePrefab(const std::string& filename);
+
 private:
     // Windowsのメッセージを処理する関数
     static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
