@@ -80,6 +80,8 @@ void Application::Run() {
             
             for (int i = 0; i < m_gameObjects.size(); i++)
             {
+                
+
                 bool isSelected = (m_selectedObjectIndex == i);
                 if (ImGui::Selectable(m_gameObjects[i]->GetName().c_str(), isSelected))
                 {
@@ -178,22 +180,17 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam,
 //////////////////////////////////////
 void Application::SaveScene(const std::string& filename)
 {
-    std::ofstream ofs(filename);
-    if (!ofs)
+    json root = json::array(); // シーン全体を配列する
+    for (const auto& obj : m_gameObjects)
     {
-		return; // ファイルが開けなかったら保存しない
+        root.push_back(obj->ToJson());
     }
 
-	for (const auto& obj : m_gameObjects)// ゲームオブジェクトの数だけループ
+    std::ofstream ofs(filename);
+    if (ofs)
     {
-		auto& t = obj->GetTransform(); // Transform情報を取得
-		// 名前、PosX、PosY、PosZ、RotX、RotY、RotZ、ScaleX、ScaleY、ScaleZの順で保存
-        ofs << obj -> GetName() << " "
-            << t.position.x << " " << t.position.y << " " << t.position.z << " "
-            << t.rotation.x << " " << t.rotation.y << " " << t.rotation.z << " "
-			<< t.scale.x    << " " << t.scale.y    << " " << t.scale.z    << "\n";
+        ofs << root.dump(4); // インデックス4で保存
     }
-    std::cout << "Scene Saved:" << filename << std::endl;
 }
 
 //////////////////////////////////////
@@ -206,25 +203,19 @@ void Application::LoadScene(const std::string& filename)
     std::ifstream ifs(filename);
     if (!ifs)
     {
-        return; // ファイルが開けなかったら読み込まない
+        return;
     }
 
-    m_gameObjects.clear(); // 既存のオブジェクトを全て削除
-    m_selectedObjectIndex = -1; // 選択もリセット
+    json root;
+    ifs >> root;
 
-    std::string name;
-    float posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ;
-
-    while (ifs >> name >> posX >> posY >> posZ >> rotX >> rotY >> rotZ >> scaleX >> scaleY >> scaleZ)
+    m_gameObjects.clear();
+    for (const auto& j : root)
     {
-        auto obj = std::make_shared<GameObject>(name); // オブジェクトを作成
-        auto& t = obj->GetTransform(); // Transform情報を取得して設定
-        t.position = { posX, posY, posZ };
-        t.rotation = { rotX, rotY, rotZ };
-        t.scale = { scaleX, scaleY, scaleZ };
-        m_gameObjects.push_back(obj); // リストに追加
+        auto obj = std::make_shared<GameObject>("");
+        obj->FromJson(j);
+        m_gameObjects.push_back(obj);
     }
-    std::cout << "Scene Loaded:" << filename << std::endl;
 }
 
 void Application::SavePrefab(int index, const std::string& filename)
@@ -235,15 +226,10 @@ void Application::SavePrefab(int index, const std::string& filename)
     }
 
     std::ofstream ofs(filename);
-    auto& obj = m_gameObjects[index];
-    auto& t = obj->GetTransform();
-
-	// 1つ分のデータだけを書き出す（名前、PosX、PosY、PosZ、RotX、RotY、RotZ、ScaleX、ScaleY、ScaleZの順）
-    ofs << obj->GetName() << " "
-        << t.position.x << " " << t.position.y << " " << t.position.z << " "
-        << t.rotation.x << " " << t.rotation.y << " " << t.rotation.z << " "
-        << t.scale.x    << " " << t.scale.y    << " " << t.scale.z    << "\n";
-	std::cout << "Prefab Saved:" << filename << std::endl;
+    if (ofs)
+        {
+        ofs << m_gameObjects[index]->ToJson().dump(4);
+        }
 }
 
 void Application::InstantiatePrefab(const std::string& filename)
@@ -254,21 +240,12 @@ void Application::InstantiatePrefab(const std::string& filename)
         return;
     }
 
-    std::string name;
-    float posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ;
+        json j;
+        ifs >> j; // JSONとして解析
 
-    if (ifs >> name >> posX >> posY >> posZ >> rotX >> rotY >> rotZ >> scaleX >> scaleY  >> scaleZ)
-    {
-        // 新しいオブジェクトとしてシーンに追加（名前の重複を避けるために"(Clone)"を付与）
-        auto obj = std::make_shared<GameObject>(name + "(Clone)");
-        auto& t = obj->GetTransform();
-        t.position = { posX, posY, posZ };
-        t.rotation = { rotX, rotY, rotZ };
-        t.scale = { scaleX, scaleY, scaleZ };
+        auto obj = std::make_shared<GameObject>("");
+        obj -> FromJson(j);
+        obj->SetName(obj->GetName() + "(Clone)");
         m_gameObjects.push_back(obj);
-    }
-    else
-    {
-		std::cout << "Failed to load prefab:" << filename << std::endl;
-    }
+    
 }

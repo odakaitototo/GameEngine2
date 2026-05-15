@@ -139,6 +139,7 @@
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h" />
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
+    <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\ImGui\imgui.cpp" />

@@ -3,6 +3,10 @@
 #include <vector>
 #include <DirectXMath.h> // 数字ライブラリ（座標計算用）
 
+#include <../SourceFile/Engine/Json/json.hpp>
+
+using json = nlohmann::json;
+
 
 
 // Transform情報をまとめる構造体
@@ -25,6 +29,32 @@ public:
 
 	Transform& GetTransform() { return m_transform; }
 
+public: // JSON関係
+	// JSONへの書き出し
+	json ToJson() const
+	{
+		// "name"で登録した名前とTransformの情報をペアで管理する
+		// j["name"]で呼び出すことで情報を呼び出すことができる
+		json j;
+		j["name"] = m_name; // 変数 m_name を"name"というキーで登録
+		j["transform"] =
+		{
+			{"position", {m_transform.position.x,m_transform.position.y,m_transform.position.z}},
+			{"rotation", {m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
+			{"scale", {m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
+		};
+		return j;
+	}
+
+	// JSONから読み込み
+	void FromJson(const json& j)
+	{
+		m_name = j.at("name").get<std::string>();
+		auto& t = j.at("transform");
+		m_transform.position = { t["position"][0],t["position"][1], t["position"][2] };
+		m_transform.rotation = { t["rotation"][0],t["rotation"][1], t["rotation"][2] };
+		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
+	}
 
 private:
 	std::string m_name; // オブジェクト名

@@ -70,6 +70,9 @@
     <Filter Include="ヘッダー ファイル\Engine\Scene">
       <UniqueIdentifier>{8c418cce-73b2-4c0f-b075-ee19d29d9e72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\Json">
+      <UniqueIdentifier>{a64a2d2d-9bef-4e91-aad5-b3b0a316aa9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h">
       <Filter>ヘッダー ファイル\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceFile\Engine\Json\json.hpp">
+      <Filter>ソース ファイル\Engine\Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
