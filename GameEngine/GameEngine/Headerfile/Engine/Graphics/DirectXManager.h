@@ -24,6 +24,7 @@ private:
 	ComPtr<ID3D11DeviceContext> m_pContext; // 実行指示
 	ComPtr<IDXGISwapChain> m_pSwapChain; // 画面の入れ替え
 	ComPtr<ID3D11RenderTargetView> m_pRenderTarget; // 描画先
-
+	D3D11_VIEWPORT m_viewport = {}; // ビューポートを記憶しておく変数
+	ComPtr<ID3D11RasterizerState> m_pRasterizerState; // 描画のルールを保存する変数
 	
 };

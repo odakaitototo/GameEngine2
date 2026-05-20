@@ -138,6 +138,8 @@
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\Mesh.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\Shader.h" />
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
@@ -152,7 +154,14 @@
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\DirectXManager.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\ImGuiManager.cpp" />
+    <ClCompile Include="SourceFile\Engine\Graphics\Mesh.cpp" />
+    <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ShaderFile\SimpleShader.hlsl">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

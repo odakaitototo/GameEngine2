@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <DirectXMath.h> // 数字ライブラリ（座標計算用）
-
-#include <../SourceFile/Engine/Json/json.hpp>
+#include <Engine/Graphics/Mesh.h>
+// 外部ファイル
+#include <../SourceFile/Engine/Json/json.hpp> // JSON
 
 using json = nlohmann::json;
 
@@ -56,7 +57,29 @@ public: // JSON関係
 		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
 	}
 
+public: // メッシュとコンテキスト
+	// このオブジェクトが使うメッシュをセットする
+	void SetMesh(std::shared_ptr<Mesh> mesh)
+	{
+		m_mesh = mesh;
+	}
+
+	// 描画実行
+	void Draw(ID3D11DeviceContext* context)
+	{
+		if (m_mesh)
+		{
+			m_mesh->Bind(context); // GPUに指定のメッシュを使うことを伝える
+			m_mesh->Draw(context); // 描画開始の命令
+		}
+	}
+
+
 private:
 	std::string m_name; // オブジェクト名
 	Transform m_transform; // 位置・回転・スケール
+
+private: // メッシュとコンテキスト
+	std::shared_ptr<Mesh> m_mesh; // メッシュへの共通ポインタ
+
 };

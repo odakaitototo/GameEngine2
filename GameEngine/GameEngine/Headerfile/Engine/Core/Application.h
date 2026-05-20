@@ -8,6 +8,7 @@
 #include "Engine/Graphics/DirectXManager.h"
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/Scene/GameObject.h"
+#include "Engine/Graphics/Shader.h"
 
 class Application {
 public:
@@ -51,4 +52,10 @@ private:
 
 	// 現在選択されているゲームオブジェクトインデックス（Inspectorで編集するため）
     int m_selectedObjectIndex = -1;  
+
+private: // メッシュ関係
+    std::shared_ptr<Mesh> m_commonMesh; // シーン全体で使いまわす、共通の三角形メッシュ
+
+private: // シェーダー関係
+    std::unique_ptr<Shader> m_shader; // シェーダーの管理用
 };

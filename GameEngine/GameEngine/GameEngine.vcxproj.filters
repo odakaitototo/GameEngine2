@@ -73,6 +73,9 @@
     <Filter Include="ソース ファイル\Engine\Json">
       <UniqueIdentifier>{a64a2d2d-9bef-4e91-aad5-b3b0a316aa9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="シェーダーファイル">
+      <UniqueIdentifier>{896e93ee-0ca1-47e4-9bce-170f321972e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -114,6 +117,12 @@
     <ClInclude Include="SourceFile\Engine\Json\json.hpp">
       <Filter>ソース ファイル\Engine\Json</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Graphics\Mesh.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Graphics\Shader.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -149,5 +158,16 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_impl_win32.cpp">
       <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Graphics\Mesh.cpp">
+      <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp">
+      <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ShaderFile\SimpleShader.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </Text>
   </ItemGroup>
 </Project>

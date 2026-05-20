@@ -1,11 +1,25 @@
 #include "Engine/Core/Application.h"
 #include <imgui.h>
 
+////////////////////////////////////////////////////////-----メモ----////////////////////////////////////////////////////////////////////
+//
+// shared_ptr(ポインタ)でMeshを管理する理由：メモリの節約：GAmeObject自体に頂点データを持たすと
+// 　　　　　　　　　　　　　　　　　　　　　　　　　　　　オブジェクトを増やすたびにGPUのメモリが消費されるから。
+// 　　　　　　　　　　　　　　　　　　　　　　　　　　　　ポインタにすれば実態は一つで済むためメモリが枯渇することはない。
+// 　　　　　　　　　　　　　　　　　　　　：高速な描画：同じメッシュを使いまわすことで、
+// 　　　　　　　　　　　　　　　　　　　　　　　　　　　「同じメッシュを使うオブジェクトをまとめて描画（インスタンシング）」
+// 　　　　　　　　　　　　　　　　　　　　　　　　　　　という最適化が可能
+// 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 Application::Application() : m_hWnd(nullptr), m_hInstance(nullptr) {}
 
 Application::~Application() {}
 
-bool Application::Initialize(HINSTANCE hInstance, int width, int height) {
+// 初期化処理
+bool Application::Initialize(HINSTANCE hInstance, int width, int height)
+{
     m_hInstance = hInstance;
 
     // ウィンドウクラスの設定
@@ -31,6 +45,23 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height) {
 
     // Imguiの初期化（DirectXのデバイス等を渡す）
     m_imgui.Initialize(m_hWnd, m_dx.GetDevice(), m_dx.GetContext());
+
+   m_commonMesh = std::make_shared<Mesh>();
+    std::vector<Vertex> vertices =
+    {
+        {{ 0.0f, 0.5f, 0.5f },{ 1.0f, 0.0f, 0.0f, 1.0f }},
+        {{ 0.5f, -0.5f, 0.5f },{ 0.0f, 1.0f, 0.0f, 1.0f }},
+        {{ -.05f, -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f, 1.0f }}
+    };
+    m_commonMesh ->Create(m_dx.GetDevice(), vertices);
+
+    // シェーダーの生成と読み込み
+    m_shader = std::make_unique<Shader>();
+    // L"..." とすることで、Wchar_t型 (std::wstring用)の文字列にします
+    if (!m_shader->Load(m_dx.GetDevice(), L"/HAL/Game/DX/GameEngine/GameEngine/GameEngine/ShaderFile/SimpleShader.hlsl"))
+    {
+        return false; // シェーダーのコンパイルに失敗したら起動しない(安全設計)
+    }
 
     return true;
 }
@@ -67,7 +98,11 @@ void Application::Run() {
             {
                 // 新しいオブジェクトを作成してリストに追加
                 std::string name = "GameObject" + std::to_string(m_gameObjects.size());
-                m_gameObjects.push_back(std::make_shared<GameObject>(name));
+                auto newObj = std::make_shared<GameObject>(name);
+
+                newObj->SetMesh(m_commonMesh); // 新しく作ったオブジェクトに、共通メッシュの住所を教える
+
+                m_gameObjects.push_back(newObj);
             }
             ImGui::Separator();
             if (ImGui::Button("Instantiate Prefab"))
@@ -144,6 +179,15 @@ void Application::Run() {
             // 描画開始
             m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
             // ここで今後のUpdateやDrawを呼び出します
+
+            m_shader->Bind(m_dx.GetContext()); // シェイダーを使うためにGPUに指示する
+
+            // シーンに存在する全てのゲームオブジェクトをループ描画する
+            for (int i = 0; i < m_gameObjects.size(); i++)
+            {
+                // GameObject内のDrawが呼ばれ、内部でMeshのBindとDrawCallが走る
+                m_gameObjects[i]->Draw(m_dx.GetContext());
+            }
 
             // ImGuiをDirectXの上に重ねて描画
             m_imgui.End();
@@ -249,3 +293,6 @@ void Application::InstantiatePrefab(const std::string& filename)
         m_gameObjects.push_back(obj);
     
 }
+
+
+ 
