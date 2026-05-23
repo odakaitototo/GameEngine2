@@ -10,6 +10,7 @@
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Graphics/Shader.h"
+#include "Engine/Graphics/Camera.h"
 
 // GPUに送るデータの形式をHLSLと一致させる
 struct ConstantBufferTransform
@@ -76,4 +77,7 @@ private: // シェーダー関係
 
 private: //定数場hhぁの実態
     ComPtr<ID3D11Buffer> m_pConstantBuffer;
+
+private: // カメラ関係
+    Camera m_camera;
 };

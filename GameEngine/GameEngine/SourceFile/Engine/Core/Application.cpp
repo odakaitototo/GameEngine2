@@ -101,6 +101,20 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
      // ばっふぁを生成（初期データは後でマイフレーム送るのでnullptr）
     m_dx.GetDevice()->CreateBuffer(&cbDesc, nullptr, &m_pConstantBuffer);
 
+    // カメラの初期設定
+
+    // 位置と向き
+    m_camera.SetLookAt(
+        DirectX::XMVectorSet(0.0f, 1.0f, -10.0f, 0.0f), // eyePosition（カメラの位置）
+        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), // focusPoint（見ている場所）
+        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) // upDirection（上方向）
+    );
+
+    // レンズの設定
+    float aspectRatio = m_screenWidth / m_screenHeight;
+    float fovAngle = DirectX::XMConvertToRadians(60.0f);
+    m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
+
     return true;
 }
 
@@ -229,20 +243,10 @@ void Application::Run()
 
             m_shader->Bind(m_dx.GetContext()); // シェイダーを使うためにGPUに指示する
 
-            // カメラの行列を計算する
-            // View行列（カメラの位置と向き）
-            // Z軸の手前(-5.0f)に少し浮かせた(Y:2.0f)位置から、原点(0,0,0)を見下ろすカメラ
-            DirectX::XMVECTOR eyePosition = DirectX::XMVectorSet(0.0f, 1.0f, -10.0f, 0.0f);
-            DirectX::XMVECTOR focusPoint = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 真っ直ぐ奥を見る
-            DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-            DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
-
-
-            // Projection行列(レンズの設定)
-            // 画角60度、アスペクト比(画面比率)、近くの限界0.1f、遠くの限界100.0ｆ
-            float fovAngle = DirectX::XMConvertToRadians(60.0f);
-            float aspectRatio = m_screenWidth / m_screenHeight; // 実際のウィンドウの幅 / 高さに合わせる
-            DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovAngle, aspectRatio, 0.1f, 100.0f);
+            // Cameraクラスから完成済みの行列を持ってくる
+            DirectX::XMMATRIX viewMatrix = m_camera.GetViewMatrix();
+            DirectX::XMMATRIX projectionMatrix = m_camera.GetProjectionMatrix();
+           
 
             // シーンに存在する全てのゲームオブジェクトをループ描画する
             for (int i = 0; i < m_gameObjects.size(); i++)

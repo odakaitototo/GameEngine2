@@ -123,6 +123,9 @@
     <ClInclude Include="Headerfile\Engine\Graphics\Shader.h">
       <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Graphics\Camera.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -162,6 +165,9 @@
       <Filter>ソース ファイル\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp">
+      <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Graphics\Camera.cpp">
       <Filter>ソース ファイル\Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
