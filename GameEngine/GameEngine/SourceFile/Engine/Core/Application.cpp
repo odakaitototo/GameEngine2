@@ -54,11 +54,32 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
    m_commonMesh = std::make_shared<Mesh>();
     std::vector<Vertex> vertices =
     {
-        {{ 0.0f, 0.5f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f }},
-        {{ 0.5f, -0.5f, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f }},
-        {{-0.5f, -0.5f, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f }}
+        // 前面 (Z = -0.5)
+        {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f }}, // 0: 左上 (赤)
+        {{  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f }}, // 1: 右上 (緑)
+        {{ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f }}, // 2: 左下 (青)
+        {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f }}, // 3: 右下 (黄)
+
+        // 背面 (Z = 0.5)
+        {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f }}, // 4: 左上 (マゼンタ)
+        {{  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f }}, // 5: 右上 (シアン)
+        {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }}, // 6: 左下 (白)
+        {{  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 0.0f, 1.0f }}  // 7: 右下 (黒)
     };
-    m_commonMesh ->Create(m_dx.GetDevice(), vertices);
+
+    // インっデックスデータ（頂点を結ぶ計算）
+    std::vector<UINT> indices =
+    {
+        0, 1, 2,  2, 1, 3, // 前面
+        5, 4, 7,  7, 4, 6, // 背面
+        4, 0, 6,  6, 0, 2, // 左面
+        1, 5, 3,  3, 5, 7, // 右面
+        4, 5, 0,  0, 5, 1, // 上面
+        2, 3, 6,  6, 3, 7  // 下面
+    };
+    m_commonMesh = std::make_shared<Mesh>();
+
+    m_commonMesh ->Create(m_dx.GetDevice(), vertices, indices);
 
     // シェーダーの生成と読み込み
     m_shader = std::make_unique<Shader>();

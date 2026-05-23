@@ -21,7 +21,8 @@ public:
 	Mesh() = default;
 
 	// Deviceを使って、頂点バッファを作成する
-	bool Create(ID3D11Device* device, const std::vector<Vertex>& vertices);
+	// 立体を描画できるようにindicesを追加
+	bool Create(ID3D11Device* device, const std::vector<Vertex>& vertices, const std::vector<UINT>& indices);
 
 	// Contextに、このメッシュを描画する準備をさせる
 	void Bind(ID3D11DeviceContext* context);
@@ -33,4 +34,10 @@ private:
 	ComPtr<ID3D11Buffer> m_pvertexBuffer; // GPU側のメモリに置かれた頂点データ
 	UINT m_vertexCount = 0; // 頂点の数
 	UINT m_stride = sizeof(Vertex); // 頂点1つ当たりのサイズ
+
+private: // 立体描画する際に必要なもの
+	ComPtr<ID3D11Buffer> m_pIndexBuffer; // インデックスデータ用のバッファ
+	UINT m_indexCount = 0; // インデックスの数
+
+
 };
