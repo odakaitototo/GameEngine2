@@ -27,4 +27,8 @@ private:
 	D3D11_VIEWPORT m_viewport = {}; // ビューポートを記憶しておく変数
 	ComPtr<ID3D11RasterizerState> m_pRasterizerState; // 描画のルールを保存する変数
 	
+private:// Zバッファ用の変数
+	ComPtr<ID3D11Texture2D> m_pDepthStencilBuffer; // 奥行を記録するもの
+	ComPtr<ID3D11DepthStencilView> m_pDepthStencilView; // 記録する際に使うもの
+	ComPtr<ID3D11DepthStencilState> m_pDepthStencilState; // 手前の場合塗るというルール
 };

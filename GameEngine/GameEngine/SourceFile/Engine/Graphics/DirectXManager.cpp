@@ -77,6 +77,32 @@ bool DirectXManager::Initialize(HWND hWnd, int width, int height) {
     rd.FrontCounterClockwise = FALSE;
     m_pDevice->CreateRasterizerState(&rd, &m_pRasterizerState);
 
+    // Zバッファ用のテクスチャを作る
+    D3D11_TEXTURE2D_DESC depthDesc = {};
+    depthDesc.Width = width;
+    depthDesc.Height = height;
+    depthDesc.MipLevels = 1;
+    depthDesc.ArraySize = 1;
+    depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // 奥行に24ビット使う標準のフォーマット
+    depthDesc.SampleDesc.Count = 1;
+    depthDesc.SampleDesc.Quality = 0;
+    depthDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    m_pDevice->CreateTexture2D(&depthDesc, nullptr, &m_pDepthStencilBuffer);
+
+    // 書き込むためのビュー
+    m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer.Get(), nullptr, &m_pDepthStencilView);
+
+    // 手前のものだけを描画する
+    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+    dsDesc.DepthEnable = TRUE; // 深度テストをONにする
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 奥行データを書き込む
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS; // 既に書いてあるものより「距離が近ければ」塗る
+    m_pDevice->CreateDepthStencilState(&dsDesc, &m_pDepthStencilState);
+
+
+
+
 
     return true;
 }
@@ -84,7 +110,8 @@ bool DirectXManager::Initialize(HWND hWnd, int width, int height) {
 void DirectXManager::BeginScene(float r, float g, float b, float a) {
     float color[4] = { r, g, b, a }; // 背景色（RGBA）
     m_pContext->ClearRenderTargetView(m_pRenderTarget.Get(), color); // 指定した色で画面を塗りつぶす（前のフレームの絵を消す）
-    m_pContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), nullptr); // 「今からここに描画します」という宣言
+    m_pContext->ClearDepthStencilView( m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f,0); // 「今からここに描画します」という宣言
+    m_pContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), m_pDepthStencilView.Get());
 
     // 毎フレームビューポートを設定（ImGuiとGameシーンで描画の形式を書き換えあうから）
     m_pContext->RSSetViewports(1, &m_viewport);
@@ -92,7 +119,8 @@ void DirectXManager::BeginScene(float r, float g, float b, float a) {
     m_pContext->RSSetState(m_pRasterizerState.Get()); // 両面描画ルール
 
     m_pContext->OMSetBlendState(nullptr, nullptr, 0xffffffff); // ブレンドステート（透明度）をリセット
-    m_pContext->OMSetDepthStencilState(nullptr, 0); // 深度すてーとをリセット
+   
+    m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0); // 作った深度ルールをここで適応
 }
 
 void DirectXManager::EndScene() {
