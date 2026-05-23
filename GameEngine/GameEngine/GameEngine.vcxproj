@@ -136,6 +136,8 @@
     <ClInclude Include="..\Dependencies\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\Dependencies\ImGui\imstb_truetype.h" />
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
+    <ClInclude Include="Headerfile\Engine\Core\EditorUI.h" />
+    <ClInclude Include="Headerfile\Engine\Core\Renderer.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Camera.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h" />
@@ -153,6 +155,8 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
+    <ClCompile Include="SourceFile\Engine\Core\EditorUI.cpp" />
+    <ClCompile Include="SourceFile\Engine\Core\Renderer.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\DirectXManager.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\ImGuiManager.cpp" />

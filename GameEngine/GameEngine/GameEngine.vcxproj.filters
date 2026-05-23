@@ -126,6 +126,12 @@
     <ClInclude Include="Headerfile\Engine\Graphics\Camera.h">
       <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Core\EditorUI.h">
+      <Filter>ヘッダー ファイル\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Core\Renderer.h">
+      <Filter>ヘッダー ファイル\Engine\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -169,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Graphics\Camera.cpp">
       <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Core\EditorUI.cpp">
+      <Filter>ソース ファイル\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Core\Renderer.cpp">
+      <Filter>ソース ファイル\Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

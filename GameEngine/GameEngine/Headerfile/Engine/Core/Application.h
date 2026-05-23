@@ -11,7 +11,8 @@
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Graphics/Shader.h"
 #include "Engine/Graphics/Camera.h"
-
+#include "Engine/Core/EditorUI.h"
+#include "Engine/Core/Renderer.h"
 // GPUに送るデータの形式をHLSLと一致させる
 struct ConstantBufferTransform
 {
@@ -21,6 +22,9 @@ struct ConstantBufferTransform
 };
 
 class Application {
+    friend class EditorUI; // EditorUIクラスは、私のprivateデータにアクセスしてもよい、という一文
+    friend class Renderer;
+    
 public:
     Application();
     ~Application();
@@ -62,6 +66,9 @@ private:
     ImGuiManager m_imgui;
     float m_backgroundColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f }; // 背景色を保持する変数
 
+    EditorUI m_editorUI;
+    
+
 private:
     //ゲームオブジェクトのリスト（スマートポインターで完全に管理）
     std::vector<std::shared_ptr<GameObject>> m_gameObjects;
@@ -80,4 +87,6 @@ private: //定数場hhぁの実態
 
 private: // カメラ関係
     Camera m_camera;
+private:
+    Renderer m_renderer;
 };

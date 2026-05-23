@@ -137,173 +137,20 @@ void Application::Run()
         {
             break;
         }
+
             // ImGuiのフレーム開始
             m_imgui.Begin();
+           
+            m_editorUI.Draw(this); // 「this」は、Application自身が「私のポインタを使ってね」 
 
-
-            // Hierarchyウィンドウ（左側に配置）
-            ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
-            ImGui::Begin("Hierarchy");
-
-            if (ImGui::Button("Save Scene"))
-            {
-                SaveScene("scene.txt"); // シーンを保存
-			}
-            if (ImGui::Button("Load Scene"))
-            {
-                LoadScene("scene.txt"); // シーンを読み込み
-			}
-            ImGui::Separator();
-            // オブジェクト作成ボタン
-            if (ImGui::Button("Create Empty"))
-            {
-                // 新しいオブジェクトを作成してリストに追加
-                std::string name = "GameObject" + std::to_string(m_gameObjects.size());
-                auto newObj = std::make_shared<GameObject>(name);
-
-                newObj->SetMesh(m_commonMesh); // 新しく作ったオブジェクトに、共通メッシュの住所を教える
-
-                m_gameObjects.push_back(newObj);
-            }
-            ImGui::Separator();
-            if (ImGui::Button("Instantiate Prefab"))
-            {
-                InstantiatePrefab("GameObject0.pfb"); // プレハブを読み込んでシーンに追加
-            }
-            ImGui::Separator();
-            ImGui::Text("Scene Objects");
-            ImGui::Separator(); // 区切るための線
-            
-            for (int i = 0; i < m_gameObjects.size(); i++)
-            {
-                bool isSelected = (m_selectedObjectIndex == i);
-                if (ImGui::Selectable(m_gameObjects[i]->GetName().c_str(), isSelected))
-                {
-                    m_selectedObjectIndex = i; // 選択したオブジェクトの番号を保存
-                }
-            }
-
-            ImGui::End();
-
-            // Inspectorウィンドウ（右側に配置）
-            ImGui::SetNextWindowPos(ImVec2(600, 0),ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
-			ImGui::Begin("Inspector"); // ウィンドウ名
-            if (m_selectedObjectIndex != -1 && m_selectedObjectIndex < m_gameObjects.size())
-            {
-                auto& obj = m_gameObjects[m_selectedObjectIndex];
-
-                // 名前編集
-                char buf[128];
-                strcpy_s(buf, obj->GetName().c_str());
-                if (ImGui::InputText("Name", buf, sizeof(buf)))
-                {
-                    obj -> SetName(buf);
-                }
-                ImGui::Separator();
-
-                // Transform編集（ここが保存対象になる重要なデータ）
-                auto& trans = obj->GetTransform();
-                ImGui::DragFloat3("Position", &trans.position.x, 0.1f);
-                ImGui::DragFloat3("Rotation", &trans.rotation.x, 0.1f);
-				ImGui::DragFloat3("Scale",    &trans.scale.x,    0.01f);
-            }
-            else
-            {
-                ImGui::Text("The object is not selected..."); // オブジェクトが選択されていない場合のメッセージ
-            }
-
-            if (m_selectedObjectIndex != -1)
-            {
-                if (ImGui::Button("Make Prefab"))
-                {
-                    std::string path = m_gameObjects[m_selectedObjectIndex]->GetName() + ".pfb";
-                    SavePrefab(m_selectedObjectIndex, path); // プレハブとして保存
-                }
-            }
-            ImGui::End();
-
-            ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(400, 100), ImGuiCond_FirstUseEver);
-            ImGui::Begin("Engine Tuner"); // ウィンドウ名
-            ImGui::Text("Transform"); // テキストの表示
-            ImGui::ColorEdit4("BackgroundColor", m_backgroundColor);
-            ImGui::End();
-
-            // FPSなどの統計情報(オーバーレイ表示)
-            ImGui::SetNextWindowPos(ImVec2(10, 570));
-            ImGui::Begin("Stats", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
-			ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-            ImGui::End();
 
             // 描画開始
             m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-            // ここで今後のUpdateやDrawを呼び出します
+            m_renderer.Render(this); // 描画処理
 
-            m_shader->Bind(m_dx.GetContext()); // シェイダーを使うためにGPUに指示する
-
-            // Cameraクラスから完成済みの行列を持ってくる
-            DirectX::XMMATRIX viewMatrix = m_camera.GetViewMatrix();
-            DirectX::XMMATRIX projectionMatrix = m_camera.GetProjectionMatrix();
-           
-
-            // シーンに存在する全てのゲームオブジェクトをループ描画する
-            for (int i = 0; i < m_gameObjects.size(); i++)
-            {
-                // Transformを取得
-                auto& t = m_gameObjects[i]->GetTransform();
-
-                // スケール・回転・平行移動の行数を作成
-                DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(t.scale.x, t.scale.y, t.scale.z);
-
-                float radX = DirectX::XMConvertToRadians(t.rotation.x);
-                float radY = DirectX::XMConvertToRadians(t.rotation.y);
-                float radZ = DirectX::XMConvertToRadians(t.rotation.z);
-                DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(radX, radY, radZ);
-                DirectX::XMMATRIX translation = DirectX::XMMatrixTranslation(t.position.x, t.position.y, t.position.z);
-
-                // 3つの行数を掛け合わせてワールド行列を完成させる
-                DirectX::XMMATRIX worldMatrix = scale * rotation * translation;
-
-                // 定数バッファの構造体にデータを詰める
-                ConstantBufferTransform cbData;
-
-                // HLSLは行列の読み込み方法がC++と逆なので、転置して送る
-                cbData.worldMatrix = DirectX::XMMatrixTranspose(worldMatrix);
-
-                // ViewとProjectionも転置して詰める
-                cbData.viewMatrix = DirectX::XMMatrixTranspose(viewMatrix);
-                cbData.projectionMatrix = DirectX::XMMatrixTranspose(projectionMatrix);
-
-                D3D11_MAPPED_SUBRESOURCE mappedResource;
-
-                // D3D11_MAP_WRITE_DISCARDが重要
-                // 「前の箱はGPUが使っているかもしれないから、古いのは破棄して、新しい箱を用意して」という命令
-                if (SUCCEEDED(m_dx.GetContext()->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
-                {
-                    // もらった新しい箱(pData)に、行列データを直接流し込む
-                    memcpy(mappedResource.pData, &cbData, sizeof(ConstantBufferTransform));
-
-                    // 箱を閉じる
-                    m_dx.GetContext()->Unmap(m_pConstantBuffer.Get(), 0);
-
-                }
-
-
-
-                // 「0番目のスロット(b0)」ここの定数バッファをセットする
-                m_dx.GetContext()->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-
-                // データの準備完了　描画
-                m_gameObjects[i]->Draw(m_dx.GetContext());
-
-
-            }
 
             // ImGuiをDirectXの上に重ねて描画
             m_imgui.End();
-
             m_dx.EndScene(); // 描画終了
         
     }
@@ -409,6 +256,8 @@ void Application::InstantiatePrefab(const std::string& filename)
         m_gameObjects.push_back(obj);
     
 }
+
+
 
 
  
