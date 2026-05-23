@@ -4,11 +4,20 @@
 #include <memory>
 #include <fstream>
 #include <iostream>
+#include "DirectXMath.h"
 
 #include "Engine/Graphics/DirectXManager.h"
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Graphics/Shader.h"
+
+// GPUに送るデータの形式をHLSLと一致させる
+struct ConstantBufferTransform
+{
+    DirectX::XMMATRIX worldMatrix; // 64バイト
+    DirectX::XMMATRIX viewMatrix;
+    DirectX::XMMATRIX projectionMatrix;
+};
 
 class Application {
 public:
@@ -32,9 +41,15 @@ public: // プレハブの保存と読み込みの関数
     void SavePrefab(int index, const std::string& filename);
     void InstantiatePrefab(const std::string& filename);
 
+
+    
+
 private:
     // Windowsのメッセージを処理する関数
     static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    
+    float m_screenWidth; // Window画面の横幅の変数
+    float m_screenHeight; // Window画面の縦幅の変数
 
     DirectXManager m_dx; // DirectX管理クラス
 
@@ -58,4 +73,7 @@ private: // メッシュ関係
 
 private: // シェーダー関係
     std::unique_ptr<Shader> m_shader; // シェーダーの管理用
+
+private: //定数場hhぁの実態
+    ComPtr<ID3D11Buffer> m_pConstantBuffer;
 };
