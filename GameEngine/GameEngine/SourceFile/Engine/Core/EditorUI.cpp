@@ -98,7 +98,43 @@ void EditorUI::Draw(Application* app)
         }
     }
 
+    // 矢印キーによるオブジェクトの固定値移動
+    if (app->m_selectedObjectIndex != -1)
+    {
+        ImGui::Separator();
+        ImGui::Text("SnapMovement (Arrow Keys)");
 
+        // 移動する幅
+        float snapValue = 1.0f;
+
+        // 選択中のオブジェクトの Transform を取得
+        auto& trans = app->m_gameObjects[app->m_selectedObjectIndex]->GetTransform();
+
+        // ImGuiが矢印キーが押された瞬間を検知したら、座標を足し引きする
+        if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) // 右矢印
+        {
+            trans.position.x += snapValue;
+
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) // 左矢印
+        {
+            trans.position.x -= snapValue;
+
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) // 上矢印
+        {
+            trans.position.y += snapValue;
+
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) // 下矢印
+        {
+            trans.position.y -= snapValue;
+
+        }
+    }
 
 
 
