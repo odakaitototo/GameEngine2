@@ -30,6 +30,10 @@ public:
 
 	Transform& GetTransform() { return m_transform; }
 
+	DirectX::XMFLOAT4& GetColor() { return m_color; } // 色のデータを置き換え参照できるようにする
+
+	bool& GetUseSolidColor() { return m_useSolidColor; } // 単色化虹色かどうかのスイッチを参照する
+
 public: // JSON関係
 	// JSONへの書き出し
 	json ToJson() const
@@ -44,6 +48,9 @@ public: // JSON関係
 			{"rotation", {m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
 			{"scale", {m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
 		};
+
+		j["color"] = { m_color.x, m_color.y, m_color.z, m_color.w }; // 色のデータ
+		j["useSolidColor"] = m_useSolidColor; // 単色モードのON/OFFの情報
 		return j;
 	}
 
@@ -55,6 +62,21 @@ public: // JSON関係
 		m_transform.position = { t["position"][0],t["position"][1], t["position"][2] };
 		m_transform.rotation = { t["rotation"][0],t["rotation"][1], t["rotation"][2] };
 		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
+
+		if (j.contains("color"))
+		{
+			m_color.x = j["color"][0];
+			m_color.y = j["color"][1];
+			m_color.z = j["color"][2];
+			m_color.w = j["color"][3];
+
+		}
+
+		if (j.contains("useSolidColor"))
+		{
+			m_useSolidColor = j["useSolidColor"];
+		}
+
 	}
 
 public: // メッシュとコンテキスト
@@ -78,6 +100,12 @@ public: // メッシュとコンテキスト
 private:
 	std::string m_name; // オブジェクト名
 	Transform m_transform; // 位置・回転・スケール
+
+
+private: // 色関係
+	DirectX::XMFLOAT4 m_color = { 1.0f, 1.0f, 1.0f,1.0f }; // 色のデータ
+	bool m_useSolidColor = false;
+
 
 private: // メッシュとコンテキスト
 	std::shared_ptr<Mesh> m_mesh; // メッシュへの共通ポインタ

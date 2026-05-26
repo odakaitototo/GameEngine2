@@ -6,6 +6,11 @@ cbuffer TransformBuffer : register(b0) // •`‰æ‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğImGui‚Å“®‚©‚µ‚½‚
     matrix World; // ƒ[ƒ‹ƒhÀ•W
     matrix View;
     matrix projection;
+    
+    float4 materialColor; // C++‚©‚ç‘—‚ç‚ê‚Ä‚«‚½F‚ğó‚¯æ‚é
+    
+    int useSolidColor;
+    float3 dummy;
 }
 
 
@@ -39,5 +44,15 @@ VS_OUTPUT VS(VS_INPUT input)
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {
-    return input.Color;
+    // ƒXƒCƒbƒ`‚ªON‚È‚ç’PFi’¸“_ƒJƒ‰[–³‹j
+    if (useSolidColor ==1)
+    {
+        return materialColor;
+    }
+    // ƒXƒCƒbƒ`‚ªOFF‚È‚ç“øF‚É‚·‚é
+    else
+    {
+        return input.Color * materialColor;
+    }
+    
 }

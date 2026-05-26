@@ -42,6 +42,14 @@ void Renderer::Render(Application* app)
         cbData.viewMatrix = DirectX::XMMatrixTranspose(viewMatrix);
         cbData.projectionMatrix = DirectX::XMMatrixTranspose(projectionMatrix);
 
+        // GameObjectの色を、GPUへ送るデータに詰める
+        cbData.materialColor = app->m_gameObjects[i]->GetColor();
+
+        //  boolをintに変換してGPUに送る
+        cbData.useSolidColor = app->m_gameObjects[i]->GetUseSolidColor() ? 1 : 0;
+
+        cbData.dummy = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+            
         D3D11_MAPPED_SUBRESOURCE mappedResource;
 
         HRESULT hr = app->m_dx.GetContext()->Map(app->m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -62,6 +70,9 @@ void Renderer::Render(Application* app)
 
         // 「0番目のスロット(b0)」ここの定数バッファをセットする
         app->m_dx.GetContext()->VSSetConstantBuffers(0, 1, app->m_pConstantBuffer.GetAddressOf());
+
+        // ピクセルシェイダーにも上と同じデータをセットする
+        app->m_dx.GetContext()->PSSetConstantBuffers(0, 1, app->m_pConstantBuffer.GetAddressOf());
 
         // データの準備完了　描画
         app->m_gameObjects[i]->Draw(app->m_dx.GetContext());

@@ -19,6 +19,11 @@ struct ConstantBufferTransform
     DirectX::XMMATRIX worldMatrix; // 64バイト
     DirectX::XMMATRIX viewMatrix;
     DirectX::XMMATRIX projectionMatrix;
+
+    DirectX::XMFLOAT4 materialColor; // 色情報
+
+    int useSolidColor; // 4バイト（ONなら1　OFFなら0）
+    DirectX::XMFLOAT3 dummy; // 12バイト（これで合計16バイト）
 };
 
 class Application {

@@ -42,7 +42,10 @@ void EditorUI::Draw(Application* app)
     for (int i = 0; i < app->m_gameObjects.size(); i++)
     {
         bool isSelected = (app->m_selectedObjectIndex == i);
-        if (ImGui::Selectable(app->m_gameObjects[i]->GetName().c_str(), isSelected))
+
+        std::string displayLadel = app->m_gameObjects[i]->GetName() + "##" + std::to_string(i); // クローンからクローンを作る際にIDが変わるようにした。
+
+        if (ImGui::Selectable(displayLadel.c_str(), isSelected))
         {
             app->m_selectedObjectIndex = i; // 選択したオブジェクトの番号を保存
         }
@@ -72,6 +75,14 @@ void EditorUI::Draw(Application* app)
         ImGui::DragFloat3("Position", &trans.position.x, 0.1f);
         ImGui::DragFloat3("Rotation", &trans.rotation.x, 0.1f);
         ImGui::DragFloat3("Scale", &trans.scale.x, 0.01f);
+
+        // マテリアルのカラーの編集
+        ImGui::Separator();
+        auto& color = obj->GetColor();
+        ImGui::ColorEdit4("Material Color", &color.x);
+
+        // 単色化虹色か切り替えるチェックボックス
+        ImGui::Checkbox("Use Solid Color", &obj->GetUseSolidColor());
     }
     else
     {
@@ -86,6 +97,12 @@ void EditorUI::Draw(Application* app)
             app->SavePrefab(app->m_selectedObjectIndex, path); // プレハブとして保存
         }
     }
+
+
+
+
+
+
     ImGui::End();
 
     ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
