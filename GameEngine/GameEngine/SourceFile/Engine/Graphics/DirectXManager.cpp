@@ -128,3 +128,108 @@ void DirectXManager::EndScene() {
     // 第1引数を1にすると、ディスプレイのリフレッシュレートに合わせて表示（垂直同期）します。
     m_pSwapChain->Present(1, 0); // 垂直同期（1）で画面を更新
 }
+
+
+bool DirectXManager::CreateSceneResources(int width, int height)
+{
+    // 安全のため、すでに作られていたら一度リセットする
+
+    m_pSceneRTV.Reset();
+    m_pSceneSRV.Reset();
+    m_pSceneColorTexture.Reset();
+    m_pSceneDSV.Reset();
+    m_pSceneDepthTexture.Reset();
+
+    // 0未満のサイズで来たら処理しない
+    if (width <= 0 || height <= 0) return false;
+
+    // カラーテクスチャ（描画用の画用紙）の作成
+    D3D11_TEXTURE2D_DESC colorDesc{};
+    colorDesc.Width = width;
+    colorDesc.Height = height;
+    colorDesc.MipLevels = 1;
+    colorDesc.ArraySize = 1;
+    colorDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 一般的なRGBA各8ビット
+    colorDesc.SampleDesc.Count = 1; // マルチサンプルなし
+    colorDesc.SampleDesc.Quality = 0;
+    colorDesc.Usage = D3D11_USAGE_DEFAULT;
+    // 描画先としても、読み込みとしても使う
+    colorDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+    HRESULT hr = m_pDevice->CreateTexture2D(&colorDesc, nullptr, &m_pSceneColorTexture);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // レンダーターゲットビューの作成
+    hr = m_pDevice->CreateRenderTargetView(m_pSceneColorTexture.Get(), nullptr, &m_pSceneRTV);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // シェーダーリソースビューの作成（ImGui表示用）
+    hr = m_pDevice->CreateShaderResourceView(m_pSceneColorTexture.Get(), nullptr, &m_pSceneSRV);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // 深度テクスチャの作成
+    D3D11_TEXTURE2D_DESC depthDesc{};
+    depthDesc.Width = width;
+    depthDesc.Height = height;
+    depthDesc.MipLevels = 1;
+    depthDesc.ArraySize = 1;
+    depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // 深度24ビット、ステンシル8ビット
+    depthDesc.SampleDesc.Count = 1;
+    depthDesc.SampleDesc.Quality = 0;
+    depthDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL; // 深度バッファとしてバインド
+
+    hr = m_pDevice->CreateTexture2D(&depthDesc, nullptr, &m_pSceneDepthTexture);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // 深度ステンシルビューの作成
+    hr = m_pDevice->CreateDepthStencilView(m_pSceneDepthTexture.Get(), nullptr, &m_pSceneDSV);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+    return true;
+
+}
+
+void DirectXManager::BeginSceneTexture(float width, float height, float r, float g, float b, float a)
+{
+    // ImGuiがもっているテクスチャを手放させる
+    ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
+    m_pContext->PSSetShaderResources(0, 1, nullSRV);
+
+    // 描画先をモニターからScene用テクスチャにセット
+    m_pContext->OMSetRenderTargets(1, m_pSceneRTV.GetAddressOf(), m_pSceneDSV.Get());
+
+    // 指定された背景色でテクスチャをクリア
+    float color[4] = { r,g,b,a };
+    m_pContext->ClearRenderTargetView(m_pSceneRTV.Get(), color);
+    m_pContext->ClearDepthStencilView(m_pSceneDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+    // ビューポートのセット
+    D3D11_VIEWPORT vp{};
+    vp.Width = width;
+    vp.Height = height;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = 0.0f;
+    vp.TopLeftY = 0.0f;
+    m_pContext->RSSetViewports(1, &vp);
+
+    // 3D描画用のルールを適用する
+    m_pContext->RSSetState(m_pRasterizerState.Get());
+    m_pContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+    m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
+}

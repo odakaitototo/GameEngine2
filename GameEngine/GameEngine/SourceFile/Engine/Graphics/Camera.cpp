@@ -21,3 +21,17 @@ void Camera::SetPerspective(float fovAngle, float aspectRatio, float nearZ, floa
 {
 	m_projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovAngle, aspectRatio, nearZ, farZ);
 }
+
+void Camera::SetAspect(float width, float height)
+{
+	// ‚‚³‚ª0ˆÈ‰º‚É‚È‚é‚Æ‚ÆŠ„‚èZƒGƒ‰[‚É‚È‚é‚Ì‚Å
+	// 0ˆÈ‰º‚¾‚Æreturn‚·‚é
+	if (height <= 0.0f)
+	{
+		return;
+	}
+
+	float aspectRatio = width / height; // c‰¡”ä‚ğŒvZ‚·‚é
+
+	SetPerspective(DirectX::XMConvertToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
+}

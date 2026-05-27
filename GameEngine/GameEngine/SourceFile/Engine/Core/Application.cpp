@@ -20,6 +20,8 @@ Application::~Application() {}
 // 初期化処理
 bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 {
+
+    SetProcessDPIAware();
     m_hInstance = hInstance;
 
     // ウィンドウクラスの設定
@@ -40,6 +42,16 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
         return false; // 初期化に失敗したら起動しない
     }
 
+    // Scene窓口の裏紙リソースを初期サイズで作っておく
+    if (!m_dx.CreateSceneResources(width, height))
+    {
+        return false;
+    }
+
+    // 最初のサイズを記憶させておく
+    m_sceneWidth = (float)width;
+    m_sceneHeight = (float)height;
+
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
     UpdateWindow(m_hWnd);
 
@@ -47,6 +59,10 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     GetClientRect(m_hWnd, &rc);
     m_screenWidth = static_cast<float>(rc.right - rc.left);
     m_screenHeight = static_cast<float>(rc.bottom - rc.top);
+
+    // 起動時に1度だけ、カメラの横縦比を教える
+    m_camera.SetAspect((float)width, (float)height);
+
 
     // Imguiの初期化（DirectXのデバイス等を渡す）
     m_imgui.Initialize(m_hWnd, m_dx.GetDevice(), m_dx.GetContext());
@@ -140,13 +156,23 @@ void Application::Run()
 
             // ImGuiのフレーム開始
             m_imgui.Begin();
+
+            m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
+
+            // 3D空間を描画
+            m_renderer.Render(this);
+
+            // メイン画面への描画フェーズ
+            // 描画先をメイン画面に戻し画面をクリアする
+            // エディタ自体の背景色
+            m_dx.BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
            
             m_editorUI.Draw(this); // 「this」は、Application自身が「私のポインタを使ってね」 
 
 
-            // 描画開始
-            m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-            m_renderer.Render(this); // 描画処理
+            //// 描画開始
+            //m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
+            //m_renderer.Render(this); // 描画処理
 
 
             // ImGuiをDirectXの上に重ねて描画
@@ -255,6 +281,25 @@ void Application::InstantiatePrefab(const std::string& filename)
         obj->SetMesh(m_commonMesh); // クローンしたオブジェクトに「形」を与える
         m_gameObjects.push_back(obj);
     
+}
+
+void Application::ResizeScene(float width, float height)
+{
+    // 同じサイズなら何もしない
+    if (width == m_sceneWidth && height == m_sceneHeight)
+    {
+        return;
+    }
+
+    // 新しいサイズを記録
+    m_sceneWidth = width;
+    m_sceneHeight = height;
+
+    // DirectXのテクスチャを新しいサイズで作り直す
+    m_dx.CreateSceneResources((int)width, (int)height);
+
+    // カメラのアスペクト比を更新んして、歪みを消す
+    m_camera.SetAspect(width, height);
 }
 
 

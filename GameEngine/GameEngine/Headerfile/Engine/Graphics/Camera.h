@@ -43,6 +43,8 @@ public:
 		return m_projectionMatrix;
 	}
 
+	void SetAspect(float width, float height); // 画面のサイズからアスペクト比を更新する関数
+
 private:
 	DirectX::XMMATRIX m_viewMatrix;
 	DirectX::XMMATRIX m_projectionMatrix;

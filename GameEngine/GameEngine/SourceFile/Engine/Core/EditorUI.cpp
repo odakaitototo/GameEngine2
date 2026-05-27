@@ -5,6 +5,28 @@
 
 void EditorUI::Draw(Application* app)
 {
+
+    // Sceneウィンドウ（ビューボート）
+    ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(640, 400), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Scene");
+
+    // 現在のSceneの中の使えるスペースを取得
+    ImVec2 sceneWindowSize = ImGui::GetContentRegionAvail();
+
+    // サイズが0よりおおきければ、Appplicationにサイズ変更を伝える
+    if (sceneWindowSize.x > 0.0f && sceneWindowSize.y > 0.0f)
+    {
+        app->ResizeScene(sceneWindowSize.x, sceneWindowSize.y);
+    }
+
+    // 取得したスペースの大きさに合わせて、3Dを描画したテクスチャを画像として表示
+    ImGui::Image((void*)app->m_dx.GetSceneSRV(), sceneWindowSize);
+
+    ImGui::End();
+
+
+
     // Hierarchyウィンドウ（左側に配置）
     ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);

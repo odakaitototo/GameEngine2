@@ -51,6 +51,10 @@ public: // プレハブの保存と読み込みの関数
     void SavePrefab(int index, const std::string& filename);
     void InstantiatePrefab(const std::string& filename);
 
+public: // ビューポート関係
+    // Sceneのサイズが変った時に呼び出す関数
+    void ResizeScene(float width, float height);
+
 
     
 
@@ -94,4 +98,9 @@ private: // カメラ関係
     Camera m_camera;
 private:
     Renderer m_renderer;
+
+private: // ビューポート関係
+    // 現在のSceneのサイズを記憶しておくための変数
+    float m_sceneWidth = 0.0f;
+    float m_sceneHeight = 0.0f;
 };
