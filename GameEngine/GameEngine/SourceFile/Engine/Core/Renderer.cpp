@@ -13,6 +13,41 @@ void Renderer::Render(Application* app)
     DirectX::XMMATRIX viewMatrix = app->m_camera.GetViewMatrix();
     DirectX::XMMATRIX projectionMatrix = app->m_camera.GetProjectionMatrix();
 
+    // グリッド線を表示
+    if (app->m_gridMesh)
+    {
+        ConstantBufferTransform cbGrid;
+
+        // グリッドは空間の中心から動かさないので、単位行列のまま送る
+        cbGrid.worldMatrix = DirectX::XMMatrixTranspose(DirectX::XMMatrixIdentity());
+
+        cbGrid.viewMatrix = DirectX::XMMatrixTranspose(viewMatrix);
+        cbGrid.projectionMatrix = DirectX::XMMatrixTranspose(projectionMatrix);
+
+        // 色の設定
+        cbGrid.materialColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+        cbGrid.useSolidColor = 0;
+        cbGrid.dummy = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+        // 定数バッファにデータを書き込む
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        HRESULT hrGrid = app->m_dx.GetContext()->Map(app->m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+        if (SUCCEEDED(hrGrid))
+        {
+            memcpy(mappedResource.pData, &cbGrid, sizeof(ConstantBufferTransform));
+            app->m_dx.GetContext()->Unmap(app->m_pConstantBuffer.Get(), 0);
+        }
+
+        // シェーダーにデータを送る
+        app->m_dx.GetContext()->VSSetConstantBuffers(0, 1, app->m_pConstantBuffer.GetAddressOf());
+        app->m_dx.GetContext()->PSSetConstantBuffers(0,1,app->m_pConstantBuffer.GetAddressOf());
+
+        // 描画処理
+        app->m_gridMesh->Bind(app->m_dx.GetContext());
+        app->m_gridMesh->Draw(app->m_dx.GetContext());
+    }
+
 
     // シーンに存在する全てのゲームオブジェクトをループ描画する
     for (int i = 0; i < app->m_gameObjects.size(); i++)

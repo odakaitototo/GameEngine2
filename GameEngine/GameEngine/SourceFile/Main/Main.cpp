@@ -4,7 +4,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Application app;
 
     // 1280x720ÇÃÉTÉCÉYÇ≈èâä˙âª
-    if (app.Initialize(hInstance, 1280, 720)) {
+    if (app.Initialize(hInstance, 1920, 1080)) {
         app.Run();
     }
 

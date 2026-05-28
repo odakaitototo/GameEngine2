@@ -52,7 +52,7 @@ void Mesh::Bind(ID3D11DeviceContext* context)
 	context->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	// 頂点をどうつないで形にするか
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
+	context->IASetPrimitiveTopology(m_topology); // 三角形リスト
 }
 
 void Mesh::Draw(ID3D11DeviceContext* context)

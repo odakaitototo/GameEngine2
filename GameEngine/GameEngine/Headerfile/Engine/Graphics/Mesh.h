@@ -30,6 +30,12 @@ public:
 	// 実際に描画命令を出す
 	void Draw(ID3D11DeviceContext* context);
 
+public:
+	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY topology)
+	{
+		m_topology = topology;
+	}
+
 private:
 	ComPtr<ID3D11Buffer> m_pvertexBuffer; // GPU側のメモリに置かれた頂点データ
 	UINT m_vertexCount = 0; // 頂点の数
@@ -39,5 +45,7 @@ private: // 立体描画する際に必要なもの
 	ComPtr<ID3D11Buffer> m_pIndexBuffer; // インデックスデータ用のバッファ
 	UINT m_indexCount = 0; // インデックスの数
 
+private:
+	D3D11_PRIMITIVE_TOPOLOGY m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 };

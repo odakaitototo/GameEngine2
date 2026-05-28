@@ -23,6 +23,19 @@ void EditorUI::Draw(Application* app)
     // 取得したスペースの大きさに合わせて、3Dを描画したテクスチャを画像として表示
     ImGui::Image((void*)app->m_dx.GetSceneSRV(), sceneWindowSize);
 
+    if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    {
+        // マウスの座標を、Imageの左上を(0,0)としたローカル座標に変換する
+        ImVec2 mousePos = ImGui::GetMousePos();
+        ImVec2 windowPos = ImGui::GetItemRectMin(); // Imageの左上の座標
+
+        float localMouseX = mousePos.x - windowPos.x;
+        float localMouseY = mousePos.y - windowPos.y;
+
+        // 当たり判定の実行
+        app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
+    }
+
     ImGui::End();
 
 
@@ -132,28 +145,51 @@ void EditorUI::Draw(Application* app)
         // 選択中のオブジェクトの Transform を取得
         auto& trans = app->m_gameObjects[app->m_selectedObjectIndex]->GetTransform();
 
-        // ImGuiが矢印キーが押された瞬間を検知したら、座標を足し引きする
-        if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) // 右矢印
+        // UIの入力と、3D空間のショートカット入力を分離する
+        // ImGui::GetID().WantTextInputは「今、テキストボックスに文字を打ち込んでいるか？」を判定
+        if (!ImGui::GetIO().WantTextInput)
         {
-            trans.position.x += snapValue;
+            static bool prevRight = false, prevLeft = false, prevUp = false, prevDown = false;
 
-        }
+            // 今の瞬間のキー状態をWindows　APIから直接取得 (ImGuiの横取りを無視)
+            bool currRight = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+            bool currLeft = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+            bool currUp = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+            bool currDown = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
 
-        if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) // 左矢印
-        {
-            trans.position.x -= snapValue;
 
-        }
 
-        if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) // 上矢印
-        {
-            trans.position.y += snapValue;
 
-        }
+            // ImGuiが矢印キーが押された瞬間を検知したら、座標を足し引きする
+            if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) // 右矢印
+            {
+                trans.position.x += snapValue;
 
-        if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) // 下矢印
-        {
-            trans.position.y -= snapValue;
+            }
+
+            if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) // 左矢印
+            {
+                trans.position.x -= snapValue;
+
+            }
+
+            if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) // 上矢印
+            {
+                trans.position.y += snapValue;
+
+            }
+
+            if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) // 下矢印
+            {
+                trans.position.y -= snapValue;
+
+            }
+
+            // 状態を更新
+            prevRight = currRight;
+            prevLeft  = currLeft;
+            prevUp    = currUp;
+            prevDown = currDown;
 
         }
     }

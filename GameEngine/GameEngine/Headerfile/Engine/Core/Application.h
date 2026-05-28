@@ -4,6 +4,7 @@
 #include <memory>
 #include <fstream>
 #include <iostream>
+#include <DirectXCollision.h> // 当たり判定を使うためのもの
 #include "DirectXMath.h"
 
 #include "Engine/Graphics/DirectXManager.h"
@@ -55,6 +56,10 @@ public: // ビューポート関係
     // Sceneのサイズが変った時に呼び出す関数
     void ResizeScene(float width, float height);
 
+public: // オブジェクト関係
+
+    void PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight); // マウスクリックでオブジェクトを選択する関数
+
 
     
 
@@ -87,6 +92,8 @@ private:
 
 private: // メッシュ関係
     std::shared_ptr<Mesh> m_commonMesh; // シーン全体で使いまわす、共通の三角形メッシュ
+
+    std::shared_ptr<Mesh> m_gridMesh; // グリッド専用メッシュ
 
 private: // シェーダー関係
     std::unique_ptr<Shader> m_shader; // シェーダーの管理用

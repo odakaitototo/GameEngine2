@@ -32,7 +32,8 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 
     // ウィンドウの作成
     m_hWnd = CreateWindow(wc.lpszClassName, L"Project: Rescue Trace - Engine v0.1",
-        WS_OVERLAPPEDWINDOW, 100, 100, width, height, NULL, NULL, wc.hInstance, NULL);
+        WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
+        100,100, width, height, NULL, NULL, wc.hInstance, NULL);
 
     if (!m_hWnd) return false;
 
@@ -96,6 +97,31 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     m_commonMesh = std::make_shared<Mesh>();
 
     m_commonMesh ->Create(m_dx.GetDevice(), vertices, indices);
+
+    // グリッドの頂点データ生成
+    std::vector<Vertex> gridVertices;
+    std::vector<UINT> gridIndices;
+    int gridSize = 20;
+    UINT gridIndex = 0;
+    for (int i = -gridSize; i <= gridSize; i++)
+    {
+        gridVertices.push_back({ {(float)i, 0.0f, (float)-gridSize }, { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridVertices.push_back({ { (float)i, 0.0f, (float)gridSize },  { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridIndices.push_back(gridIndex++);
+        gridIndices.push_back(gridIndex++);
+    
+    }
+
+    for (int i = -gridSize; i <= gridSize; i++) {
+        gridVertices.push_back({ { (float)-gridSize, 0.0f, (float)i }, { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridVertices.push_back({ { (float)gridSize, 0.0f, (float)i },  { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridIndices.push_back(gridIndex++);
+        gridIndices.push_back(gridIndex++);
+    }
+
+    m_gridMesh = std::make_shared<Mesh>();
+    m_gridMesh->Create(m_dx.GetDevice(), gridVertices, gridIndices);
+    m_gridMesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
     // シェーダーの生成と読み込み
     m_shader = std::make_unique<Shader>();
@@ -300,6 +326,75 @@ void Application::ResizeScene(float width, float height)
 
     // カメラのアスペクト比を更新んして、歪みを消す
     m_camera.SetAspect(width, height);
+}
+
+// マウスピッキングの実装
+void Application::PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight)
+{
+    // カメラの行列を取得
+    DirectX::XMMATRIX view = m_camera.GetViewMatrix();
+    DirectX::XMMATRIX proj = m_camera.GetProjectionMatrix();
+    DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+
+    // 2Dのモニター座標から、3D空間へのRayを作る
+    DirectX::XMVECTOR rayOrigin = DirectX::XMVector3Unproject(
+        DirectX::XMVectorSet(mouseX, mouseY, 0.0f, 0.0f), // 画面の手前
+        0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
+        proj, view, world
+    );
+
+    DirectX::XMVECTOR farPoint = DirectX::XMVector3Unproject(
+        DirectX::XMVectorSet(mouseX, mouseY, 1.0f, 0.0f), // 画面の奥
+        0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
+        proj, view, world
+    );
+
+    DirectX::XMVECTOR rayDir = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(farPoint, rayOrigin)); // レーザーの向きを計算
+
+    // 各オブジェクトのレーザーが当たっているかを調べる
+    float minDistance = 1000000.0f; //　一番手前にあるレーザーを見つけるよう
+    int hitIndex = -1; // 当たったオブジェクトの番号
+
+    for (int i = 0; i < m_gameObjects.size(); i++)
+    {
+        auto& t = m_gameObjects[i]->GetTransform();
+
+        // オブジェクトのワールド行列（配置データ）を計算
+        DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(t.scale.x, t.scale.y, t.scale.z);
+        float radX = DirectX::XMConvertToRadians(t.rotation.x);
+        float radY = DirectX::XMConvertToRadians(t.rotation.y);
+        float radZ = DirectX::XMConvertToRadians(t.rotation.z);
+        DirectX::XMMATRIX rot = DirectX::XMMatrixRotationRollPitchYaw(radX, radY, radZ);
+        DirectX::XMMATRIX trans = DirectX::XMMatrixTranslation(t.position.x, t.position.y, t.position.z);
+        DirectX::XMMATRIX objWorld = scale * rot * trans;
+
+        // レーザーを「オブジェクトの視点（ローカル空間）」に逆変換する
+        DirectX::XMVECTOR det;
+        DirectX::XMMATRIX invWorld = DirectX::XMMatrixInverse(&det, objWorld);
+
+        DirectX::XMVECTOR localOrigin = DirectX::XMVector3TransformCoord(rayOrigin, invWorld);
+        DirectX::XMVECTOR localDir = DirectX::XMVector3TransformNormal(rayDir, invWorld);
+        localDir = DirectX::XMVector3Normalize(localDir);
+
+        // サイコロの当たり判定箱
+        DirectX::BoundingBox box(DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+
+        float distance = 0.0f;
+
+        if (box.Intersects(localOrigin, localDir, distance))
+        {
+            // カメラから一番近い（手前にある）ものを選択する
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                hitIndex = i;
+            }
+        }
+    }
+
+    // 3. 当たっていたら選択状態にする（空振りなら -1 になって選択解除される）
+    m_selectedObjectIndex = hitIndex;
+
 }
 
 
