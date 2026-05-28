@@ -11,6 +11,22 @@ void EditorUI::Draw(Application* app)
     ImGui::SetNextWindowSize(ImVec2(640, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Scene");
 
+    // ショートカットキーの監視
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z, false))
+    {
+        app->ExecuteUndo();
+    }
+
+    // Deleteキーでオブジェクトの消去
+    if (ImGui::IsKeyPressed(ImGuiKey_Delete, false) && app->m_selectedObjectIndex != -1)
+    {
+        // 選択中のオブジェクトをリストから消し去る
+        app->m_gameObjects.erase(app->m_gameObjects.begin() + app->m_selectedObjectIndex);
+        app->m_selectedObjectIndex = -1; // 選択解除
+        app->m_undoStack.clear();
+    }
+
+
     // 現在のSceneの中の使えるスペースを取得
     ImVec2 sceneWindowSize = ImGui::GetContentRegionAvail();
 
@@ -108,8 +124,20 @@ void EditorUI::Draw(Application* app)
         // Transform編集（ここが保存対象になる重要なデータ）
         auto& trans = obj->GetTransform();
         ImGui::DragFloat3("Position", &trans.position.x, 0.1f);
+        if (ImGui::IsItemActivated())
+        {
+            app->RecordUndo();
+        }
         ImGui::DragFloat3("Rotation", &trans.rotation.x, 0.1f);
+        if (ImGui::IsItemActivated())
+        {
+            app->RecordUndo();
+        }
         ImGui::DragFloat3("Scale", &trans.scale.x, 0.01f);
+        if (ImGui::IsItemActivated())
+        {
+            app->RecordUndo();
+        }
 
         // マテリアルのカラーの編集
         ImGui::Separator();
@@ -163,24 +191,28 @@ void EditorUI::Draw(Application* app)
             // ImGuiが矢印キーが押された瞬間を検知したら、座標を足し引きする
             if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) // 右矢印
             {
+                app->RecordUndo();
                 trans.position.x += snapValue;
 
             }
 
             if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) // 左矢印
             {
+                app->RecordUndo();
                 trans.position.x -= snapValue;
 
             }
 
             if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) // 上矢印
             {
+                app->RecordUndo();
                 trans.position.y += snapValue;
 
             }
 
             if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) // 下矢印
             {
+                app->RecordUndo();
                 trans.position.y -= snapValue;
 
             }

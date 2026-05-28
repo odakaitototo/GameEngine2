@@ -397,6 +397,52 @@ void Application::PickObject(float mouseX, float mouseY, float viewWidth, float 
 
 }
 
+void Application::RecordUndo()
+{
+    if (m_selectedObjectIndex == -1)
+    {
+        return; // 何も選択されていなければ無視
+    }
+
+    auto& t = m_gameObjects[m_selectedObjectIndex]->GetTransform();
+
+    // 現在の数値をメモ帳に書き写す
+    UndoRecord rec;
+    rec.objectIndex = m_selectedObjectIndex;
+    rec.px = t.position.x; rec.py = t.position.y; rec.pz = t.position.z;
+    rec.rx = t.rotation.x; rec.ry = t.rotation.y; rec.rz = t.rotation.z;
+    rec.sx = t.scale.x;  rec.sy = t.scale.y;  rec.sz = t.scale.z;
+
+    // 履歴リストの最後に追加する
+    m_undoStack.push_back(rec);
+}
+
+// Ctrl+zが押されたときに呼び出し、過去の状態を復元する
+void Application::ExecuteUndo()
+{
+    if (m_undoStack.empty())
+    {
+        return; // 履歴がなければ何もしない
+    }
+
+        // 履歴リストの一番最後（最新の過去）を取り出す
+        UndoRecord rec = m_undoStack.back();
+        m_undoStack.pop_back(); // 取り出した履歴はリストから消す
+
+        // インデックスが安全か確認してから復元する
+        if (rec.objectIndex >= 0 && rec.objectIndex < m_gameObjects.size())
+        {
+            auto& t = m_gameObjects[rec.objectIndex]->GetTransform();
+            t.position = { rec.px, rec.py, rec.pz };
+            t.rotation = { rec.rx, rec.rz, rec.rz };
+            t.scale = { rec.sx, rec.sy, rec.sz };
+
+            // 復元したオブジェクトを選択状態にする
+            m_selectedObjectIndex = rec.objectIndex;
+        }
+    
+}
+
 
 
 

@@ -27,6 +27,15 @@ struct ConstantBufferTransform
     DirectX::XMFLOAT3 dummy; // 12バイト（これで合計16バイト）
 };
 
+
+struct UndoRecord
+{
+    int objectIndex; // 度のオブジェクトか
+    float px, py, pz; // 位置
+    float rx, ry, rz; // ローテーション
+    float sx, sy, sz; // スケール
+};
+
 class Application {
     friend class EditorUI; // EditorUIクラスは、私のprivateデータにアクセスしてもよい、という一文
     friend class Renderer;
@@ -60,6 +69,11 @@ public: // オブジェクト関係
 
     void PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight); // マウスクリックでオブジェクトを選択する関数
 
+public: // ショートカットキー関係
+
+    // Ctrl+Z（ひとつ前の状態に戻る）
+    void RecordUndo(); // 動かす前の情報を保存する
+    void ExecuteUndo(); // 「Ctrl+Z」を押した時に巻き戻す
 
     
 
@@ -110,4 +124,7 @@ private: // ビューポート関係
     // 現在のSceneのサイズを記憶しておくための変数
     float m_sceneWidth = 0.0f;
     float m_sceneHeight = 0.0f;
+
+private: // ショートカットキー関係
+    std::vector<UndoRecord> m_undoStack;
 };
