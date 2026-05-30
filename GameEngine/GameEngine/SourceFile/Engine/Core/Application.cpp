@@ -12,6 +12,7 @@
 // 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static Application* g_app = nullptr; // WindowProcからApplication本体を操作するためのグローバル変数
 
 Application::Application() : m_hWnd(nullptr), m_hInstance(nullptr) {}
 
@@ -20,6 +21,8 @@ Application::~Application() {}
 // 初期化処理
 bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 {
+
+    g_app = this; // 自分自身を登録
 
     SetProcessDPIAware();
     m_hInstance = hInstance;
@@ -36,6 +39,9 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
         100,100, width, height, NULL, NULL, wc.hInstance, NULL);
 
     if (!m_hWnd) return false;
+
+    DragAcceptFiles(m_hWnd, TRUE); // Windowsに「ドラッグ＆ドロップ」の許可をする
+
 
     // 3. DirectXの初期化
     if (!m_dx.Initialize(m_hWnd, width, height)) 
@@ -174,27 +180,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     float fovAngle = DirectX::XMConvertToRadians(60.0f);
     m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
 
-    // 画像を読み込んで、テクスチャ付きのサイコロを作る
-    m_testTexture = std::make_shared<Texture>();
-
-    // 用意した画像ファイル名に合わせる
-    if (m_testTexture->Load(m_dx.GetDevice(), "C:/HAL/Game/DX/GameEngine/GameEngine/miaka.jpg"))
-    {
-        auto testObj = std::make_shared<GameObject>("TexturedBox");
-        testObj->SetMesh(m_commonMesh); // 形をセット
-        testObj->SetTexture(m_testTexture); // 画像をセット
-        testObj->GetUseSolidColor() = false; // 単色モードをOFF
-
-        // グリッド乗せんの上に乗るように調整
-        testObj->GetTransform().position = { 0.0f,0.5f,0.0f };
-
-        m_gameObjects.push_back(testObj); // 世界に配置
-    }
-    else
-    {
-        // もし画像が見つからなかったら、コンソールに警告を出す
-        OutputDebugStringA("画像の読み込みに失敗しました！ファイル名と場所を確認してください");
-    }
+   
 
     return true;
 }
@@ -265,6 +251,15 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam,
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
+
+        // ファイルがドロップされたときの合図を取得する
+    case WM_DROPFILES:
+        if (g_app)
+        {
+            // wParamに「落とされたファイルの情報」があるので渡す
+            g_app->OnDropFiles((HDROP)wParam);
+        }
+        return 0;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -310,7 +305,7 @@ void Application::LoadScene(const std::string& filename)
     for (const auto& j : root)
     {
         auto obj = std::make_shared<GameObject>("");
-        obj->FromJson(j);
+        obj->FromJson(j, m_dx.GetDevice());
 
         obj->SetMesh(m_commonMesh); // 読み込んだオブジェクトに「形」を与える
         m_gameObjects.push_back(obj);
@@ -343,7 +338,7 @@ void Application::InstantiatePrefab(const std::string& filename)
         ifs >> j; // JSONとして解析
 
         auto obj = std::make_shared<GameObject>("");
-        obj -> FromJson(j);
+        obj -> FromJson(j, m_dx.GetDevice());
         obj->SetName(obj->GetName() + "(Clone)");
 
         obj->SetMesh(m_commonMesh); // クローンしたオブジェクトに「形」を与える
@@ -483,6 +478,34 @@ void Application::ExecuteUndo()
             m_selectedObjectIndex = rec.objectIndex;
         }
     
+}
+
+void Application::OnDropFiles(HDROP hDrop)
+{
+    char filePath[MAX_PATH];
+
+    // 落とされたファイルの内、1番目のファイルパスを読み取る
+    if (DragQueryFileA(hDrop, 0, filePath, MAX_PATH))
+    {
+        // オブジェクトが選択されているか確認
+        if (m_selectedObjectIndex != -1)
+        {
+            // 新しいテクスチャを作って読み込む
+            auto newTexture = std::make_shared<Texture>();
+
+            // ドラッグ＆ドロップなら絶対パス（filePath）が確実に入る
+            if (newTexture->Load(m_dx.GetDevice(), filePath))
+            {
+                // 選択中のオブジェクトに画像をセットして、テクスチャモードをONにする
+                m_gameObjects[m_selectedObjectIndex]->SetTexture(newTexture);
+                m_gameObjects[m_selectedObjectIndex]->GetUseSolidColor() = false;
+
+                OutputDebugStringA("マテリアルを適応しました");
+            }
+        }
+    }
+    // Windowsに「ファイルの受け取り処理が終わりました」と報告
+    DragFinish(hDrop);
 }
 
 

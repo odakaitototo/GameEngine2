@@ -38,7 +38,7 @@ public:
 
 public: // JSON関係
 	// JSONへの書き出し
-	json ToJson() const
+	nlohmann::json ToJson() const
 	{
 		// "name"で登録した名前とTransformの情報をペアで管理する
 		// j["name"]で呼び出すことで情報を呼び出すことができる
@@ -53,11 +53,21 @@ public: // JSON関係
 
 		j["color"] = { m_color.x, m_color.y, m_color.z, m_color.w }; // 色のデータ
 		j["useSolidColor"] = m_useSolidColor; // 単色モードのON/OFFの情報
+
+		// テクスチャのパスをJSONに書き出す
+		if (m_texture != nullptr)
+		{
+			j["texturePath"] = m_texture->GetFilePath();
+		}
+		else
+		{
+			j["texturePath"] = ""; //画像がない場合は空文字
+		}
 		return j;
 	}
 
 	// JSONから読み込み
-	void FromJson(const json& j)
+	void FromJson(const json& j, ID3D11Device* device)
 	{
 		m_name = j.at("name").get<std::string>();
 		auto& t = j.at("transform");
@@ -77,6 +87,22 @@ public: // JSON関係
 		if (j.contains("useSolidColor"))
 		{
 			m_useSolidColor = j["useSolidColor"];
+		}
+
+		// JSONからテクスチャのパスを読み込み、自動ロードする
+		if (j.contains("texturePath") && j["texturePath"] != "")
+		{
+			std::string path = j["texturePath"];
+
+			auto loadedTex = std::make_shared<Texture>();
+			if (loadedTex->Load(device, path))
+			{
+				m_texture = loadedTex;
+			}
+		}
+		else
+		{
+			m_texture = nullptr;
 		}
 
 	}

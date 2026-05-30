@@ -54,5 +54,9 @@ bool Texture::Load(ID3D11Device* device, const std::string& filename)
 	{
 		return false;
 	}
+
+	// 正常に読み込めたら、パスを記憶しておく」
+	m_filePath = filename;
+
 	return true;
 }

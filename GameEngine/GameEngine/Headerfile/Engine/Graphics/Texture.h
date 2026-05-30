@@ -16,9 +16,13 @@ public:
 	// 描画する時に、GPU（シェーダー）に画像を渡すための窓口
 	ID3D11ShaderResourceView* GetSRV() const { return m_pSRV.Get(); }
 
+	// 画像のファイルパスを取得する関数
+	std::string GetFilePath() const { return m_filePath; }
+
 private:
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture; // テクスチャの実態
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pSRV; // シェーダーへ渡す用のビュー
+	std::string m_filePath; // 読み込んだ画像のパスを記憶する変数
 
 };

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <DirectXCollision.h> // 当たり判定を使うためのもの
+#include <shellapi.h> // ドラッグ＆ドロップ機能を使うためのもの
 #include "DirectXMath.h"
 
 #include "Engine/Graphics/DirectXManager.h"
@@ -54,12 +55,20 @@ public:
     void Terminate();
 
 public: // 保存と読み込みの関数
+
+    // シーンの保存と読み込みの関数
     void SaveScene(const std::string& filename);
 	void LoadScene(const std::string& filename);
 
-public: // プレハブの保存と読み込みの関数
+    // プレハブの保存と読み込みの関数
     void SavePrefab(int index, const std::string& filename);
     void InstantiatePrefab(const std::string& filename);
+
+public: // ファイルのドロップ関係
+
+    // ファイルがドロップされたときの処理
+    void OnDropFiles(HDROP hDrop); 
+    
 
 public: // ビューポート関係
     // Sceneのサイズが変った時に呼び出す関数

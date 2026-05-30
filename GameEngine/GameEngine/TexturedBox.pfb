@@ -5,12 +5,12 @@
         1.0,
         1.0
     ],
-    "name": "GameObject0",
-    "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\test.png",
+    "name": "TexturedBox",
+    "texturePath": "C:/HAL/Game/DX/GameEngine/GameEngine/miaka.jpg",
     "transform": {
         "position": [
-            -3.0,
-            0.0,
+            -2.5,
+            0.5,
             0.0
         ],
         "rotation": [
