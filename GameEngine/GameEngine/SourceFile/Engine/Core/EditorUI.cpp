@@ -52,7 +52,61 @@ void EditorUI::Draw(Application* app)
         app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
     }
 
+
+    // エディタカメラの操作
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+    {
+        // マウスの移動量を取得して,カメラを回転させる
+        ImVec2 mouseDelta = ImGui::GetIO().MouseDelta;
+        app->m_camera.Rotate(mouseDelta.y * 0.2f, mouseDelta.x * 0.2f);
+
+        // WASDキーでカメラを移動させる
+        float moveSpeed = 0.1f;
+        float dRight = 0.0f, dUp = 0.0f, dForward = 0.0f;
+
+        if (ImGui::IsKeyDown(ImGuiKey_W))
+        {
+            dForward += moveSpeed; // 前
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_S))
+        {
+            dForward -= moveSpeed; // 後ろ
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_D))
+        {
+            dRight += moveSpeed; // 右
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_A))
+        {
+            dRight -= moveSpeed; // 左
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_Q))
+        {
+            dUp += moveSpeed;  // 上
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_E))
+        {
+            dUp -= moveSpeed; // 下
+        }
+
+        // Shiftキーを押している間は早くなる
+        if (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift))
+        {
+            dRight *= 3.0f;
+            dForward *= 3.0f;
+        }
+
+        app->m_camera.Move(dRight, dUp, dForward);
+    }
+
     ImGui::End();
+
+    
 
 
 

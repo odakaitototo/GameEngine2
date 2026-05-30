@@ -127,4 +127,7 @@ private: // ビューポート関係
 
 private: // ショートカットキー関係
     std::vector<UndoRecord> m_undoStack;
+
+private: // テクスチャー関係
+    std::shared_ptr<Texture> m_testTexture; // テスト用の画像
 };

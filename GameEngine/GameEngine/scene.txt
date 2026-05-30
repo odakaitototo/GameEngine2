@@ -9,21 +9,48 @@
         "name": "GameObject0",
         "transform": {
             "position": [
-                0.0,
+                3.299999952316284,
                 0.0,
                 0.0
             ],
             "rotation": [
                 0.0,
-                0.0,
+                -24.200000762939453,
                 0.0
             ],
             "scale": [
                 1.0,
-                1.0,
+                0.8399999737739563,
                 1.0
             ]
         },
-        "useSolidColor": false
+        "useSolidColor": true
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject0(Clone)",
+        "transform": {
+            "position": [
+                1.2999999523162842,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                -24.200000762939453,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.8399999737739563,
+                1.0
+            ]
+        },
+        "useSolidColor": true
     }
 ]

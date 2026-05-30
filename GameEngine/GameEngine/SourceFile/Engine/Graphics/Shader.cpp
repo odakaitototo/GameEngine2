@@ -26,11 +26,22 @@ bool Shader::Load(ID3D11Device* device, const std::wstring& fileName)
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA,0} // 12という数字は、座標（float3 = 4バイト*3 = 12バイト）の次から色（COLOR）が始まるという意味
-
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA,0}, // 12という数字は、座標（float3 = 4バイト*3 = 12バイト）の次から色（COLOR）が始まるという意味
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	HRESULT hrLayout = device->CreateInputLayout(ied, 2, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &m_inputLayout);
+	// サンプラーの作成
+	D3D11_SAMPLER_DESC sampDesc = {};
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // きれいに拡大拡小する
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; // はみ出したらリピート
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	device->CreateSamplerState(&sampDesc, &m_samplerState);
+
+	HRESULT hrLayout = device->CreateInputLayout(ied, 3, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &m_inputLayout);
 	
 	if (FAILED(hrLayout))
 	{
@@ -49,4 +60,7 @@ void Shader::Bind(ID3D11DeviceContext* context)
 	context->IASetInputLayout(m_inputLayout.Get());
 	context->VSSetShader(m_vertexShader.Get(), nullptr, 0);
 	context->PSSetShader(m_pixelShader.Get(), nullptr, 0);
+	// ピクセルシェイダーにサンプラーをセット
+	context->PSSetSamplers(0, 1, m_samplerState.GetAddressOf());
 }
+

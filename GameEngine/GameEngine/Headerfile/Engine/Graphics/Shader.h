@@ -22,4 +22,6 @@ private:
 	ComPtr<ID3D11VertexShader> m_vertexShader; // 頂点シェイダーのデータ
 	ComPtr<ID3D11PixelShader> m_pixelShader; // ピクセルシェイダーのデータ
 	ComPtr<ID3D11InputLayout> m_inputLayout; // C++の構造体とHLSLの橋渡し役
+
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> m_samplerState; // サンプラー
 };

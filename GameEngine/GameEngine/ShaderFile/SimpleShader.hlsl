@@ -13,6 +13,9 @@ cbuffer TransformBuffer : register(b0) // •`‰æ‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğImGui‚Å“®‚©‚µ‚½‚
     float3 dummy;
 }
 
+// C++‚©‚ç‘—‚ç‚ê‚Ä‚­‚éu‰æ‘œv‚ÆuƒTƒ“ƒvƒ‰[v
+Texture2D txDiffuse : register(t0);
+SamplerState samLinear : register(s0);
 
 // CPU‚©‚çó‚¯æ‚é’¸“_ƒf[ƒ^‚ÌŒ`
 // Mesh.h‚Å’è‹`‚µ‚½ustruct Vertexv‚ÆŠ®‘S‚Éˆê’v‚³‚¹‚é•K—v‚ª‚ ‚éB
@@ -21,12 +24,14 @@ struct VS_INPUT
 {
     float3 Pos : POSITION;
     float4 Color : COLOR;
+    float2 Tex : TEXCOORD; // UVÀ•W
 };
 
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float4 Color : COLOR;
+    float2 Tex : TEXCOORD; // UVÀ•W
 };
 
 VS_OUTPUT VS(VS_INPUT input)
@@ -39,6 +44,7 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(output.Pos, View); // ƒJƒƒ‰‚©‚ç‚Ì‹“_‚É•ÏŠ·
     output.Pos = mul(output.Pos, projection); // ‰“‹ßŠ´
     output.Color = input.Color;
+    output.Tex = input.Tex; // ‚»‚Ì‚Ü‚ÜƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‘—‚é
     return output;
 }
 
@@ -50,9 +56,17 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
         return materialColor;
     }
     // ƒXƒCƒbƒ`‚ªOFF‚È‚ç“øF‚É‚·‚é
+    else if(useSolidColor == 2)
+    {
+       // ‰æ‘œ‚ğ‚½‚È‚¢ƒOƒŠƒbƒhü
+        return input.Color * materialColor;
+    }
     else
     {
-        return input.Color * materialColor;
+         // UVÀ•W‚ğg‚Á‚ÄA‰æ‘œiƒeƒNƒXƒ`ƒƒj‚©‚çF‚ğ“Ç‚İæ‚é
+        float4 texColor = txDiffuse.Sample(samLinear, input.Tex);
+        
+        return texColor * materialColor;
     }
     
 }

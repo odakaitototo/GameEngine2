@@ -18,6 +18,10 @@ public:
 	Camera();
 	~Camera();
 
+	void Update(); // フレーム呼んで行列を更新する
+	void Move(float dRight, float dUp, float dForward); // 前後左右への移動
+	void Rotate(float dpitch, float dYam); // 視点の回転
+
 	// カメラの位置と向いている方向を設定
 	// position (Eye) : カメラの現在の位置
 	// target (Focus) : カメラが「何を見つめているか」の中心点
@@ -48,4 +52,10 @@ public:
 private:
 	DirectX::XMMATRIX m_viewMatrix;
 	DirectX::XMMATRIX m_projectionMatrix;
+
+	// カメラの状態を記憶する変数
+
+	DirectX::XMFLOAT3 m_position = { 0.0f, 1.0f, -10.0f }; // 初期位置
+	float m_pitch = 0.0f; // 縦の回転数（おじぎ）
+	float m_yaw = 0.0f; // 横の回転角度（首振り）
 };

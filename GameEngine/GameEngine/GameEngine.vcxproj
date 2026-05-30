@@ -127,14 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Dependencies\ImGui\imconfig.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imgui.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imgui_impl_dx11.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imgui_internal.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imstb_textedit.h" />
-    <ClInclude Include="..\Dependencies\ImGui\imstb_truetype.h" />
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
     <ClInclude Include="Headerfile\Engine\Core\EditorUI.h" />
     <ClInclude Include="Headerfile\Engine\Core\Renderer.h" />
@@ -143,6 +135,8 @@
     <ClInclude Include="Headerfile\Engine\Graphics\ImGuiManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Mesh.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Shader.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\stb_image.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\Texture.h" />
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
@@ -162,6 +156,7 @@
     <ClCompile Include="SourceFile\Engine\Graphics\ImGuiManager.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp" />
+    <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <ItemGroup>

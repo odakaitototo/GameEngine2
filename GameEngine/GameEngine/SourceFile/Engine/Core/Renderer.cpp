@@ -26,7 +26,7 @@ void Renderer::Render(Application* app)
 
         // 色の設定
         cbGrid.materialColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-        cbGrid.useSolidColor = 0;
+        cbGrid.useSolidColor = 2;
         cbGrid.dummy = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
         // 定数バッファにデータを書き込む
@@ -80,8 +80,20 @@ void Renderer::Render(Application* app)
         // GameObjectの色を、GPUへ送るデータに詰める
         cbData.materialColor = app->m_gameObjects[i]->GetColor();
 
+        if (app->m_gameObjects[i]->GetUseSolidColor())
+        {
+            cbData.useSolidColor = 1; // 単色モード
+        }
+        else if(app->m_gameObjects[i]->GetTexture())
+        {
+            cbData.useSolidColor = 0; // テクスチャーモード
+        }
+        else
+        {
+            cbData.useSolidColor = 2; // 画像がない場合は頂点カラーモード
+        }
         //  boolをintに変換してGPUに送る
-        cbData.useSolidColor = app->m_gameObjects[i]->GetUseSolidColor() ? 1 : 0;
+       // cbData.useSolidColor = app->m_gameObjects[i]->GetUseSolidColor() ? 1 : 0;
 
         cbData.dummy = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
             
@@ -109,9 +121,22 @@ void Renderer::Render(Application* app)
         // ピクセルシェイダーにも上と同じデータをセットする
         app->m_dx.GetContext()->PSSetConstantBuffers(0, 1, app->m_pConstantBuffer.GetAddressOf());
 
+        // GameObjectが画像を持っていたら、シェーダーにセットする
+        auto texture = app->m_gameObjects[i]->GetTexture();
+        if (texture != nullptr)
+        {
+            // 画像を持っている場合は、その画像をセット
+            ID3D11ShaderResourceView* srv = texture->GetSRV();
+            app->m_dx.GetContext()->PSSetShaderResources(0, 1, &srv);
+        }
+        else
+        {
+            ID3D11ShaderResourceView* nullSrv = nullptr;
+            app->m_dx.GetContext()->PSSetShaderResources(0, 1, &nullSrv);
+        }
+
         // データの準備完了　描画
         app->m_gameObjects[i]->Draw(app->m_dx.GetContext());
-
 
     }
 }

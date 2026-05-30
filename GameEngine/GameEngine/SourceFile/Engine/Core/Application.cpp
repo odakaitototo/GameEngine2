@@ -72,27 +72,51 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     std::vector<Vertex> vertices =
     {
         // 前面 (Z = -0.5)
-        {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f }}, // 0: 左上 (赤)
-        {{  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f }}, // 1: 右上 (緑)
-        {{ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f }}, // 2: 左下 (青)
-        {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f }}, // 3: 右下 (黄)
+        {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 0
+        {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 1
+        {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 2
+        {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 3
 
         // 背面 (Z = 0.5)
-        {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f }}, // 4: 左上 (マゼンタ)
-        {{  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f }}, // 5: 右上 (シアン)
-        {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }}, // 6: 左下 (白)
-        {{  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 0.0f, 1.0f }}  // 7: 右下 (黒)
+        {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 4
+        {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 5
+        {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 6
+        {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 7
+
+        // 上面 (Y = 0.5)
+        {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 8
+        {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 9
+        {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 10
+        {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 11
+
+        // 下面 (Y = -0.5)
+        {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 12
+        {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 13
+        {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 14
+        {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 15
+
+        // 左面 (X = -0.5)
+        {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 16
+        {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 17
+        {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 18
+        {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 19
+
+        // 右面 (X = 0.5)
+        {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 20
+        {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 21
+        {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 22
+        {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}  // 23
     };
 
     // インっデックスデータ（頂点を結ぶ計算）
     std::vector<UINT> indices =
     {
-        0, 1, 2,  2, 1, 3, // 前面
-        5, 4, 7,  7, 4, 6, // 背面
-        4, 0, 6,  6, 0, 2, // 左面
-        1, 5, 3,  3, 5, 7, // 右面
-        4, 5, 0,  0, 5, 1, // 上面
-        2, 3, 6,  6, 3, 7  // 下面
+        0, 1, 2,  2, 1, 3,       // 前面
+        4, 5, 6,  6, 5, 7,       // 背面
+        8, 9, 10, 10, 9, 11,     // 上面
+        12, 13, 14, 14, 13, 15,  // 下面
+        16, 17, 18, 18, 17, 19,  // 左面
+        20, 21, 22, 22, 21, 23   // 右面
     };
     m_commonMesh = std::make_shared<Mesh>();
 
@@ -105,16 +129,16 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     UINT gridIndex = 0;
     for (int i = -gridSize; i <= gridSize; i++)
     {
-        gridVertices.push_back({ {(float)i, 0.0f, (float)-gridSize }, { 0.4f, 0.4f, 0.4f, 1.0f } });
-        gridVertices.push_back({ { (float)i, 0.0f, (float)gridSize },  { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridVertices.push_back({ {(float)i, 0.0f, (float)-gridSize }, { 0.4f, 0.4f, 0.4f, 1.0f }, {0.0f,0.0f} });
+        gridVertices.push_back({ { (float)i, 0.0f, (float)gridSize },  { 0.4f, 0.4f, 0.4f, 1.0f }, {0.0f,0.0f} });
         gridIndices.push_back(gridIndex++);
         gridIndices.push_back(gridIndex++);
     
     }
 
     for (int i = -gridSize; i <= gridSize; i++) {
-        gridVertices.push_back({ { (float)-gridSize, 0.0f, (float)i }, { 0.4f, 0.4f, 0.4f, 1.0f } });
-        gridVertices.push_back({ { (float)gridSize, 0.0f, (float)i },  { 0.4f, 0.4f, 0.4f, 1.0f } });
+        gridVertices.push_back({ { (float)-gridSize, 0.0f, (float)i }, { 0.4f, 0.4f, 0.4f, 1.0f }, { 0.0f,0.0f } });
+        gridVertices.push_back({ { (float)gridSize, 0.0f, (float)i },  { 0.4f, 0.4f, 0.4f, 1.0f }, {0.0f,0.0f} });
         gridIndices.push_back(gridIndex++);
         gridIndices.push_back(gridIndex++);
     }
@@ -126,7 +150,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     // シェーダーの生成と読み込み
     m_shader = std::make_unique<Shader>();
     // L"..." とすることで、Wchar_t型 (std::wstring用)の文字列にします
-    if (!m_shader->Load(m_dx.GetDevice(), L"/HAL/Game/DX/GameEngine/GameEngine/GameEngine/ShaderFile/SimpleShader.hlsl"))
+    if (!m_shader->Load(m_dx.GetDevice(), L"ShaderFile/SimpleShader.hlsl"))
     {
         return false; // シェーダーのコンパイルに失敗したら起動しない(安全設計)
     }
@@ -140,22 +164,37 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     cbDesc.MiscFlags = 0;
     cbDesc.StructureByteStride = 0;
 
-     // ばっふぁを生成（初期データは後でマイフレーム送るのでnullptr）
+     // バッファを生成（初期データは後でマイフレーム送るのでnullptr）
     m_dx.GetDevice()->CreateBuffer(&cbDesc, nullptr, &m_pConstantBuffer);
 
-    // カメラの初期設定
-
-    // 位置と向き
-    m_camera.SetLookAt(
-        DirectX::XMVectorSet(0.0f, 1.0f, -10.0f, 0.0f), // eyePosition（カメラの位置）
-        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), // focusPoint（見ている場所）
-        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) // upDirection（上方向）
-    );
+   
 
     // レンズの設定
     float aspectRatio = m_screenWidth / m_screenHeight;
     float fovAngle = DirectX::XMConvertToRadians(60.0f);
     m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
+
+    // 画像を読み込んで、テクスチャ付きのサイコロを作る
+    m_testTexture = std::make_shared<Texture>();
+
+    // 用意した画像ファイル名に合わせる
+    if (m_testTexture->Load(m_dx.GetDevice(), "C:/HAL/Game/DX/GameEngine/GameEngine/miaka.jpg"))
+    {
+        auto testObj = std::make_shared<GameObject>("TexturedBox");
+        testObj->SetMesh(m_commonMesh); // 形をセット
+        testObj->SetTexture(m_testTexture); // 画像をセット
+        testObj->GetUseSolidColor() = false; // 単色モードをOFF
+
+        // グリッド乗せんの上に乗るように調整
+        testObj->GetTransform().position = { 0.0f,0.5f,0.0f };
+
+        m_gameObjects.push_back(testObj); // 世界に配置
+    }
+    else
+    {
+        // もし画像が見つからなかったら、コンソールに警告を出す
+        OutputDebugStringA("画像の読み込みに失敗しました！ファイル名と場所を確認してください");
+    }
 
     return true;
 }
@@ -182,6 +221,9 @@ void Application::Run()
 
             // ImGuiのフレーム開始
             m_imgui.Begin();
+
+            //毎フレーム、カメラの行列を最新状態に更新する
+            m_camera.Update();
 
             m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
 

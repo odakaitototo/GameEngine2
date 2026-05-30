@@ -3,6 +3,8 @@
 #include <vector>
 #include <DirectXMath.h> // 数字ライブラリ（座標計算用）
 #include <Engine/Graphics/Mesh.h>
+#include <Engine/Graphics/Texture.h>
+#include <memory>
 // 外部ファイル
 #include <../SourceFile/Engine/Json/json.hpp> // JSON
 
@@ -97,6 +99,12 @@ public: // メッシュとコンテキスト
 	}
 
 
+public: // テクスチャ関係
+	void SetTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
+
+	std::shared_ptr<Texture> GetTexture() const { return m_texture; }
+	
+
 private:
 	std::string m_name; // オブジェクト名
 	Transform m_transform; // 位置・回転・スケール
@@ -109,5 +117,8 @@ private: // 色関係
 
 private: // メッシュとコンテキスト
 	std::shared_ptr<Mesh> m_mesh; // メッシュへの共通ポインタ
+
+private: // テクスチャ関係
+	std::shared_ptr<Texture> m_texture; // 自分が張り付ける画像
 
 };

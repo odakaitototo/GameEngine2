@@ -12,6 +12,7 @@ struct Vertex
 {
 	DirectX::XMFLOAT3 pos; // 位置（x,y,z）
 	DirectX::XMFLOAT4 color; // 色 (r,g,b,a)
+	DirectX::XMFLOAT2 uv;
 
 };
 
