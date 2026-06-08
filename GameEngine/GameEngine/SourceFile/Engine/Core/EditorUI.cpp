@@ -1,4 +1,4 @@
-#include "Engine/Core/EditorUI.h"
+ï»¿#include "Engine/Core/EditorUI.h"
 #include "Engine/Core/Application.h"
 #include <imgui.h>
 #include <string>
@@ -6,95 +6,97 @@
 void EditorUI::Draw(Application* app)
 {
 
-    // SceneƒEƒBƒ“ƒhƒEiƒrƒ…[ƒ{[ƒgj
+    // Sceneã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ï¼ˆãƒ“ãƒ¥ãƒ¼ãƒœãƒ¼ãƒˆï¼‰
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(640, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Scene");
 
-    // ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ÌŠÄ‹
+    // ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã®ç›£è¦–
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z, false))
     {
         app->ExecuteUndo();
     }
 
-    // DeleteƒL[‚ÅƒIƒuƒWƒFƒNƒg‚ÌÁ‹
+    // Deleteã‚­ãƒ¼ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¶ˆå»
     if (ImGui::IsKeyPressed(ImGuiKey_Delete, false) && app->m_selectedObjectIndex != -1)
     {
-        // ‘I‘ğ’†‚ÌƒIƒuƒWƒFƒNƒg‚ğƒŠƒXƒg‚©‚çÁ‚µ‹‚é
+        // é¸æŠä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªã‚¹ãƒˆã‹ã‚‰æ¶ˆã—å»ã‚‹
         app->m_gameObjects.erase(app->m_gameObjects.begin() + app->m_selectedObjectIndex);
-        app->m_selectedObjectIndex = -1; // ‘I‘ğ‰ğœ
+        app->m_selectedObjectIndex = -1; // é¸æŠè§£é™¤
         app->m_undoStack.clear();
     }
 
 
-    // Œ»İ‚ÌScene‚Ì’†‚Ìg‚¦‚éƒXƒy[ƒX‚ğæ“¾
+    // ç¾åœ¨ã®Sceneã®ä¸­ã®ä½¿ãˆã‚‹ã‚¹ãƒšãƒ¼ã‚¹ã‚’å–å¾—
     ImVec2 sceneWindowSize = ImGui::GetContentRegionAvail();
 
-    // ƒTƒCƒY‚ª0‚æ‚è‚¨‚¨‚«‚¯‚ê‚ÎAAppplication‚ÉƒTƒCƒY•ÏX‚ğ“`‚¦‚é
+    // ã‚µã‚¤ã‚ºãŒ0ã‚ˆã‚ŠãŠãŠãã‘ã‚Œã°ã€Appplicationã«ã‚µã‚¤ã‚ºå¤‰æ›´ã‚’ä¼ãˆã‚‹
     if (sceneWindowSize.x > 0.0f && sceneWindowSize.y > 0.0f)
     {
         app->ResizeScene(sceneWindowSize.x, sceneWindowSize.y);
     }
 
-    // æ“¾‚µ‚½ƒXƒy[ƒX‚Ì‘å‚«‚³‚É‡‚í‚¹‚ÄA3D‚ğ•`‰æ‚µ‚½ƒeƒNƒXƒ`ƒƒ‚ğ‰æ‘œ‚Æ‚µ‚Ä•\¦
+    // å–å¾—ã—ãŸã‚¹ãƒšãƒ¼ã‚¹ã®å¤§ãã•ã«åˆã‚ã›ã¦ã€3Dã‚’æç”»ã—ãŸãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç”»åƒã¨ã—ã¦è¡¨ç¤º
     ImGui::Image((void*)app->m_dx.GetSceneSRV(), sceneWindowSize);
 
+    // ç”»é¢ä¸Šã«ãƒã‚¦ã‚¹ãŒã‚ã‚Šã€ã‹ã¤å·¦ã‚¯ãƒªãƒƒã‚¯ã—ãŸæ™‚ã ã‘å‡¦ç†ã™ã‚‹ï¼ˆUIæ“ä½œã¨ã®åˆ†é›¢ï¼‰
     if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
-        // ƒ}ƒEƒX‚ÌÀ•W‚ğAImage‚Ì¶ã‚ğ(0,0)‚Æ‚µ‚½ƒ[ƒJƒ‹À•W‚É•ÏŠ·‚·‚é
+        // ãƒã‚¦ã‚¹ã®åº§æ¨™ã‚’ã€Imageã®å·¦ä¸Šã‚’(0,0)ã¨ã—ãŸãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã«å¤‰æ›ã™ã‚‹
         ImVec2 mousePos = ImGui::GetMousePos();
-        ImVec2 windowPos = ImGui::GetItemRectMin(); // Image‚Ì¶ã‚ÌÀ•W
+        ImVec2 windowPos = ImGui::GetItemRectMin(); // Sceneç”»é¢ã®å·¦ä¸Šã®åº§æ¨™
 
+        // å¼•ãç®—ã«ã‚ˆã£ã¦ã€ç”»åƒã®å·¦ä¸Šã‚’ï¼ˆ0,0)ã¨ã—ãŸã€ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã«å¤‰æ›
         float localMouseX = mousePos.x - windowPos.x;
         float localMouseY = mousePos.y - windowPos.y;
 
-        // “–‚½‚è”»’è‚ÌÀs
+        // å½“ãŸã‚Šåˆ¤å®šã®å®Ÿè¡Œ
         app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
     }
 
 
-    // ƒGƒfƒBƒ^ƒJƒƒ‰‚Ì‘€ì
+    // ã‚¨ãƒ‡ã‚£ã‚¿ã‚«ãƒ¡ãƒ©ã®æ“ä½œ
     if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
     {
-        // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ğæ“¾‚µ‚Ä,ƒJƒƒ‰‚ğ‰ñ“]‚³‚¹‚é
+        // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã‚’å–å¾—ã—ã¦,ã‚«ãƒ¡ãƒ©ã‚’å›è»¢ã•ã›ã‚‹
         ImVec2 mouseDelta = ImGui::GetIO().MouseDelta;
         app->m_camera.Rotate(mouseDelta.y * 0.2f, mouseDelta.x * 0.2f);
 
-        // WASDƒL[‚ÅƒJƒƒ‰‚ğˆÚ“®‚³‚¹‚é
+        // WASDã‚­ãƒ¼ã§ã‚«ãƒ¡ãƒ©ã‚’ç§»å‹•ã•ã›ã‚‹
         float moveSpeed = 0.1f;
         float dRight = 0.0f, dUp = 0.0f, dForward = 0.0f;
 
         if (ImGui::IsKeyDown(ImGuiKey_W))
         {
-            dForward += moveSpeed; // ‘O
+            dForward += moveSpeed; // å‰
         }
 
         if (ImGui::IsKeyDown(ImGuiKey_S))
         {
-            dForward -= moveSpeed; // Œã‚ë
+            dForward -= moveSpeed; // å¾Œã‚
         }
 
         if (ImGui::IsKeyDown(ImGuiKey_D))
         {
-            dRight += moveSpeed; // ‰E
+            dRight += moveSpeed; // å³
         }
 
         if (ImGui::IsKeyDown(ImGuiKey_A))
         {
-            dRight -= moveSpeed; // ¶
+            dRight -= moveSpeed; // å·¦
         }
 
         if (ImGui::IsKeyDown(ImGuiKey_Q))
         {
-            dUp += moveSpeed;  // ã
+            dUp += moveSpeed;  // ä¸Š
         }
 
         if (ImGui::IsKeyDown(ImGuiKey_E))
         {
-            dUp -= moveSpeed; // ‰º
+            dUp -= moveSpeed; // ä¸‹
         }
 
-        // ShiftƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Í‘‚­‚È‚é
+        // Shiftã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ã‚‹é–“ã¯æ—©ããªã‚‹
         if (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift))
         {
             dRight *= 3.0f;
@@ -110,63 +112,65 @@ void EditorUI::Draw(Application* app)
 
 
 
-    // HierarchyƒEƒBƒ“ƒhƒEi¶‘¤‚É”z’uj
+    // Hierarchyã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ï¼ˆå·¦å´ã«é…ç½®ï¼‰
     ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Hierarchy");
 
     if (ImGui::Button("Save Scene"))
     {
-        app->SaveScene("scene.txt"); // ƒV[ƒ“‚ğ•Û‘¶
+        app->SaveScene("scene.txt"); // ã‚·ãƒ¼ãƒ³ã‚’ä¿å­˜
     }
     if (ImGui::Button("Load Scene"))
     {
-        app->LoadScene("scene.txt"); // ƒV[ƒ“‚ğ“Ç‚İ‚İ
+        app->LoadScene("scene.txt"); // ã‚·ãƒ¼ãƒ³ã‚’èª­ã¿è¾¼ã¿
     }
     ImGui::Separator();
-    // ƒIƒuƒWƒFƒNƒgì¬ƒ{ƒ^ƒ“
+    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆãƒœã‚¿ãƒ³
     if (ImGui::Button("Create Empty"))
     {
-        // V‚µ‚¢ƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚ÄƒŠƒXƒg‚É’Ç‰Á
+        // æ–°ã—ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãƒªã‚¹ãƒˆã«è¿½åŠ 
         std::string name = "GameObject" + std::to_string(app->m_gameObjects.size());
         auto newObj = std::make_shared<GameObject>(name);
 
-        newObj->SetMesh(app->m_commonMesh); // V‚µ‚­ì‚Á‚½ƒIƒuƒWƒFƒNƒg‚ÉA‹¤’ÊƒƒbƒVƒ…‚ÌZŠ‚ğ‹³‚¦‚é
+        newObj->SetMesh(app->m_commonMesh); // æ–°ã—ãä½œã£ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã€å…±é€šãƒ¡ãƒƒã‚·ãƒ¥ã®ä½æ‰€ã‚’æ•™ãˆã‚‹
 
         app->m_gameObjects.push_back(newObj);
     }
     ImGui::Separator();
+    static char prefabLoadBuf[128] = "Yuka.pfb";
+    ImGui::InputText("Prefab File", prefabLoadBuf, sizeof(prefabLoadBuf));
+
+    // â­•ï¸ ã€ä¿®æ­£ã€‘ä¸Šã§å…¥åŠ›ã•ã‚ŒãŸåå‰ï¼ˆprefabLoadBufï¼‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ï¼
     if (ImGui::Button("Instantiate Prefab"))
     {
-        app->InstantiatePrefab("GameObject0.pfb"); // ƒvƒŒƒnƒu‚ğ“Ç‚İ‚ñ‚ÅƒV[ƒ“‚É’Ç‰Á
+        app->InstantiatePrefab(prefabLoadBuf);
     }
-    ImGui::Separator();
-    ImGui::Text("Scene Objects");
-    ImGui::Separator(); // ‹æØ‚é‚½‚ß‚Ìü
+    ImGui::Separator(); // åŒºåˆ‡ã‚‹ãŸã‚ã®ç·š
    
     for (int i = 0; i < app->m_gameObjects.size(); i++)
     {
         bool isSelected = (app->m_selectedObjectIndex == i);
 
-        std::string displayLadel = app->m_gameObjects[i]->GetName() + "##" + std::to_string(i); // ƒNƒ[ƒ“‚©‚çƒNƒ[ƒ“‚ğì‚éÛ‚ÉID‚ª•Ï‚í‚é‚æ‚¤‚É‚µ‚½B
+        std::string displayLadel = app->m_gameObjects[i]->GetName() + "##" + std::to_string(i); // ã‚¯ãƒ­ãƒ¼ãƒ³ã‹ã‚‰ã‚¯ãƒ­ãƒ¼ãƒ³ã‚’ä½œã‚‹éš›ã«IDãŒå¤‰ã‚ã‚‹ã‚ˆã†ã«ã—ãŸã€‚
 
         if (ImGui::Selectable(displayLadel.c_str(), isSelected))
         {
-            app->m_selectedObjectIndex = i; // ‘I‘ğ‚µ‚½ƒIƒuƒWƒFƒNƒg‚Ì”Ô†‚ğ•Û‘¶
+            app->m_selectedObjectIndex = i; // é¸æŠã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç•ªå·ã‚’ä¿å­˜
         }
     }
 
     ImGui::End();
 
-    // InspectorƒEƒBƒ“ƒhƒEi‰E‘¤‚É”z’uj
+    // Inspectorã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ï¼ˆå³å´ã«é…ç½®ï¼‰
     ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Inspector"); // ƒEƒBƒ“ƒhƒE–¼
+    ImGui::Begin("Inspector"); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å
     if (app->m_selectedObjectIndex != -1 && app->m_selectedObjectIndex < app->m_gameObjects.size())
     {
         auto& obj = app->m_gameObjects[app->m_selectedObjectIndex];
 
-        // –¼‘O•ÒW
+        // åå‰ç·¨é›†
         char buf[128];
         strcpy_s(buf, obj->GetName().c_str());
         if (ImGui::InputText("Name", buf, sizeof(buf)))
@@ -175,7 +179,7 @@ void EditorUI::Draw(Application* app)
         }
         ImGui::Separator();
 
-        // Transform•ÒWi‚±‚±‚ª•Û‘¶‘ÎÛ‚É‚È‚éd—v‚Èƒf[ƒ^j
+        // Transformç·¨é›†ï¼ˆã“ã“ãŒä¿å­˜å¯¾è±¡ã«ãªã‚‹é‡è¦ãªãƒ‡ãƒ¼ã‚¿ï¼‰
         auto& trans = obj->GetTransform();
         ImGui::DragFloat3("Position", &trans.position.x, 0.1f);
         if (ImGui::IsItemActivated())
@@ -193,17 +197,17 @@ void EditorUI::Draw(Application* app)
             app->RecordUndo();
         }
 
-        // ƒ}ƒeƒŠƒAƒ‹‚ÌƒJƒ‰[‚Ì•ÒW
+        // ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚«ãƒ©ãƒ¼ã®ç·¨é›†
         ImGui::Separator();
         auto& color = obj->GetColor();
         ImGui::ColorEdit4("Material Color", &color.x);
 
-        // ’PF‰»“øF‚©Ø‚è‘Ö‚¦‚éƒ`ƒFƒbƒNƒ{ƒbƒNƒX
+        // å˜è‰²åŒ–è™¹è‰²ã‹åˆ‡ã‚Šæ›¿ãˆã‚‹ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹
         ImGui::Checkbox("Use Solid Color", &obj->GetUseSolidColor());
     }
     else
     {
-        ImGui::Text("The object is not selected..."); // ƒIƒuƒWƒFƒNƒg‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÌƒƒbƒZ[ƒW
+        ImGui::Text("The object is not selected..."); // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé¸æŠã•ã‚Œã¦ã„ãªã„å ´åˆã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
     }
 
     if (app->m_selectedObjectIndex != -1)
@@ -211,29 +215,29 @@ void EditorUI::Draw(Application* app)
         if (ImGui::Button("Make Prefab"))
         {
             std::string path = app->m_gameObjects[app->m_selectedObjectIndex]->GetName() + ".pfb";
-            app->SavePrefab(app->m_selectedObjectIndex, path); // ƒvƒŒƒnƒu‚Æ‚µ‚Ä•Û‘¶
+            app->SavePrefab(app->m_selectedObjectIndex, path); // ãƒ—ãƒ¬ãƒãƒ–ã¨ã—ã¦ä¿å­˜
         }
     }
 
-    // –îˆóƒL[‚É‚æ‚éƒIƒuƒWƒFƒNƒg‚ÌŒÅ’è’lˆÚ“®
+    // çŸ¢å°ã‚­ãƒ¼ã«ã‚ˆã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å›ºå®šå€¤ç§»å‹•
     if (app->m_selectedObjectIndex != -1)
     {
         ImGui::Separator();
         ImGui::Text("SnapMovement (Arrow Keys)");
 
-        // ˆÚ“®‚·‚é•
+        // ç§»å‹•ã™ã‚‹å¹…
         float snapValue = 1.0f;
 
-        // ‘I‘ğ’†‚ÌƒIƒuƒWƒFƒNƒg‚Ì Transform ‚ğæ“¾
+        // é¸æŠä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã® Transform ã‚’å–å¾—
         auto& trans = app->m_gameObjects[app->m_selectedObjectIndex]->GetTransform();
 
-        // UI‚Ì“ü—Í‚ÆA3D‹óŠÔ‚ÌƒVƒ‡[ƒgƒJƒbƒg“ü—Í‚ğ•ª—£‚·‚é
-        // ImGui::GetID().WantTextInput‚Íu¡AƒeƒLƒXƒgƒ{ƒbƒNƒX‚É•¶š‚ğ‘Å‚¿‚ñ‚Å‚¢‚é‚©Hv‚ğ”»’è
+        // UIã®å…¥åŠ›ã¨ã€3Dç©ºé–“ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆå…¥åŠ›ã‚’åˆ†é›¢ã™ã‚‹
+        // ImGui::GetID().WantTextInputã¯ã€Œä»Šã€ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«æ–‡å­—ã‚’æ‰“ã¡è¾¼ã‚“ã§ã„ã‚‹ã‹ï¼Ÿã€ã‚’åˆ¤å®š
         if (!ImGui::GetIO().WantTextInput)
         {
             static bool prevRight = false, prevLeft = false, prevUp = false, prevDown = false;
 
-            // ¡‚ÌuŠÔ‚ÌƒL[ó‘Ô‚ğWindows@API‚©‚ç’¼Úæ“¾ (ImGui‚Ì‰¡æ‚è‚ğ–³‹)
+            // ä»Šã®ç¬é–“ã®ã‚­ãƒ¼çŠ¶æ…‹ã‚’Windowsã€€APIã‹ã‚‰ç›´æ¥å–å¾— (ImGuiã®æ¨ªå–ã‚Šã‚’ç„¡è¦–)
             bool currRight = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
             bool currLeft = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
             bool currUp = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
@@ -242,36 +246,50 @@ void EditorUI::Draw(Application* app)
 
 
 
-            // ImGui‚ª–îˆóƒL[‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ğŒŸ’m‚µ‚½‚çAÀ•W‚ğ‘«‚µˆø‚«‚·‚é
-            if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) // ‰E–îˆó
+            // ImGuiãŒçŸ¢å°ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸç¬é–“ã‚’æ¤œçŸ¥ã—ãŸã‚‰ã€åº§æ¨™ã‚’è¶³ã—å¼•ãã™ã‚‹
+            if (ImGui::IsKeyPressed(ImGuiKey_L)) // å³çŸ¢å°
             {
                 app->RecordUndo();
                 trans.position.x += snapValue;
 
             }
 
-            if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) // ¶–îˆó
+            if (ImGui::IsKeyPressed(ImGuiKey_J)) // å·¦çŸ¢å°
             {
                 app->RecordUndo();
                 trans.position.x -= snapValue;
 
             }
 
-            if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) // ã–îˆó
+            if (ImGui::IsKeyPressed(ImGuiKey_I)) // ä¸ŠçŸ¢å°
+            {
+                app->RecordUndo();
+                trans.position.z += snapValue;
+
+            }
+
+            if (ImGui::IsKeyPressed(ImGuiKey_K)) // ä¸‹çŸ¢å°
+            {
+                app->RecordUndo();
+                trans.position.z -= snapValue;
+
+            }
+
+            if (ImGui::IsKeyPressed(ImGuiKey_U)) // ä¸ŠçŸ¢å°
             {
                 app->RecordUndo();
                 trans.position.y += snapValue;
 
             }
 
-            if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) // ‰º–îˆó
+            if (ImGui::IsKeyPressed(ImGuiKey_O)) // ä¸‹çŸ¢å°
             {
                 app->RecordUndo();
                 trans.position.y -= snapValue;
 
             }
 
-            // ó‘Ô‚ğXV
+            // çŠ¶æ…‹ã‚’æ›´æ–°
             prevRight = currRight;
             prevLeft  = currLeft;
             prevUp    = currUp;
@@ -287,12 +305,12 @@ void EditorUI::Draw(Application* app)
 
     ImGui::SetNextWindowPos(ImVec2(400, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(400, 100), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Engine Tuner"); // ƒEƒBƒ“ƒhƒE–¼
-    ImGui::Text("Transform"); // ƒeƒLƒXƒg‚Ì•\¦
+    ImGui::Begin("Engine Tuner"); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å
+    ImGui::Text("Transform"); // ãƒ†ã‚­ã‚¹ãƒˆã®è¡¨ç¤º
     ImGui::ColorEdit4("BackgroundColor", app->m_backgroundColor);
     ImGui::End();
 
-    // FPS‚È‚Ç‚Ì“Œvî•ñ(ƒI[ƒo[ƒŒƒC•\¦)
+    // FPSãªã©ã®çµ±è¨ˆæƒ…å ±(ã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤è¡¨ç¤º)
     ImGui::SetNextWindowPos(ImVec2(10, 570));
     ImGui::Begin("Stats", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);

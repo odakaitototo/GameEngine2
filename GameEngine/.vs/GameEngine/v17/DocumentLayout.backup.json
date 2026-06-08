@@ -3,28 +3,40 @@
   "WorkspaceRootPath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Core\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\EditorUI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Core\\EditorUI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Core\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Core\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Json\\json.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\EditorUI.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -67,10 +79,6 @@
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\Mesh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Main\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Main\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -79,20 +87,12 @@
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Json\\json.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Renderer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Headerfile\\Engine\\Core\\Renderer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\Dependencies\\ImGui\\imgui_impl_dx11.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:Dependencies\\ImGui\\imgui_impl_dx11.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{7CCF5576-8BBB-467F-9566-3C2B173850F0}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -102,21 +102,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Texture.cpp",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAAC8AAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-29T08:56:39.619Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -125,66 +112,77 @@
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\EditorUI.cpp",
               "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\EditorUI.cpp",
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\EditorUI.cpp",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAAAFQAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-05-23T05:41:28.423Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Application.h",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
+              "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
+              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
+              "ViewState": "AgIAACsAAAAAAAAAAAAowDMAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-03T07:56:01.179Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Texture.cpp",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\Texture.cpp",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAC8AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-29T08:56:39.619Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "DirectXManager.cpp",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAcwNgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-03T09:04:34.467Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ImGuiManager.cpp",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-03T18:18:40.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "GameObject.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h",
               "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h",
               "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Scene\\GameObject.h",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAIwGQAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAYwHEAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-05-08T08:04:44.264Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Texture.h",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
-              "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
-              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-29T08:36:17.776Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Application.cpp",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
-              "ViewState": "AgIAAKsAAAAAAAAAAAAAALwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-03T07:57:03.837Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Application.h",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
-              "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Application.h",
-              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEIAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-03T07:56:01.179Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "Camera.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Camera.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\Camera.cpp",
@@ -196,7 +194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "Shader.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Shader.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\Shader.cpp",
@@ -208,7 +206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "SimpleShader.hlsl",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\ShaderFile\\SimpleShader.hlsl",
               "RelativeDocumentMoniker": "GameEngine\\ShaderFile\\SimpleShader.hlsl",
@@ -220,7 +218,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "Mesh.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Mesh.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\Mesh.h",
@@ -232,7 +230,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 7,
+              "Title": "json.hpp",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
+              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
+              "ViewState": "AgIAAOQiAAAAAAAAAAAiwB8jAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-20T07:34:05.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "Shader.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Shader.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\Shader.h",
@@ -244,7 +254,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
+              "Title": "Texture.h",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
+              "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
+              "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Graphics\\Texture.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-29T08:36:17.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Application.cpp",
+              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
+              "ViewState": "AgIAAIsBAAAAAAAAAAAcwG4BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-03T07:57:03.837Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "EditorUI.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\EditorUI.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Core\\EditorUI.h",
@@ -256,7 +290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "Renderer.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Renderer.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\Renderer.cpp",
@@ -268,7 +302,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "stb_image.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\stb_image.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\stb_image.h",
@@ -280,19 +314,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "DirectXManager.cpp",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\DirectXManager.cpp",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAUwOAAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-03T09:04:34.467Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "Camera.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\Camera.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\Camera.h",
@@ -304,7 +326,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "Mesh.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\Mesh.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\Mesh.cpp",
@@ -316,7 +338,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "DirectXManager.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Graphics\\DirectXManager.h",
@@ -328,7 +350,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "Main.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Main\\Main.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Main\\Main.cpp",
@@ -340,19 +362,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "json.hpp",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
-              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Json\\json.hpp",
-              "ViewState": "AgIAAOJeAAAAAAAAAAD4v+peAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-20T07:34:05.418Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "Renderer.h",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\Headerfile\\Engine\\Core\\Renderer.h",
               "RelativeDocumentMoniker": "GameEngine\\Headerfile\\Engine\\Core\\Renderer.h",
@@ -364,7 +374,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "imgui_impl_dx11.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\Dependencies\\ImGui\\imgui_impl_dx11.cpp",
               "RelativeDocumentMoniker": "Dependencies\\ImGui\\imgui_impl_dx11.cpp",
@@ -373,18 +383,6 @@
               "ViewState": "AgIAAEgBAAAAAAAAAAAhwP4BAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-05-20T08:57:57.134Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "ImGuiManager.cpp",
-              "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Graphics\\ImGuiManager.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-03T18:18:40.659Z"
             }
           ]
         }

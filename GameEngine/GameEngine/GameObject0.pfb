@@ -6,10 +6,10 @@
         1.0
     ],
     "name": "GameObject0",
-    "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\test.png",
+    "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
     "transform": {
         "position": [
-            -3.0,
+            0.0,
             0.0,
             0.0
         ],

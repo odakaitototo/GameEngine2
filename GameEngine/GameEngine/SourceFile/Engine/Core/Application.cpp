@@ -275,7 +275,7 @@ void Application::SaveScene(const std::string& filename)
     json root = json::array(); // シーン全体を配列する
     for (const auto& obj : m_gameObjects)
     {
-        root.push_back(obj->ToJson());
+        root.push_back(obj->ToJson()); // 全オブジェクトのデータを配列化
     }
 
     std::ofstream ofs(filename);
@@ -301,14 +301,15 @@ void Application::LoadScene(const std::string& filename)
     json root;
     ifs >> root;
 
-    m_gameObjects.clear();
-    for (const auto& j : root)
+    m_gameObjects.clear(); //現在のシーンをリセットする
+
+    for (const auto& j : root) // 配列内のオブジェクトの情報を復元
     {
         auto obj = std::make_shared<GameObject>("");
-        obj->FromJson(j, m_dx.GetDevice());
+        obj->FromJson(j, m_dx.GetDevice()); // テクスチャなどを復元
 
         obj->SetMesh(m_commonMesh); // 読み込んだオブジェクトに「形」を与える
-        m_gameObjects.push_back(obj);
+        m_gameObjects.push_back(obj); // シーンにそろったデータを持つオブジェクトを設置
     }
 }
 
@@ -318,7 +319,7 @@ void Application::SavePrefab(int index, const std::string& filename)
     {
         return;
     }
-
+    // オブジェクト名をファイル名にして出力する
     std::ofstream ofs(filename);
     if (ofs)
         {
@@ -331,20 +332,26 @@ void Application::InstantiatePrefab(const std::string& filename)
     std::ifstream ifs(filename);
     if (!ifs)
     {
-        return;
+        return; // ファイルが見つからなければ何もしない
     }
 
-        json j;
-        ifs >> j; // JSONとして解析
+    // JSONデータを読み込む
+    json j;
+    ifs >> j;
 
-        auto obj = std::make_shared<GameObject>("");
-        obj -> FromJson(j, m_dx.GetDevice());
-        obj->SetName(obj->GetName() + "(Clone)");
+    // 新しいオブジェクトを作ってデータを流し込む
+    auto obj = std::make_shared<GameObject>("");
+    obj->FromJson(j, m_dx.GetDevice());
 
-        obj->SetMesh(m_commonMesh); // クローンしたオブジェクトに「形」を与える
-        m_gameObjects.push_back(obj);
-    
+    // 名前の末尾に (Clone) を付けて分かりやすくする
+    obj->SetName(obj->GetName() + "(Clone)");
+    obj->SetMesh(m_commonMesh); // 形をセット
+
+    // シーンに配置！
+    m_gameObjects.push_back(obj);
 }
+    
+
 
 void Application::ResizeScene(float width, float height)
 {

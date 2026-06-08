@@ -1,8 +1,15 @@
 {
+    "color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
     "name": "GameObject1",
+    "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
     "transform": {
         "position": [
-            0.0,
+            -2.0,
             0.0,
             0.0
         ],
@@ -16,5 +23,6 @@
             1.0,
             1.0
         ]
-    }
+    },
+    "useSolidColor": false
 }

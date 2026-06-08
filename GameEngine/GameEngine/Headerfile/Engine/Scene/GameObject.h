@@ -44,11 +44,17 @@ public: // JSON関係
 		// j["name"]で呼び出すことで情報を呼び出すことができる
 		json j;
 		j["name"] = m_name; // 変数 m_name を"name"というキーで登録
+		// Transformを階層化して保存
 		j["transform"] =
 		{
-			{"position", {m_transform.position.x,m_transform.position.y,m_transform.position.z}},
-			{"rotation", {m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
-			{"scale", {m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
+			{"position", 
+			{m_transform.position.x,m_transform.position.y,m_transform.position.z}},
+
+			{"rotation", 
+			{m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
+
+			{"scale", 
+			{m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
 		};
 
 		j["color"] = { m_color.x, m_color.y, m_color.z, m_color.w }; // 色のデータ
@@ -69,13 +75,18 @@ public: // JSON関係
 	// JSONから読み込み
 	void FromJson(const json& j, ID3D11Device* device)
 	{
-		m_name = j.at("name").get<std::string>();
-		auto& t = j.at("transform");
+		m_name = j.at("name").get<std::string>(); //JSONのnameの中の情報を
+		                                          //C++形式(string型)に変換しm_nameに代入
+
+		auto& t = j.at("transform"); // transformの中にある情報（座標、回転、サイズ）をtに代入
+
+        // 取り出した情報をそれぞれのメンバ変数に代入
 		m_transform.position = { t["position"][0],t["position"][1], t["position"][2] };
 		m_transform.rotation = { t["rotation"][0],t["rotation"][1], t["rotation"][2] };
 		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
 
-		if (j.contains("color"))
+		// JSONの中に色のキーがあるか見る
+		if (j.contains("color")) 
 		{
 			m_color.x = j["color"][0];
 			m_color.y = j["color"][1];
@@ -83,13 +94,13 @@ public: // JSON関係
 			m_color.w = j["color"][3];
 
 		}
-
-		if (j.contains("useSolidColor"))
+		// 読み込むオブジェクトが単色設定かどうか
+		if (j.contains("useSolidColor")) 
 		{
 			m_useSolidColor = j["useSolidColor"];
 		}
 
-		// JSONからテクスチャのパスを読み込み、自動ロードする
+		// 読み込むオブジェクトにテクスチャが貼られているかどうか
 		if (j.contains("texturePath") && j["texturePath"] != "")
 		{
 			std::string path = j["texturePath"];

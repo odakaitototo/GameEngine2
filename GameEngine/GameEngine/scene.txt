@@ -6,11 +6,11 @@
             1.0,
             1.0
         ],
-        "name": "GameObject0",
-        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\test.png",
+        "name": "tuti",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
         "transform": {
             "position": [
-                0.0,
+                -1.0,
                 0.0,
                 0.0
             ],
@@ -22,6 +22,2134 @@
             "scale": [
                 1.0,
                 1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -2.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -4.0,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -5.0,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -3.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -3.0,
+                1.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -4.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -2.0,
+                2.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -2.0,
+                1.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -4.0,
+                2.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                0.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -3.0,
+                2.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                0.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                0.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -4.0,
+                1.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                1.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                0.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -4.0,
+                0.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -3.0,
+                0.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -2.0,
+                0.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -3.0,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -2.0,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                2.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -5.0,
+                1.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.75,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                2.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                2.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.0,
+                1.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                1.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                1.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                3.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                2.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -1.0,
+                2.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -2.0,
+                2.75,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -3.0,
+                3.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -4.0,
+                3.0,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -5.0,
+                3.75,
+                4.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -5.0,
+                4.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "kusa(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
+        "transform": {
+            "position": [
+                -5.0,
+                4.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                2.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                3.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                3.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "tuti(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -5.0,
+                2.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                4.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -3.0,
+                4.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                4.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                4.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                4.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -3.0,
+                4.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -3.0,
+                4.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                4.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                4.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                3.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -3.0,
+                3.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                2.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -3.0,
+                2.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                2.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                3.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                4.75,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                3.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                3.0,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                4.75,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -4.0,
+                4.75,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "renga(Clone)",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "transform": {
+            "position": [
+                -2.0,
+                4.75,
+                3.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                0.5,
                 1.0
             ]
         },
