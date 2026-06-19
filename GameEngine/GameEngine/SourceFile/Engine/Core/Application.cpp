@@ -1,4 +1,5 @@
 #include "Engine/Core/Application.h"
+#include "Engine/Scene/GameObject.h"
 #include <imgui.h>
 
 ////////////////////////////////////////////////////////-----メモ----////////////////////////////////////////////////////////////////////
@@ -114,7 +115,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
         {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}  // 23
     };
 
-    // インっデックスデータ（頂点を結ぶ計算）
+    // インデックスデータ（頂点を結ぶ計算）
     std::vector<UINT> indices =
     {
         0, 1, 2,  2, 1, 3,       // 前面
@@ -236,7 +237,8 @@ void Application::Run()
     }
 }
 
-void Application::Terminate() {
+void Application::Terminate()
+{
     UnregisterClass(L"RescueTraceEngine", m_hInstance);
 }
 
@@ -350,6 +352,27 @@ void Application::InstantiatePrefab(const std::string& filename)
     // シーンに配置！
     m_gameObjects.push_back(obj);
 }
+
+// オブジェクトの複製
+void Application::ObujectDuplication()
+{
+
+    // 何も選択されていなければ処理しない
+    if (m_selectedObjectIndex == -1 || m_selectedObjectIndex >= m_gameObjects.size())
+    {
+        return;
+    }
+
+    // 選択中のオブジェクトのクローンを読んで複製する
+    auto cloneObj = m_gameObjects[m_selectedObjectIndex]->Clone();
+
+    // 完全に重ならないように位置をずらす（ポートフォリオに書けるかも）
+    cloneObj->GetTransform().position.x += 2.0f;
+
+    // リストの一番後ろに追加して、それを選択中の状態にする
+    m_gameObjects.push_back(cloneObj);
+    m_selectedObjectIndex = (int)m_gameObjects.size() - 1;
+}
     
 
 
@@ -441,6 +464,7 @@ void Application::PickObject(float mouseX, float mouseY, float viewWidth, float 
 
 }
 
+
 void Application::RecordUndo()
 {
     if (m_selectedObjectIndex == -1)
@@ -461,7 +485,7 @@ void Application::RecordUndo()
     m_undoStack.push_back(rec);
 }
 
-// Ctrl+zが押されたときに呼び出し、過去の状態を復元する
+// Ctrl+Zが押されたときに呼び出し、過去の状態を復元する
 void Application::ExecuteUndo()
 {
     if (m_undoStack.empty())
@@ -487,6 +511,9 @@ void Application::ExecuteUndo()
     
 }
 
+
+
+// ドラグ＆ドロップでテクスチャーを張り付ける処理
 void Application::OnDropFiles(HDROP hDrop)
 {
     char filePath[MAX_PATH];

@@ -157,6 +157,7 @@
     <ClCompile Include="SourceFile\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp" />
+    <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <ItemGroup>

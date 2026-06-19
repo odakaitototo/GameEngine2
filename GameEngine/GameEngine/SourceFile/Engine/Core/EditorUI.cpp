@@ -11,11 +11,16 @@ void EditorUI::Draw(Application* app)
     ImGui::SetNextWindowSize(ImVec2(640, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Scene");
 
-    // ショートカットキーの監視
+    // Ctrl+Zが押されたときに呼び出し、ひとつ前の操作まで戻る
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z, false))
     {
         app->ExecuteUndo();
     }
+    // Ctrl+Dが押されたときに呼び出し、選択中のオブジェクトを複製する
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_D, false))
+        {
+        app->ObujectDuplication();
+        }
 
     // Deleteキーでオブジェクトの消去
     if (ImGui::IsKeyPressed(ImGuiKey_Delete, false) && app->m_selectedObjectIndex != -1)
@@ -141,7 +146,7 @@ void EditorUI::Draw(Application* app)
     static char prefabLoadBuf[128] = "Yuka.pfb";
     ImGui::InputText("Prefab File", prefabLoadBuf, sizeof(prefabLoadBuf));
 
-    // ⭕️ 【修正】上で入力された名前（prefabLoadBuf）のファイルを読み込む！
+    // 上で入力された名前（prefabLoadBuf）のファイルを読み込む！
     if (ImGui::Button("Instantiate Prefab"))
     {
         app->InstantiatePrefab(prefabLoadBuf);

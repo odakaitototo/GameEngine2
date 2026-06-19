@@ -36,126 +36,175 @@ public:
 
 	bool& GetUseSolidColor() { return m_useSolidColor; } // 単色化虹色かどうかのスイッチを参照する
 
+	//複製機能
+	//自分自身のコピーを作成して返す関数宣言
+	std::shared_ptr<GameObject> Clone() const;
+
+
 public: // JSON関係
-	// JSONへの書き出し
-	nlohmann::json ToJson() const
-	{
-		// "name"で登録した名前とTransformの情報をペアで管理する
-		// j["name"]で呼び出すことで情報を呼び出すことができる
-		json j;
-		j["name"] = m_name; // 変数 m_name を"name"というキーで登録
-		// Transformを階層化して保存
-		j["transform"] =
-		{
-			{"position", 
-			{m_transform.position.x,m_transform.position.y,m_transform.position.z}},
 
-			{"rotation", 
-			{m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
-
-			{"scale", 
-			{m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
-		};
-
-		j["color"] = { m_color.x, m_color.y, m_color.z, m_color.w }; // 色のデータ
-		j["useSolidColor"] = m_useSolidColor; // 単色モードのON/OFFの情報
-
-		// テクスチャのパスをJSONに書き出す
-		if (m_texture != nullptr)
-		{
-			j["texturePath"] = m_texture->GetFilePath();
-		}
-		else
-		{
-			j["texturePath"] = ""; //画像がない場合は空文字
-		}
-		return j;
-	}
-
-	// JSONから読み込み
-	void FromJson(const json& j, ID3D11Device* device)
-	{
-		m_name = j.at("name").get<std::string>(); //JSONのnameの中の情報を
-		                                          //C++形式(string型)に変換しm_nameに代入
-
-		auto& t = j.at("transform"); // transformの中にある情報（座標、回転、サイズ）をtに代入
-
-        // 取り出した情報をそれぞれのメンバ変数に代入
-		m_transform.position = { t["position"][0],t["position"][1], t["position"][2] };
-		m_transform.rotation = { t["rotation"][0],t["rotation"][1], t["rotation"][2] };
-		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
-
-		// JSONの中に色のキーがあるか見る
-		if (j.contains("color")) 
-		{
-			m_color.x = j["color"][0];
-			m_color.y = j["color"][1];
-			m_color.z = j["color"][2];
-			m_color.w = j["color"][3];
-
-		}
-		// 読み込むオブジェクトが単色設定かどうか
-		if (j.contains("useSolidColor")) 
-		{
-			m_useSolidColor = j["useSolidColor"];
-		}
-
-		// 読み込むオブジェクトにテクスチャが貼られているかどうか
-		if (j.contains("texturePath") && j["texturePath"] != "")
-		{
-			std::string path = j["texturePath"];
-
-			auto loadedTex = std::make_shared<Texture>();
-			if (loadedTex->Load(device, path))
-			{
-				m_texture = loadedTex;
-			}
-		}
-		else
-		{
-			m_texture = nullptr;
-		}
-
-	}
+	nlohmann::json ToJson() const;
+	void FromJson(const json& JSON, ID3D11Device* device);
 
 public: // メッシュとコンテキスト
-	// このオブジェクトが使うメッシュをセットする
+
 	void SetMesh(std::shared_ptr<Mesh> mesh)
 	{
 		m_mesh = mesh;
 	}
 
-	// 描画実行
-	void Draw(ID3D11DeviceContext* context)
-	{
-		if (m_mesh)
-		{
-			m_mesh->Bind(context); // GPUに指定のメッシュを使うことを伝える
-			m_mesh->Draw(context); // 描画開始の命令
-		}
-	}
-
+	// 関数の「宣言(名前)」だけにする
+	void Draw(ID3D11DeviceContext* context);
 
 public: // テクスチャ関係
-	void SetTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
-
-	std::shared_ptr<Texture> GetTexture() const { return m_texture; }
-	
+	void SetTexture(std::shared_ptr<Texture> texture)
+	{
+		m_texture = texture;
+	}
+	std::shared_ptr<Texture> GetTexture() const
+	{
+		return m_texture;
+	}
 
 private:
 	std::string m_name; // オブジェクト名
 	Transform m_transform; // 位置・回転・スケール
 
-
 private: // 色関係
-	DirectX::XMFLOAT4 m_color = { 1.0f, 1.0f, 1.0f,1.0f }; // 色のデータ
+	DirectX::XMFLOAT4 m_color = { 1.0f,1.0f,1.0f,1.0f }; // 色のデータ
 	bool m_useSolidColor = false;
-
 
 private: // メッシュとコンテキスト
 	std::shared_ptr<Mesh> m_mesh; // メッシュへの共通ポインタ
 
-private: // テクスチャ関係
+private: //	テクスチャ関係
 	std::shared_ptr<Texture> m_texture; // 自分が張り付ける画像
+
+
+	
+
+
+
+
+//	// JSONへの書き出し
+//	nlohmann::json ToJson() const
+//	{
+//		// "name"で登録した名前とTransformの情報をペアで管理する
+//		// j["name"]で呼び出すことで情報を呼び出すことができる
+//		json j;
+//		j["name"] = m_name; // 変数 m_name を"name"というキーで登録
+//		// Transformを階層化して保存
+//		j["transform"] =
+//		{
+//			{"position", 
+//			{m_transform.position.x,m_transform.position.y,m_transform.position.z}},
+//
+//			{"rotation", 
+//			{m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
+//
+//			{"scale", 
+//			{m_transform.scale.x,m_transform.scale.y,m_transform.scale.z}}
+//		};
+//
+//		j["color"] = { m_color.x, m_color.y, m_color.z, m_color.w }; // 色のデータ
+//		j["useSolidColor"] = m_useSolidColor; // 単色モードのON/OFFの情報
+//
+//		// テクスチャのパスをJSONに書き出す
+//		if (m_texture != nullptr)
+//		{
+//			j["texturePath"] = m_texture->GetFilePath();
+//		}
+//		else
+//		{
+//			j["texturePath"] = ""; //画像がない場合は空文字
+//		}
+//		return j;
+//	}
+//
+//	// JSONから読み込み
+//	void FromJson(const json& j, ID3D11Device* device)
+//	{
+//		m_name = j.at("name").get<std::string>(); //JSONのnameの中の情報を
+//		                                          //C++形式(string型)に変換しm_nameに代入
+//
+//		auto& t = j.at("transform"); // transformの中にある情報（座標、回転、サイズ）をtに代入
+//
+//        // 取り出した情報をそれぞれのメンバ変数に代入
+//		m_transform.position = { t["position"][0],t["position"][1], t["position"][2] };
+//		m_transform.rotation = { t["rotation"][0],t["rotation"][1], t["rotation"][2] };
+//		m_transform.scale = { t["scale"][0],t["scale"][1] ,t["scale"][2] };
+//
+//		// JSONの中に色のキーがあるか見る
+//		if (j.contains("color")) 
+//		{
+//			m_color.x = j["color"][0];
+//			m_color.y = j["color"][1];
+//			m_color.z = j["color"][2];
+//			m_color.w = j["color"][3];
+//
+//		}
+//		// 読み込むオブジェクトが単色設定かどうか
+//		if (j.contains("useSolidColor")) 
+//		{
+//			m_useSolidColor = j["useSolidColor"];
+//		}
+//
+//		// 読み込むオブジェクトにテクスチャが貼られているかどうか
+//		if (j.contains("texturePath") && j["texturePath"] != "")
+//		{
+//			std::string path = j["texturePath"];
+//
+//			auto loadedTex = std::make_shared<Texture>();
+//			if (loadedTex->Load(device, path))
+//			{
+//				m_texture = loadedTex;
+//			}
+//		}
+//		else
+//		{
+//			m_texture = nullptr;
+//		}
+//
+//	}
+//
+//public: // メッシュとコンテキスト
+//	// このオブジェクトが使うメッシュをセットする
+//	void SetMesh(std::shared_ptr<Mesh> mesh)
+//	{
+//		m_mesh = mesh;
+//	}
+//
+//	// 描画実行
+//	void Draw(ID3D11DeviceContext* context)
+//	{
+//		if (m_mesh)
+//		{
+//			m_mesh->Bind(context); // GPUに指定のメッシュを使うことを伝える
+//			m_mesh->Draw(context); // 描画開始の命令
+//		}
+//	}
+//
+//
+//public: // テクスチャ関係
+//	void SetTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
+//
+//	std::shared_ptr<Texture> GetTexture() const { return m_texture; }
+//	
+//
+//private:
+//	std::string m_name; // オブジェクト名
+//	Transform m_transform; // 位置・回転・スケール
+//
+//
+//private: // 色関係
+//	DirectX::XMFLOAT4 m_color = { 1.0f, 1.0f, 1.0f,1.0f }; // 色のデータ
+//	bool m_useSolidColor = false;
+//
+//
+//private: // メッシュとコンテキスト
+//	std::shared_ptr<Mesh> m_mesh; // メッシュへの共通ポインタ
+//
+//private: // テクスチャ関係
+//	std::shared_ptr<Texture> m_texture; // 自分が張り付ける画像
 
 };

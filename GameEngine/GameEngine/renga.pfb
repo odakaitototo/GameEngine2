@@ -9,9 +9,9 @@
     "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
     "transform": {
         "position": [
-            -2.0,
-            0.0,
-            0.0
+            1.5999999046325684,
+            2.0,
+            1.0
         ],
         "rotation": [
             0.0,

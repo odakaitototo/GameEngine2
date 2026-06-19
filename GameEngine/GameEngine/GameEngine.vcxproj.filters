@@ -73,6 +73,9 @@
     <Filter Include="ヘッダー ファイル\Engine\Graphics">
       <UniqueIdentifier>{851dc816-5907-4b1c-9ede-c90d947742f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\Scene">
+      <UniqueIdentifier>{143ef963-6e53-449c-bb50-b0bfee995097}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp">
       <Filter>ソース ファイル\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp">
+      <Filter>ソース ファイル\Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

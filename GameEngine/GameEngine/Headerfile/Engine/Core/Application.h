@@ -15,6 +15,14 @@
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Core/EditorUI.h"
 #include "Engine/Core/Renderer.h"
+
+/////////////////////////////////-------- メモ ---------//////////////////////////////////////////////
+// 
+// ・friend宣言：private内のものを使えるように許可を出すもの。
+// 
+// 
+// 
+///////////////////////////////////////////////////////////////////////////////
 // GPUに送るデータの形式をHLSLと一致させる
 struct ConstantBufferTransform
 {
@@ -38,6 +46,8 @@ struct UndoRecord
 };
 
 class Application {
+
+    // friend宣言：オブジェクトのリストなどを使いたいから
     friend class EditorUI; // EditorUIクラスは、私のprivateデータにアクセスしてもよい、という一文
     friend class Renderer;
     
@@ -83,6 +93,9 @@ public: // ショートカットキー関係
     // Ctrl+Z（ひとつ前の状態に戻る）
     void RecordUndo(); // 動かす前の情報を保存する
     void ExecuteUndo(); // 「Ctrl+Z」を押した時に巻き戻す
+
+    // Ctrl+V（複製）
+    void ObujectDuplication(); // 「Ctrl+V」を押した時に複製する
 
     
 
@@ -136,6 +149,7 @@ private: // ビューポート関係
 
 private: // ショートカットキー関係
     std::vector<UndoRecord> m_undoStack;
+
 
 private: // テクスチャー関係
     std::shared_ptr<Texture> m_testTexture; // テスト用の画像
