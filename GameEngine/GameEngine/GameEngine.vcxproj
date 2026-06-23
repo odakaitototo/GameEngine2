@@ -127,6 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\ImGui\ImGuizmo.h" />
+    <ClInclude Include="Headerfile\Engine\Component\ComponentBase.h" />
+    <ClInclude Include="Headerfile\Engine\Component\TransformComponent.h" />
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
     <ClInclude Include="Headerfile\Engine\Core\EditorUI.h" />
     <ClInclude Include="Headerfile\Engine\Core\Renderer.h" />
@@ -142,12 +145,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\ImGui\imgui.cpp" />
+    <ClCompile Include="..\Dependencies\ImGui\ImGuizmo.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_demo.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Headerfile\Engine\Component\MeshRendererComponent.h" />
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\EditorUI.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Renderer.cpp" />

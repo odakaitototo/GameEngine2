@@ -1,15 +1,23 @@
 ﻿#include "Engine/Core/EditorUI.h"
 #include "Engine/Core/Application.h"
-#include <imgui.h>
+#include "imgui.h"
+#include "ImGuizmo.h"
 #include <string>
 
 void EditorUI::Draw(Application* app)
 {
+    // 画面全体をはめ込み用ボードにする
+    ImGui::DockSpaceOverViewport(0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
 
     // Sceneウィンドウ（ビューボート）
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(640, 400), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Scene");
+
+    // 空白をゼロにし、スクロールを完全にできなくする。画面ずれを防ぐ
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGuiWindowFlags sceneFlags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+    ImGui::Begin("Scene", nullptr, sceneFlags);
+    ImGui::PopStyleVar(); // スタイルを元に戻す
 
     // Ctrl+Zが押されたときに呼び出し、ひとつ前の操作まで戻る
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z, false))
@@ -44,21 +52,15 @@ void EditorUI::Draw(Application* app)
     // 取得したスペースの大きさに合わせて、3Dを描画したテクスチャを画像として表示
     ImGui::Image((void*)app->m_dx.GetSceneSRV(), sceneWindowSize);
 
-    // 画面上にマウスがあり、かつ左クリックした時だけ処理する（UI操作との分離）
-    if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-    {
-        // マウスの座標を、Imageの左上を(0,0)としたローカル座標に変換する
-        ImVec2 mousePos = ImGui::GetMousePos();
-        ImVec2 windowPos = ImGui::GetItemRectMin(); // Scene画面の左上の座標
+    // ギズモを描画するために、画像の座標とサイズを記憶しておく
+    ImVec2 imagePos = ImGui::GetItemRectMin();
+    ImVec2 imageSize = ImGui::GetItemRectSize();
 
-        // 引き算によって、画像の左上を（0,0)とした、ローカル座標に変換
-        float localMouseX = mousePos.x - windowPos.x;
-        float localMouseY = mousePos.y - windowPos.y;
+    // 画像がクリックされたかどうかの状態だけを保存しておく
+    bool isImageHovered = ImGui::IsItemHovered();
+    bool isMouseClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-        // 当たり判定の実行
-        app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
-    }
-
+   
 
     // エディタカメラの操作
     if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
@@ -110,6 +112,74 @@ void EditorUI::Draw(Application* app)
 
         app->m_camera.Move(dRight, dUp, dForward);
     }
+
+    // ImGuizmoによるオブジェクト直感操作システム
+    ImGuizmo::BeginFrame();
+
+    // ギズモサイズを変更する場所
+    ImGuizmo::Style& gizmoStyle = ImGuizmo::GetStyle();
+    gizmoStyle.TranslationLineThickness = 6.0f;  // 移動の線の太さ
+    gizmoStyle.TranslationLineArrowSize = 12.0f; // 移動の矢印の大きさ
+    gizmoStyle.RotationLineThickness = 6.0f;  // 回転の線の太さ
+    gizmoStyle.RotationOuterLineThickness = 5.0f;  // 回転の外側の線の太さ
+    gizmoStyle.ScaleLineThickness = 6.0f;  // 拡縮の線の太さ
+    gizmoStyle.ScaleLineCircleSize = 12.0f; // 拡縮の先端の大きさ
+
+    ImGuizmo::SetOrthographic(false);
+    ImGuizmo::SetDrawlist();
+    ImGuizmo::SetRect(imagePos.x, imagePos.y, imageSize.x, imageSize.y);
+
+    if (app->m_selectedObjectIndex != -1 && app->m_selectedObjectIndex < app->m_gameObjects.size())
+    {
+        auto& trans = app->m_gameObjects[app->m_selectedObjectIndex]->GetTransform();
+
+        // カメラ行列（レンズのデータ）の取得
+        DirectX::XMFLOAT4X4 view, proj;
+        DirectX::XMStoreFloat4x4(&view, app->m_camera.GetViewMatrix());
+        DirectX::XMStoreFloat4x4(&proj, app->m_camera.GetProjectionMatrix());
+
+        // オブジェクトのTransformを、計算用の1つの行列にまとめる
+        float matrixTranslation[3] = { trans.position.x, trans.position.y, trans.position.z };
+        float matrixRotation[3] = { trans.rotation.x, trans.rotation.y, trans.rotation.z };
+        float matrixScale[3] = { trans.scale.x, trans.scale.y, trans.scale.z };
+        float objectMatrix[16];
+        ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, objectMatrix);
+
+        // キーボードで操作モードを切り替え（右クリックでのカメラ移動中以外）
+        static ImGuizmo::OPERATION mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+        {
+            if (ImGui::IsKeyPressed(ImGuiKey_W)) mCurrentGizmoOperation = ImGuizmo::TRANSLATE; // Wキーで移動
+            if (ImGui::IsKeyPressed(ImGuiKey_E)) mCurrentGizmoOperation = ImGuizmo::ROTATE;    // Eキーで回転
+            if (ImGui::IsKeyPressed(ImGuiKey_R)) mCurrentGizmoOperation = ImGuizmo::SCALE;     // Rキーで拡縮
+        }
+
+        // ギズモを画面に描画し、マウスドラッグの操作を受け付ける
+        ImGuizmo::Manipulate(&view.m[0][0], &proj.m[0][0], mCurrentGizmoOperation, ImGuizmo::LOCAL, objectMatrix);
+
+        // もしギズモがマウスで操作されたら、新しい数値をTransformに書き戻す
+        if (ImGuizmo::IsUsing())
+        {
+            float resultTrans[3], resultRot[3], resultScale[3];
+            ImGuizmo::DecomposeMatrixToComponents(objectMatrix, resultTrans, resultRot, resultScale);
+
+            trans.position = { resultTrans[0], resultTrans[1], resultTrans[2] };
+            trans.rotation = { resultRot[0], resultRot[1], resultRot[2] };
+            trans.scale = { resultScale[0], resultScale[1], resultScale[2] };
+        }
+    }
+
+    // 当たり判定をギズモの後に移動させる
+    if (isImageHovered && isMouseClicked && !ImGuizmo::IsOver())
+    {
+        ImVec2 mousePos = ImGui::GetMousePos();
+        float localMouseX = mousePos.x - imagePos.x;
+        float localMouseY = mousePos.y - imagePos.y;
+
+        // 当たり判定を実行する
+        app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
+    }
+
 
     ImGui::End();
 

@@ -1,4 +1,17 @@
 #include "Engine/Scene/GameObject.h"
+#include "Engine/Component/TransformComponent.h"
+#include "Engine/Component/MeshRendererComponent.h"
+
+
+
+// GameObjectが生まれた瞬間の処理
+GameObject::GameObject(std::string name) : m_name(name)
+{
+	// 生まれた瞬間に、自分自身に必要なコンポーネントをセットする
+	AddComponent<TransformComponent>();
+	AddComponent<MeshRendererComponent>();
+}
+
 
 // 自分自身のコピー（分身）を作成して返す関数
 std::shared_ptr<GameObject> GameObject::Clone()const
@@ -7,13 +20,19 @@ std::shared_ptr<GameObject> GameObject::Clone()const
 	auto clone = std::make_shared<GameObject>(m_name + "_Copy");
 
 	// 独立した値のコピー
-	clone->m_transform = this->m_transform;
-	clone->m_color = this->m_color;
-	clone->m_useSolidColor = this->m_useSolidColor;
+	auto& myTransform = this->GetTransform();
+	auto& cloneTransform = clone->GetTransform();
+	cloneTransform.position = myTransform.position;
+	cloneTransform.rotation = myTransform.rotation;
+	cloneTransform.scale    = myTransform.scale;
 
-	// リソースの共有
-	clone->m_mesh = this->m_mesh;
-	clone->m_texture = this->m_texture;
+	auto myRender = this->GetComponent<MeshRendererComponent>();
+	auto cloneRender = clone->GetComponent<MeshRendererComponent>();
+	cloneRender->color = myRender->color;
+	cloneRender->useSolidColor = myRender->useSolidColor;
+	cloneRender->mesh = myRender->mesh;
+	cloneRender->texture = myRender->texture;
+	
 
 	return clone;
 } 
@@ -22,23 +41,25 @@ nlohmann::json GameObject::ToJson() const
 {
 	json JSON;
 	JSON["name"] = m_name;
+	auto& transform = GetTransform();
 	JSON["transform"] =
 	{
-		{"position", {m_transform.position.x,m_transform.position.y,m_transform.position.z}},
-		{"rotation", {m_transform.rotation.x,m_transform.rotation.y,m_transform.rotation.z}},
-		{"scale", {m_transform.scale.x, m_transform.scale.y, m_transform.scale.z}},
+		{"position", {transform.position.x,transform.position.y,transform.position.z}},
+		{"rotation", {transform.rotation.x,transform.rotation.y,transform.rotation.z}},
+		{"scale", {transform.scale.x, transform.scale.y, transform.scale.z}},
 	};
 
-	JSON["color"] = { m_color.x, m_color.y, m_color.z, m_color.w };
-	JSON["useSolidcolor"] = m_useSolidColor;
+	auto render = GetComponent<MeshRendererComponent>();
+	JSON["color"] = { render->color.x,render->color.y, render->color.z, render->color.w };
+	JSON["UseSolidColor"] = render->useSolidColor;
 
-	if (m_texture != nullptr)
+	if (render->texture != nullptr)
 	{
-		JSON["texturePath"] = m_texture->GetFilePath();
+		JSON["texturePath"] = render->texture->GetFilePath();
 	}
 	else
 	{
-		JSON["TexturePath"] = "";
+		JSON["texturePath"] = "";
 	}
 	return JSON;
 }
@@ -46,51 +67,45 @@ nlohmann::json GameObject::ToJson() const
 void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 {
 	m_name = JSON.at("name").get<std::string>();
+	auto& transform = GetTransform();
+	auto& transformData = JSON.at("transform");
+	transform.position = { transformData["position"][0], transformData["position"][1],transformData["position"][2] };
+	transform.rotation = { transformData["rotation"][0],transformData["rotation"][1],transformData["rotation"][2] };
+	transform.scale    = { transformData["scale"][0],transformData["scale"][1],transformData["scale"][2] };
 
-	auto& transform = JSON.at("transform");
-	m_transform.position = { transform["position"][0], transform["position"][1],transform["position"][2] };
-	m_transform.rotation = { transform["rotation"][0],transform["rotation"][1],transform["rotation"][2] };
-	m_transform.scale    = { transform["scale"][0],transform["scale"][1],transform["scale"][2] };
-
+	auto render = GetComponent<MeshRendererComponent>();
 	if (JSON.contains("color"))
 	{
-		m_color.x = JSON["color"][0];
-		m_color.y = JSON["color"][1];
-		m_color.z = JSON["color"][2];
-		m_color.w = JSON["color"][3];
+		render->color.x = JSON["color"][0];
+		render->color.y = JSON["color"][1];
+		render->color.z = JSON["color"][2];
+		render->color.w = JSON["color"][3];
 	}
 
 	if (JSON.contains("useSolidColor"))
 	{
-		m_useSolidColor = JSON["useSolidColor"];
+		render->useSolidColor = JSON["useSolidColor"];
 	}
 
 	if (JSON.contains("texturePath") && JSON["texturePath"] != "")
 	{
 		std::string path = JSON["texturePath"];
-
 		auto loadedTex = std::make_shared<Texture>();
-		if(loadedTex->Load(device,path))
+		if (loadedTex->Load(device, path))
 		{
-			m_texture = loadedTex;
+			render->texture = loadedTex;
 		}
 	}
 	else
 	{
-		m_texture = nullptr;
+		render->texture = nullptr;
 	}
-
-	
 
 }
 
 void GameObject::Draw(ID3D11DeviceContext* context)
 {
-	if (m_mesh)
-	{
-		m_mesh->Bind(context); // GPUに指定のメッシュを使うことを伝える
-		m_mesh->Draw(context); // 描画開始の命令
-	}
+	GetComponent<MeshRendererComponent>()->Draw(context);
 }
 
 	

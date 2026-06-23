@@ -1,6 +1,6 @@
 #include "Engine/Core/Application.h"
 #include "Engine/Scene/GameObject.h"
-#include <imgui.h>
+#include "imgui.h"
 
 ////////////////////////////////////////////////////////-----メモ----////////////////////////////////////////////////////////////////////
 //
@@ -74,6 +74,9 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 
     // Imguiの初期化（DirectXのデバイス等を渡す）
     m_imgui.Initialize(m_hWnd, m_dx.GetDevice(), m_dx.GetContext());
+
+    // ドッキング機能を有効化する一文
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
    m_commonMesh = std::make_shared<Mesh>();
     std::vector<Vertex> vertices =

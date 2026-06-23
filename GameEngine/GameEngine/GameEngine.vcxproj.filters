@@ -76,6 +76,15 @@
     <Filter Include="ソース ファイル\Engine\Scene">
       <UniqueIdentifier>{143ef963-6e53-449c-bb50-b0bfee995097}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\Component">
+      <UniqueIdentifier>{27ff4c2e-7c55-4690-83b6-8bc284c0b2bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Component">
+      <UniqueIdentifier>{fcf34ccf-eb1e-4d73-81b1-86f543871f2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Graphics\ImGui">
+      <UniqueIdentifier>{ea55a1a5-93f1-4482-9345-819b6e018ff0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -113,6 +122,15 @@
     </ClInclude>
     <ClInclude Include="Headerfile\Engine\Graphics\Texture.h">
       <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\ComponentBase.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\TransformComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\ImGui\ImGuizmo.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +187,12 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp">
       <Filter>ソース ファイル\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Headerfile\Engine\Component\MeshRendererComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\ImGui\ImGuizmo.cpp">
+      <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
