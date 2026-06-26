@@ -55,23 +55,14 @@ void Renderer::Render(Application* app)
         // Transformを取得
         auto& t = app->m_gameObjects[i]->GetTransform();
 
-        // スケール・回転・平行移動の行数を作成
-        DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(t.scale.x, t.scale.y, t.scale.z);
-
-        float radX = DirectX::XMConvertToRadians(t.rotation.x);
-        float radY = DirectX::XMConvertToRadians(t.rotation.y);
-        float radZ = DirectX::XMConvertToRadians(t.rotation.z);
-        DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(radX, radY, radZ);
-        DirectX::XMMATRIX translation = DirectX::XMMatrixTranslation(t.position.x, t.position.y, t.position.z);
-
-        // 3つの行数を掛け合わせてワールド行列を完成させる
-        DirectX::XMMATRIX worldMatrix = scale * rotation * translation;
+        // すでにUpdateで計算済みの「ワールド行列」をそのまま読み込む！
+        DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&t.worldMatrix);
 
         // 定数バッファの構造体にデータを詰める
         ConstantBufferTransform cbData;
 
-        // HLSLは行列の読み込み方法がC++と逆なので、転置して送る
         cbData.worldMatrix = DirectX::XMMatrixTranspose(worldMatrix);
+
 
         // ViewとProjectionも転置して詰める
         cbData.viewMatrix = DirectX::XMMatrixTranspose(viewMatrix);

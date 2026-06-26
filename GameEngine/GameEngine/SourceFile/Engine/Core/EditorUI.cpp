@@ -2,7 +2,12 @@
 #include "Engine/Core/Application.h"
 #include "imgui.h"
 #include "ImGuizmo.h"
+
 #include <string>
+#include <functional>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 void EditorUI::Draw(Application* app)
 {
@@ -51,6 +56,26 @@ void EditorUI::Draw(Application* app)
 
     // 取得したスペースの大きさに合わせて、3Dを描画したテクスチャを画像として表示
     ImGui::Image((void*)app->m_dx.GetSceneSRV(), sceneWindowSize);
+
+    // Scene画面へのドラッグ＆ドロップ受付
+    if (ImGui::BeginDragDropTarget())
+    {
+
+        // プレハブのパスを受け取る
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+        {
+            const char* path = (const char*)payload->Data;
+
+            // ファイルの拡張子が.pfbだった時だけプレハブとして出現させる
+            std::string filePath(path);
+            if (filePath.find(".pfb") != std::string::npos)
+            {
+                app->InstantiatePrefab(filePath);
+            }
+        }
+        ImGui::EndDragDropTarget();
+        
+    }
 
     // ギズモを描画するために、画像の座標とサイズを記憶しておく
     ImVec2 imagePos = ImGui::GetItemRectMin();
@@ -131,19 +156,18 @@ void EditorUI::Draw(Application* app)
 
     if (app->m_selectedObjectIndex != -1 && app->m_selectedObjectIndex < app->m_gameObjects.size())
     {
-        auto& trans = app->m_gameObjects[app->m_selectedObjectIndex]->GetTransform();
+        // オブジェクト本体も取得しておく
+        auto selectedObj = app->m_gameObjects[app->m_selectedObjectIndex];
+        auto& trans = selectedObj->GetTransform();
 
         // カメラ行列（レンズのデータ）の取得
         DirectX::XMFLOAT4X4 view, proj;
         DirectX::XMStoreFloat4x4(&view, app->m_camera.GetViewMatrix());
         DirectX::XMStoreFloat4x4(&proj, app->m_camera.GetProjectionMatrix());
 
-        // オブジェクトのTransformを、計算用の1つの行列にまとめる
-        float matrixTranslation[3] = { trans.position.x, trans.position.y, trans.position.z };
-        float matrixRotation[3] = { trans.rotation.x, trans.rotation.y, trans.rotation.z };
-        float matrixScale[3] = { trans.scale.x, trans.scale.y, trans.scale.z };
-        float objectMatrix[16];
-        ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, objectMatrix);
+        // ローカル座標の合成をやめ、すでに計算済みの「ワールド行列（絶対座標）」をそのままギズモに渡す！
+        DirectX::XMFLOAT4X4 worldFloat = trans.worldMatrix;
+        float* objectMatrix = &worldFloat.m[0][0];
 
         // キーボードで操作モードを切り替え（右クリックでのカメラ移動中以外）
         static ImGuizmo::OPERATION mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -157,15 +181,40 @@ void EditorUI::Draw(Application* app)
         // ギズモを画面に描画し、マウスドラッグの操作を受け付ける
         ImGuizmo::Manipulate(&view.m[0][0], &proj.m[0][0], mCurrentGizmoOperation, ImGuizmo::LOCAL, objectMatrix);
 
-        // もしギズモがマウスで操作されたら、新しい数値をTransformに書き戻す
+        // もしギズモがマウスで操作されたら
         if (ImGuizmo::IsUsing())
         {
+            // ギズモが動かした後の「新しいワールド行列」
+            DirectX::XMMATRIX newWorldMat = DirectX::XMLoadFloat4x4(&worldFloat);
+
+            // 親がいる場合は「逆行列」を掛けて、ローカル座標に戻してから保存する
+            DirectX::XMMATRIX newLocalMat;
+            if (selectedObj->GetParent() != nullptr)
+            {
+                DirectX::XMVECTOR det;
+                DirectX::XMMATRIX parentWorld = DirectX::XMLoadFloat4x4(&selectedObj->GetParent()->GetTransform().worldMatrix);
+                DirectX::XMMATRIX invParentWorld = DirectX::XMMatrixInverse(&det, parentWorld);
+
+                newLocalMat = newWorldMat * invParentWorld; // ワールド座標からローカル座標への変換
+            }
+            else
+            {
+                newLocalMat = newWorldMat; // 親がいなければそのまま
+            }
+
+            // 計算した新しいローカル行列から、位置・回転・スケールの数値を抜き出して Transform に上書きする
+            DirectX::XMFLOAT4X4 localFloat;
+            DirectX::XMStoreFloat4x4(&localFloat, newLocalMat);
+
             float resultTrans[3], resultRot[3], resultScale[3];
-            ImGuizmo::DecomposeMatrixToComponents(objectMatrix, resultTrans, resultRot, resultScale);
+            ImGuizmo::DecomposeMatrixToComponents(&localFloat.m[0][0], resultTrans, resultRot, resultScale);
 
             trans.position = { resultTrans[0], resultTrans[1], resultTrans[2] };
             trans.rotation = { resultRot[0], resultRot[1], resultRot[2] };
             trans.scale = { resultScale[0], resultScale[1], resultScale[2] };
+
+            // 行列を再計算して、子オブジェクトたちにも動きを伝える
+            selectedObj->UpdateTransform();
         }
     }
 
@@ -179,12 +228,7 @@ void EditorUI::Draw(Application* app)
         // 当たり判定を実行する
         app->PickObject(localMouseX, localMouseY, sceneWindowSize.x, sceneWindowSize.y);
     }
-
-
     ImGui::End();
-
-    
-
 
 
     // Hierarchyウィンドウ（左側に配置）
@@ -223,17 +267,116 @@ void EditorUI::Draw(Application* app)
     }
     ImGui::Separator(); // 区切るための線
    
-    for (int i = 0; i < app->m_gameObjects.size(); i++)
+    std::function<void(GameObject*, int)> drawNode = [&](GameObject* obj, int index)
     {
-        bool isSelected = (app->m_selectedObjectIndex == i);
+           
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+            if (app->m_selectedObjectIndex == index)
+            {
+                flags |= ImGuiTreeNodeFlags_Selected; // 選択中なら色を変える
+            }
 
-        std::string displayLadel = app->m_gameObjects[i]->GetName() + "##" + std::to_string(i); // クローンからクローンを作る際にIDが変わるようにした。
+            
+            if (obj->GetChildren().empty())
+            {
+                flags |= ImGuiTreeNodeFlags_Leaf;
+            }
 
-        if (ImGui::Selectable(displayLadel.c_str(), isSelected))
+            // クローン対策
+            std::string displayLabel = obj->GetName() + "_" + std::to_string(index);
+
+
+            bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)index, flags, "%s", displayLabel.c_str());
+
+            if (ImGui::IsItemClicked())
+            {
+                app->m_selectedObjectIndex = index;
+            }
+
+            if (ImGui::BeginDragDropSource())
+            {
+                ImGui::SetDragDropPayload("GAMEOBJECT", &index, sizeof(int));
+                ImGui::Text("Move %s", obj->GetName().c_str());
+                ImGui::EndDragDropSource();
+            }
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GAMEOBJECT"))
+                {
+                    int droppedIndex = *(const int*)payload->Data;
+                    GameObject* droppedObj = app->m_gameObjects[droppedIndex].get();
+
+                    if (droppedObj != obj)
+                    {
+                        droppedObj->SetParent(obj);
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
+
+            if (isOpen)
+            {
+                // 子供がいる場合は順番に描画（再帰呼び出し）
+                for (auto* child : obj->GetChildren())
+                {
+                    int childIndex = -1;
+                    for (int i = 0; i < app->m_gameObjects.size(); ++i)
+                    {
+                        if (app->m_gameObjects[i].get() == child)
+                        {
+                            childIndex = i;
+                            break;
+                        }
+                    }
+                    if (childIndex != -1)
+                    {
+                        drawNode(child, childIndex);
+                    }
+                }
+
+                ImGui::TreePop();
+            }
+    };
+
+    // 親がいない単体のオブジェクト表示
+    for (int i = 0; i < app->m_gameObjects.size(); ++i)
+    {
+        if (app->m_gameObjects[i]->GetParent() == nullptr)
         {
-            app->m_selectedObjectIndex = i; // 選択したオブジェクトの番号を保存
+            drawNode(app->m_gameObjects[i].get(), i);
         }
     }
+
+    // ヒエラルキーの何もないところにドロップするとおやこかんけいを解除できる
+    ImGui::Dummy(ImGui::GetContentRegionAvail());
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GAMEOBJECT"))
+        {
+            int droppedIndex = *(const int*)payload->Data;
+            app->m_gameObjects[droppedIndex]->SetParent(nullptr); // 親をなっしにする
+        }
+
+        // Hierarchyの余白にもプレハブを読み込めるようにする
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+        {
+            const char* path = (const char*)payload->Data;
+            std::string filePath(path);
+            if (filePath.find(".pfb") != std::string::npos)
+            {
+                app->InstantiatePrefab(filePath);
+            }
+        }
+
+
+
+        ImGui::EndDragDropTarget();
+    
+    }
+    
+
+    
 
     ImGui::End();
 
@@ -389,5 +532,85 @@ void EditorUI::Draw(Application* app)
     ImGui::SetNextWindowPos(ImVec2(10, 570));
     ImGui::Begin("Stats", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::End();
+
+    ///////////////////////////////////////////////
+    //
+    //プロジェクトウィンドウ(画面下部ウィンドウ)
+    //
+    ////////////////////////////////////////////////
+    ImGui::SetNextWindowPos(ImVec2(10, 600), ImGuiCond_FirstUseEver); // 画面の下の位置に配置
+    ImGui::SetNextWindowSize(ImVec2(780, 200), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Project Browser");
+
+    // 右クリックメニューの作成
+    if (ImGui::BeginPopupContextWindow("ProjectContext"))
+    {
+        if (ImGui::MenuItem("Create New Prefab"))
+        {
+            // 空のプレハブファイルを作る処理
+            std::ofstream ofs("NewPrefab.pfb");
+            ofs << "{}";
+            ofs.close();
+        }
+
+        if (ImGui::MenuItem("Create New Script(HLSL)"))
+        {
+            // 空のシェーダーファイルを作る処理
+            std::ofstream ofs("NewShader.hlsl");
+            ofs << "// New Shader";
+            ofs.close();
+        }
+       
+        ImGui::EndPopup();
+    }
+
+    ImGui::Text("Current Directory: ./ (Right-click to create files)");
+    ImGui::Separator();
+
+    // ファイルを横に並べるための準備
+    float cellSize = 100.0f;
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columnCount = (int)(panelWidth) / cellSize;
+    if (columnCount < 1)
+    {
+        columnCount = 1;
+    }
+
+    ImGui::Columns(columnCount, 0, false);
+
+    // プロジェクトの実行フォルダの中身をループで取得する
+    std::string currentPath = ".";
+    for (const auto& entry : fs::directory_iterator(currentPath))
+    {
+        auto path = entry.path();
+        std::string filename  = path.filename().string();
+        std::string extension = path.extension().string();
+
+        // プレハブ(pfb)とシェーダー・スクリプト(hlsl, txt)、画像(png)だけを表示する
+        if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg")
+        {
+            ImGui::PushID(filename.c_str());
+
+            // アイコン代わりのボタン
+            ImGui::Button(filename.c_str(), ImVec2(90, 90));
+
+            // ドラッグ＆ドロップ
+            if (ImGui::BeginDragDropSource())
+            {
+                // ファイルパを文字列として詰める
+                std::string itemPath = path.string();
+                ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath.c_str(), itemPath.size() + 1);
+                ImGui::Text("Load %s", filename.c_str());
+                ImGui::EndDragDropSource();
+            }
+
+            ImGui::TextWrapped("%s", filename.c_str());
+            ImGui::NextColumn();
+            ImGui::PopID();
+        }
+    }
+
+    ImGui::Columns(1);
     ImGui::End();
 }

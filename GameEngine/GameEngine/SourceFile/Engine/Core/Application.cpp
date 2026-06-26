@@ -1,62 +1,62 @@
-#include "Engine/Core/Application.h"
+ï»¿#include "Engine/Core/Application.h"
 #include "Engine/Scene/GameObject.h"
 #include "imgui.h"
 
-////////////////////////////////////////////////////////-----ƒƒ‚----////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////-----ãƒ¡ãƒ¢----////////////////////////////////////////////////////////////////////
 //
-// shared_ptr(ƒ|ƒCƒ“ƒ^)‚ÅMesh‚ğŠÇ—‚·‚é——RFƒƒ‚ƒŠ‚Ìß–ñFGAmeObject©‘Ì‚É’¸“_ƒf[ƒ^‚ğ‚½‚·‚Æ
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@ƒIƒuƒWƒFƒNƒg‚ğ‘‚â‚·‚½‚Ñ‚ÉGPU‚Ìƒƒ‚ƒŠ‚ªÁ”ï‚³‚ê‚é‚©‚çB
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@ƒ|ƒCƒ“ƒ^‚É‚·‚ê‚ÎÀ‘Ô‚Íˆê‚Â‚ÅÏ‚Ş‚½‚ßƒƒ‚ƒŠ‚ªŒÍŠ‰‚·‚é‚±‚Æ‚Í‚È‚¢B
-// @@@@@@@@@@@@@@@@@@@@F‚‘¬‚È•`‰æF“¯‚¶ƒƒbƒVƒ…‚ğg‚¢‚Ü‚í‚·‚±‚Æ‚ÅA
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@u“¯‚¶ƒƒbƒVƒ…‚ğg‚¤ƒIƒuƒWƒFƒNƒg‚ğ‚Ü‚Æ‚ß‚Ä•`‰æiƒCƒ“ƒXƒ^ƒ“ƒVƒ“ƒOjv
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@‚Æ‚¢‚¤Å“K‰»‚ª‰Â”\
+// shared_ptr(ãƒã‚¤ãƒ³ã‚¿)ã§Meshã‚’ç®¡ç†ã™ã‚‹ç†ç”±ï¼šãƒ¡ãƒ¢ãƒªã®ç¯€ç´„ï¼šGAmeObjectè‡ªä½“ã«é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã‚’æŒãŸã™ã¨
+// ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¢—ã‚„ã™ãŸã³ã«GPUã®ãƒ¡ãƒ¢ãƒªãŒæ¶ˆè²»ã•ã‚Œã‚‹ã‹ã‚‰ã€‚
+// ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ãƒã‚¤ãƒ³ã‚¿ã«ã™ã‚Œã°å®Ÿæ…‹ã¯ä¸€ã¤ã§æ¸ˆã‚€ãŸã‚ãƒ¡ãƒ¢ãƒªãŒæ¯æ¸‡ã™ã‚‹ã“ã¨ã¯ãªã„ã€‚
+// ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï¼šé«˜é€Ÿãªæç”»ï¼šåŒã˜ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½¿ã„ã¾ã‚ã™ã“ã¨ã§ã€
+// ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€ŒåŒã˜ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½¿ã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã¾ã¨ã‚ã¦æç”»ï¼ˆã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚·ãƒ³ã‚°ï¼‰ã€
+// ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã¨ã„ã†æœ€é©åŒ–ãŒå¯èƒ½
 // 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static Application* g_app = nullptr; // WindowProc‚©‚çApplication–{‘Ì‚ğ‘€ì‚·‚é‚½‚ß‚ÌƒOƒ[ƒoƒ‹•Ï”
+static Application* g_app = nullptr; // WindowProcã‹ã‚‰Applicationæœ¬ä½“ã‚’æ“ä½œã™ã‚‹ãŸã‚ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
 
 Application::Application() : m_hWnd(nullptr), m_hInstance(nullptr) {}
 
 Application::~Application() {}
 
-// ‰Šú‰»ˆ—
+// åˆæœŸåŒ–å‡¦ç†
 bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 {
 
-    g_app = this; // ©•ª©g‚ğ“o˜^
+    g_app = this; // è‡ªåˆ†è‡ªèº«ã‚’ç™»éŒ²
 
     SetProcessDPIAware();
     m_hInstance = hInstance;
 
-    // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ìİ’è
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®è¨­å®š
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WindowProc, 0L, 0L,
                       GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
                       L"RescueTraceEngine", NULL };
     RegisterClassEx(&wc);
 
-    // ƒEƒBƒ“ƒhƒE‚Ìì¬
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
     m_hWnd = CreateWindow(wc.lpszClassName, L"Project: Rescue Trace - Engine v0.1",
         WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
         100,100, width, height, NULL, NULL, wc.hInstance, NULL);
 
     if (!m_hWnd) return false;
 
-    DragAcceptFiles(m_hWnd, TRUE); // Windows‚Éuƒhƒ‰ƒbƒO•ƒhƒƒbƒvv‚Ì‹–‰Â‚ğ‚·‚é
+    DragAcceptFiles(m_hWnd, TRUE); // Windowsã«ã€Œãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã€ã®è¨±å¯ã‚’ã™ã‚‹
 
 
-    // 3. DirectX‚Ì‰Šú‰»
+    // 3. DirectXã®åˆæœŸåŒ–
     if (!m_dx.Initialize(m_hWnd, width, height)) 
     {
-        return false; // ‰Šú‰»‚É¸”s‚µ‚½‚ç‹N“®‚µ‚È‚¢
+        return false; // åˆæœŸåŒ–ã«å¤±æ•—ã—ãŸã‚‰èµ·å‹•ã—ãªã„
     }
 
-    // Scene‘‹Œû‚Ì— †ƒŠƒ\[ƒX‚ğ‰ŠúƒTƒCƒY‚Åì‚Á‚Ä‚¨‚­
+    // Sceneçª“å£ã®è£ç´™ãƒªã‚½ãƒ¼ã‚¹ã‚’åˆæœŸã‚µã‚¤ã‚ºã§ä½œã£ã¦ãŠã
     if (!m_dx.CreateSceneResources(width, height))
     {
         return false;
     }
 
-    // Å‰‚ÌƒTƒCƒY‚ğ‹L‰¯‚³‚¹‚Ä‚¨‚­
+    // æœ€åˆã®ã‚µã‚¤ã‚ºã‚’è¨˜æ†¶ã•ã›ã¦ãŠã
     m_sceneWidth = (float)width;
     m_sceneHeight = (float)height;
 
@@ -68,71 +68,71 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     m_screenWidth = static_cast<float>(rc.right - rc.left);
     m_screenHeight = static_cast<float>(rc.bottom - rc.top);
 
-    // ‹N“®‚É1“x‚¾‚¯AƒJƒƒ‰‚Ì‰¡c”ä‚ğ‹³‚¦‚é
+    // èµ·å‹•æ™‚ã«1åº¦ã ã‘ã€ã‚«ãƒ¡ãƒ©ã®æ¨ªç¸¦æ¯”ã‚’æ•™ãˆã‚‹
     m_camera.SetAspect((float)width, (float)height);
 
 
-    // Imgui‚Ì‰Šú‰»iDirectX‚ÌƒfƒoƒCƒX“™‚ğ“n‚·j
+    // Imguiã®åˆæœŸåŒ–ï¼ˆDirectXã®ãƒ‡ãƒã‚¤ã‚¹ç­‰ã‚’æ¸¡ã™ï¼‰
     m_imgui.Initialize(m_hWnd, m_dx.GetDevice(), m_dx.GetContext());
 
-    // ƒhƒbƒLƒ“ƒO‹@”\‚ğ—LŒø‰»‚·‚éˆê•¶
+    // ãƒ‰ãƒƒã‚­ãƒ³ã‚°æ©Ÿèƒ½ã‚’æœ‰åŠ¹åŒ–ã™ã‚‹ä¸€æ–‡
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
    m_commonMesh = std::make_shared<Mesh>();
     std::vector<Vertex> vertices =
     {
-        // ‘O–Ê (Z = -0.5)
+        // å‰é¢ (Z = -0.5)
         {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 0
         {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 1
         {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 2
         {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 3
 
-        // ”w–Ê (Z = 0.5)
+        // èƒŒé¢ (Z = 0.5)
         {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 4
         {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 5
         {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 6
         {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 7
 
-        // ã–Ê (Y = 0.5)
+        // ä¸Šé¢ (Y = 0.5)
         {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 8
         {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 9
         {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 10
         {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 11
 
-        // ‰º–Ê (Y = -0.5)
+        // ä¸‹é¢ (Y = -0.5)
         {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 12
         {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 13
         {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 14
         {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 15
 
-        // ¶–Ê (X = -0.5)
+        // å·¦é¢ (X = -0.5)
         {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 16
         {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 17
         {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 18
         {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}, // 19
 
-        // ‰E–Ê (X = 0.5)
+        // å³é¢ (X = 0.5)
         {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }}, // 20
         {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }}, // 21
         {{  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }}, // 22
         {{  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }}  // 23
     };
 
-    // ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^i’¸“_‚ğŒ‹‚ÔŒvZj
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿ï¼ˆé ‚ç‚¹ã‚’çµã¶è¨ˆç®—ï¼‰
     std::vector<UINT> indices =
     {
-        0, 1, 2,  2, 1, 3,       // ‘O–Ê
-        4, 5, 6,  6, 5, 7,       // ”w–Ê
-        8, 9, 10, 10, 9, 11,     // ã–Ê
-        12, 13, 14, 14, 13, 15,  // ‰º–Ê
-        16, 17, 18, 18, 17, 19,  // ¶–Ê
-        20, 21, 22, 22, 21, 23   // ‰E–Ê
+        0, 1, 2,  2, 1, 3,       // å‰é¢
+        4, 5, 6,  6, 5, 7,       // èƒŒé¢
+        8, 9, 10, 10, 9, 11,     // ä¸Šé¢
+        12, 13, 14, 14, 13, 15,  // ä¸‹é¢
+        16, 17, 18, 18, 17, 19,  // å·¦é¢
+        20, 21, 22, 22, 21, 23   // å³é¢
     };
     m_commonMesh = std::make_shared<Mesh>();
 
     m_commonMesh ->Create(m_dx.GetDevice(), vertices, indices);
 
-    // ƒOƒŠƒbƒh‚Ì’¸“_ƒf[ƒ^¶¬
+    // ã‚°ãƒªãƒƒãƒ‰ã®é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ç”Ÿæˆ
     std::vector<Vertex> gridVertices;
     std::vector<UINT> gridIndices;
     int gridSize = 20;
@@ -157,29 +157,29 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     m_gridMesh->Create(m_dx.GetDevice(), gridVertices, gridIndices);
     m_gridMesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-    // ƒVƒF[ƒ_[‚Ì¶¬‚Æ“Ç‚İ‚İ
+    // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç”Ÿæˆã¨èª­ã¿è¾¼ã¿
     m_shader = std::make_unique<Shader>();
-    // L"..." ‚Æ‚·‚é‚±‚Æ‚ÅAWchar_tŒ^ (std::wstring—p)‚Ì•¶š—ñ‚É‚µ‚Ü‚·
+    // L"..." ã¨ã™ã‚‹ã“ã¨ã§ã€Wchar_tå‹ (std::wstringç”¨)ã®æ–‡å­—åˆ—ã«ã—ã¾ã™
     if (!m_shader->Load(m_dx.GetDevice(), L"ShaderFile/SimpleShader.hlsl"))
     {
-        return false; // ƒVƒF[ƒ_[‚ÌƒRƒ“ƒpƒCƒ‹‚É¸”s‚µ‚½‚ç‹N“®‚µ‚È‚¢(ˆÀ‘SİŒv)
+        return false; // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã«å¤±æ•—ã—ãŸã‚‰èµ·å‹•ã—ãªã„(å®‰å…¨è¨­è¨ˆ)
     }
 
-    // ’è”ƒoƒbƒtƒ@‚Ìì¬
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
     D3D11_BUFFER_DESC cbDesc = {};
-    cbDesc.ByteWidth = sizeof(ConstantBufferTransform); // ƒTƒCƒY
-    cbDesc.Usage = D3D11_USAGE_DYNAMIC; // “®“I—p‚É‘‚«Š·‚¦‚é
+    cbDesc.ByteWidth = sizeof(ConstantBufferTransform); // ã‚µã‚¤ã‚º
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC; // å‹•çš„ç”¨ã«æ›¸ãæ›ãˆã‚‹
     cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER; // 
-    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU‚©‚ç‚Ì‘‚«‚İ‚ğ‹–‰Â
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPUã‹ã‚‰ã®æ›¸ãè¾¼ã¿ã‚’è¨±å¯
     cbDesc.MiscFlags = 0;
     cbDesc.StructureByteStride = 0;
 
-     // ƒoƒbƒtƒ@‚ğ¶¬i‰Šúƒf[ƒ^‚ÍŒã‚Åƒ}ƒCƒtƒŒ[ƒ€‘—‚é‚Ì‚Ånullptrj
+     // ãƒãƒƒãƒ•ã‚¡ã‚’ç”Ÿæˆï¼ˆåˆæœŸãƒ‡ãƒ¼ã‚¿ã¯å¾Œã§ãƒã‚¤ãƒ•ãƒ¬ãƒ¼ãƒ é€ã‚‹ã®ã§nullptrï¼‰
     m_dx.GetDevice()->CreateBuffer(&cbDesc, nullptr, &m_pConstantBuffer);
 
    
 
-    // ƒŒƒ“ƒY‚Ìİ’è
+    // ãƒ¬ãƒ³ã‚ºã®è¨­å®š
     float aspectRatio = m_screenWidth / m_screenHeight;
     float fovAngle = DirectX::XMConvertToRadians(60.0f);
     m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
@@ -209,33 +209,42 @@ void Application::Run()
             break;
         }
 
-            // ImGui‚ÌƒtƒŒ[ƒ€ŠJn
+            // ImGuiã®ãƒ•ãƒ¬ãƒ¼ãƒ é–‹å§‹
             m_imgui.Begin();
 
-            //–ˆƒtƒŒ[ƒ€AƒJƒƒ‰‚Ìs—ñ‚ğÅVó‘Ô‚ÉXV‚·‚é
+            //æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã€ã‚«ãƒ¡ãƒ©ã®è¡Œåˆ—ã‚’æœ€æ–°çŠ¶æ…‹ã«æ›´æ–°ã™ã‚‹
             m_camera.Update();
+
+            // è¦ªå­é–¢ä¿‚ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ï¼‰ã®æ›´æ–°
+            for (auto& obj : m_gameObjects)
+            {
+                if (obj->GetParent() == nullptr)
+                {
+                    obj->UpdateTransform();
+                }
+            }
 
             m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
 
-            // 3D‹óŠÔ‚ğ•`‰æ
+            // 3Dç©ºé–“ã‚’æç”»
             m_renderer.Render(this);
 
-            // ƒƒCƒ“‰æ–Ê‚Ö‚Ì•`‰æƒtƒF[ƒY
-            // •`‰ææ‚ğƒƒCƒ“‰æ–Ê‚É–ß‚µ‰æ–Ê‚ğƒNƒŠƒA‚·‚é
-            // ƒGƒfƒBƒ^©‘Ì‚Ì”wŒiF
+            // ãƒ¡ã‚¤ãƒ³ç”»é¢ã¸ã®æç”»ãƒ•ã‚§ãƒ¼ã‚º
+            // æç”»å…ˆã‚’ãƒ¡ã‚¤ãƒ³ç”»é¢ã«æˆ»ã—ç”»é¢ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
+            // ã‚¨ãƒ‡ã‚£ã‚¿è‡ªä½“ã®èƒŒæ™¯è‰²
             m_dx.BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
            
-            m_editorUI.Draw(this); // uthisv‚ÍAApplication©g‚ªu„‚Ìƒ|ƒCƒ“ƒ^‚ğg‚Á‚Ä‚Ëv 
+            m_editorUI.Draw(this); // ã€Œthisã€ã¯ã€Applicationè‡ªèº«ãŒã€Œç§ã®ãƒã‚¤ãƒ³ã‚¿ã‚’ä½¿ã£ã¦ã­ã€ 
 
 
-            //// •`‰æŠJn
+            //// æç”»é–‹å§‹
             //m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-            //m_renderer.Render(this); // •`‰æˆ—
+            //m_renderer.Render(this); // æç”»å‡¦ç†
 
 
-            // ImGui‚ğDirectX‚Ìã‚Éd‚Ë‚Ä•`‰æ
+            // ImGuiã‚’DirectXã®ä¸Šã«é‡ã­ã¦æç”»
             m_imgui.End();
-            m_dx.EndScene(); // •`‰æI—¹
+            m_dx.EndScene(); // æç”»çµ‚äº†
         
     }
 }
@@ -245,11 +254,11 @@ void Application::Terminate()
     UnregisterClass(L"RescueTraceEngine", m_hInstance);
 }
 
-// Windows OS‚©‚ç‚Ì’Ê’mi•Â‚¶‚éƒ{ƒ^ƒ“‚È‚Çj‚ğˆ—‚·‚é
+// Windows OSã‹ã‚‰ã®é€šçŸ¥ï¼ˆé–‰ã˜ã‚‹ãƒœã‚¿ãƒ³ãªã©ï¼‰ã‚’å‡¦ç†ã™ã‚‹
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT mag, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) // ImGui‚©Windows‚ÌƒCƒxƒ“ƒg‚©‚ğ”»’f
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) // ImGuiã‹Windowsã®ã‚¤ãƒ™ãƒ³ãƒˆã‹ã‚’åˆ¤æ–­
         return true;
 
     switch (message) {
@@ -257,11 +266,11 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam,
         PostQuitMessage(0);
         return 0;
 
-        // ƒtƒ@ƒCƒ‹‚ªƒhƒƒbƒv‚³‚ê‚½‚Æ‚«‚Ì‡}‚ğæ“¾‚·‚é
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸã¨ãã®åˆå›³ã‚’å–å¾—ã™ã‚‹
     case WM_DROPFILES:
         if (g_app)
         {
-            // wParam‚Éu—‚Æ‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ìî•ñv‚ª‚ ‚é‚Ì‚Å“n‚·
+            // wParamã«ã€Œè½ã¨ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã€ãŒã‚ã‚‹ã®ã§æ¸¡ã™
             g_app->OnDropFiles((HDROP)wParam);
         }
         return 0;
@@ -272,27 +281,52 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam,
 
 //////////////////////////////////////
 // 
-// ƒV[ƒ“‚Ì•Û‘¶iƒtƒ@ƒCƒ‹‚É‘‚«o‚·j
+// ã‚·ãƒ¼ãƒ³ã®ä¿å­˜ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™ï¼‰
 //
 //////////////////////////////////////
 void Application::SaveScene(const std::string& filename)
 {
-    json root = json::array(); // ƒV[ƒ“‘S‘Ì‚ğ”z—ñ‚·‚é
-    for (const auto& obj : m_gameObjects)
+    json root = json::array(); // ã‚·ãƒ¼ãƒ³å…¨ä½“ã‚’é…åˆ—ã™ã‚‹
+    for (int i = 0; i < m_gameObjects.size(); i++)
     {
-        root.push_back(obj->ToJson()); // ‘SƒIƒuƒWƒFƒNƒg‚Ìƒf[ƒ^‚ğ”z—ñ‰»
+        
+        json j = m_gameObjects[i]->ToJson(); // å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚¸ã‚§ã‚¤ã‚½ãƒ³åŒ–
+
+        if (j.is_object())
+        {
+
+            // è¦ªãŒèª°ã‹ã‚’æ¢ã—ã¦(å‡ºå¸­ç•ªå·)Jsonã«è¿½è¨˜ã™ã‚‹
+            int parentIndex = -1;
+            GameObject* parent = m_gameObjects[i]->GetParent();
+            if (parent != nullptr)
+            {
+                // å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä¸­ã‹ã‚‰è¦ªã‚’æ¢ã—ã¦ç•ªå·ã‚’ç‰¹å®šã™ã‚‹
+                for (int p = 0; p < m_gameObjects.size(); p++)
+                {
+                    if (m_gameObjects[p].get() == parent)
+                    {
+                        parentIndex = p;
+                        break;
+                    }
+                }
+            }
+            j["ParentIndex"] = parentIndex; // è¦ªã®ç•ªå·ã‚’ä¿å­˜
+
+            root.push_back(j);
+        }
     }
 
     std::ofstream ofs(filename);
     if (ofs)
     {
-        ofs << root.dump(4); // ƒCƒ“ƒfƒbƒNƒX4‚Å•Û‘¶
+        ofs << root.dump(4);
     }
 }
 
+
 //////////////////////////////////////
 // 
-// ƒV[ƒ“‚Ì“Ç‚İ‚İiƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Şj
+// ã‚·ãƒ¼ãƒ³ã®èª­ã¿è¾¼ã¿ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€ï¼‰
 //
 //////////////////////////////////////
 void Application::LoadScene(const std::string& filename)
@@ -304,17 +338,46 @@ void Application::LoadScene(const std::string& filename)
     }
 
     json root;
-    ifs >> root;
+    try {
+        ifs >> root; // æ§‹æ–‡ã‚¨ãƒ©ãƒ¼ãŒã‚ã£ã¦ã‚‚ã‚½ãƒ•ãƒˆã‚’è½ã¨ã•ãªã„
+    }
+    catch (...) {
+        return;
+    }
 
-    m_gameObjects.clear(); //Œ»İ‚ÌƒV[ƒ“‚ğƒŠƒZƒbƒg‚·‚é
+    // ä¸€ç•ªå¤–å´ãŒé…åˆ—ã˜ã‚ƒãªã„ï¼ˆå¤ã„å½¢å¼ãƒ»å£Šã‚ŒãŸãƒ‡ãƒ¼ã‚¿ï¼‰å ´åˆã¯ä¸­æ­¢
+    if (!root.is_array()) return;
 
-    for (const auto& j : root) // ”z—ñ“à‚ÌƒIƒuƒWƒFƒNƒg‚Ìî•ñ‚ğ•œŒ³
+    m_gameObjects.clear(); //ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+
+    // å…¨å“¡ã‚’ã¨ã‚Šã‚ãˆãšç”Ÿæˆã™ã‚‹
+    for (const auto& j : root)
     {
-        auto obj = std::make_shared<GameObject>("");
-        obj->FromJson(j, m_dx.GetDevice()); // ƒeƒNƒXƒ`ƒƒ‚È‚Ç‚ğ•œŒ³
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å½¢ã˜ã‚ƒãªã„ç•°å¸¸ãªãƒ‡ãƒ¼ã‚¿ã¯é£›ã°ã™
+        if (!j.is_object()) continue;
 
-        obj->SetMesh(m_commonMesh); // “Ç‚İ‚ñ‚¾ƒIƒuƒWƒFƒNƒg‚ÉuŒ`v‚ğ—^‚¦‚é
-        m_gameObjects.push_back(obj); // ƒV[ƒ“‚É‚»‚ë‚Á‚½ƒf[ƒ^‚ğ‚ÂƒIƒuƒWƒFƒNƒg‚ğİ’u
+        auto obj = std::make_shared<GameObject>("");
+        obj->FromJson(j, m_dx.GetDevice()); // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãªã©ã‚’å¾©å…ƒ
+        obj->SetMesh(m_commonMesh); // èª­ã¿è¾¼ã‚“ã ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã€Œå½¢ã€ã‚’ä¸ãˆã‚‹
+        m_gameObjects.push_back(obj);
+    }
+
+    // 2. ä¿å­˜ã—ã¦ãŠã„ãŸå‡ºå¸­ç•ªã‚’è¦‹ã¦ã€è¦ªå­é–¢ä¿‚ã‚’çµã³ç›´ã™
+    for (int i = 0; i < root.size(); i++)
+    {
+        
+        if (root[i].is_object() && root[i].contains("ParentIndex"))
+        {
+
+            if (root[i]["ParentIndex"].is_number())
+            {
+                int parentIndex = root[i]["ParentIndex"];
+                if (parentIndex >= 0 && parentIndex < m_gameObjects.size())
+                {
+                    m_gameObjects[i]->SetParent(m_gameObjects[parentIndex].get());
+                }
+            }
+        }
     }
 }
 
@@ -324,7 +387,7 @@ void Application::SavePrefab(int index, const std::string& filename)
     {
         return;
     }
-    // ƒIƒuƒWƒFƒNƒg–¼‚ğƒtƒ@ƒCƒ‹–¼‚É‚µ‚Äo—Í‚·‚é
+    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåã‚’ãƒ•ã‚¡ã‚¤ãƒ«åã«ã—ã¦å‡ºåŠ›ã™ã‚‹
     std::ofstream ofs(filename);
     if (ofs)
         {
@@ -337,108 +400,136 @@ void Application::InstantiatePrefab(const std::string& filename)
     std::ifstream ifs(filename);
     if (!ifs)
     {
-        return; // ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        return; // ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
     }
 
-    // JSONƒf[ƒ^‚ğ“Ç‚İ‚Ş
+    // JSONãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
     json j;
     ifs >> j;
 
-    // V‚µ‚¢ƒIƒuƒWƒFƒNƒg‚ğì‚Á‚Äƒf[ƒ^‚ğ—¬‚µ‚Ş
+    // æ–°ã—ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œã£ã¦ãƒ‡ãƒ¼ã‚¿ã‚’æµã—è¾¼ã‚€
     auto obj = std::make_shared<GameObject>("");
     obj->FromJson(j, m_dx.GetDevice());
 
-    // –¼‘O‚Ì––”ö‚É (Clone) ‚ğ•t‚¯‚Ä•ª‚©‚è‚â‚·‚­‚·‚é
+    // åå‰ã®æœ«å°¾ã« (Clone) ã‚’ä»˜ã‘ã¦åˆ†ã‹ã‚Šã‚„ã™ãã™ã‚‹
     obj->SetName(obj->GetName() + "(Clone)");
-    obj->SetMesh(m_commonMesh); // Œ`‚ğƒZƒbƒg
+    obj->SetMesh(m_commonMesh); // å½¢ã‚’ã‚»ãƒƒãƒˆ
 
-    // ƒV[ƒ“‚É”z’uI
+    // ã‚·ãƒ¼ãƒ³ã«é…ç½®ï¼
     m_gameObjects.push_back(obj);
 }
 
-// ƒIƒuƒWƒFƒNƒg‚Ì•¡»
+// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¤‡è£½
 void Application::ObujectDuplication()
 {
 
-    // ‰½‚à‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îˆ—‚µ‚È‚¢
+    // ä½•ã‚‚é¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°å‡¦ç†ã—ãªã„
     if (m_selectedObjectIndex == -1 || m_selectedObjectIndex >= m_gameObjects.size())
     {
         return;
     }
 
-    // ‘I‘ğ’†‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒNƒ[ƒ“‚ğ“Ç‚ñ‚Å•¡»‚·‚é
-    auto cloneObj = m_gameObjects[m_selectedObjectIndex]->Clone();
+    // å†å¸°çš„ã«ã€€éšå±¤ã¾ã‚‹ã”ã¨è¤‡è£½ã™ã‚‹é–¢æ•°
+    std::function<std::shared_ptr<GameObject>(GameObject*, GameObject*)> deepCopy = [&](GameObject* original, GameObject* parent)->std::shared_ptr<GameObject>
+        {
+            // è‡ªåˆ†è‡ªä¿¡ã‚’ã‚¯ãƒ­ãƒ¼ãƒ³
+            auto cloneObj = original->Clone();
+            cloneObj->SetName(original->GetName() + "_Copy"); // åå‰ã«ã‚³ãƒ”ãƒ¼ã‚’ä»˜ã‘ã‚‹
 
-    // Š®‘S‚Éd‚È‚ç‚È‚¢‚æ‚¤‚ÉˆÊ’u‚ğ‚¸‚ç‚·iƒ|[ƒgƒtƒHƒŠƒI‚É‘‚¯‚é‚©‚àj
-    cloneObj->GetTransform().position.x += 2.0f;
+            // æ–°ã—ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆã«è¿½åŠ 
 
-    // ƒŠƒXƒg‚Ìˆê”ÔŒã‚ë‚É’Ç‰Á‚µ‚ÄA‚»‚ê‚ğ‘I‘ğ’†‚Ìó‘Ô‚É‚·‚é
-    m_gameObjects.push_back(cloneObj);
-    m_selectedObjectIndex = (int)m_gameObjects.size() - 1;
+            // è¦ªã‚’è¨­å®š
+            if (parent != nullptr)
+            {
+                cloneObj->SetParent(parent);
+            }
+
+            // å­ä¾›ãŸã¡ã‚‚å…¨å“¡ã‚¯ãƒ­ãƒ¼ãƒ³ã™ã‚‹
+            for (auto* child : original->GetChildren())
+            {
+                deepCopy(child, cloneObj.get());
+            }
+
+            return cloneObj;
+    };
+        // é¸æŠä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¦ªã¨ã—ã¦ã‚³ãƒ”ãƒ¼é–‹å§‹
+    auto originalObj = m_gameObjects[m_selectedObjectIndex].get();
+    auto rootClone = deepCopy(originalObj, originalObj->GetParent());
+
+    // å®Œå…¨ã«é‡ãªã‚‰ãªã„ã‚ˆã†ã«å¤§æœ¬ã®è¦ªã ã‘ä½ç½®ã‚’ãšã‚‰ã™
+    rootClone->GetTransform().position.x += 2.0f;
+
+    // ã‚¯ãƒ­ãƒ¼ãƒ³ã•ã‚ŒãŸå¤§æœ¬ã®è¦ªã‚’é¸æŠçŠ¶æ…‹ã«ã™ã‚‹
+    for (int i = 0; i < m_gameObjects.size(); ++i)
+    {
+        if (m_gameObjects[i] == rootClone)
+        {
+            m_selectedObjectIndex = i;
+            break;
+        }
+    }
+
+
+    
 }
     
 
 
 void Application::ResizeScene(float width, float height)
 {
-    // “¯‚¶ƒTƒCƒY‚È‚ç‰½‚à‚µ‚È‚¢
+    // åŒã˜ã‚µã‚¤ã‚ºãªã‚‰ä½•ã‚‚ã—ãªã„
     if (width == m_sceneWidth && height == m_sceneHeight)
     {
         return;
     }
 
-    // V‚µ‚¢ƒTƒCƒY‚ğ‹L˜^
+    // æ–°ã—ã„ã‚µã‚¤ã‚ºã‚’è¨˜éŒ²
     m_sceneWidth = width;
     m_sceneHeight = height;
 
-    // DirectX‚ÌƒeƒNƒXƒ`ƒƒ‚ğV‚µ‚¢ƒTƒCƒY‚Åì‚è’¼‚·
+    // DirectXã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ–°ã—ã„ã‚µã‚¤ã‚ºã§ä½œã‚Šç›´ã™
     m_dx.CreateSceneResources((int)width, (int)height);
 
-    // ƒJƒƒ‰‚ÌƒAƒXƒyƒNƒg”ä‚ğXV‚ñ‚µ‚ÄA˜c‚İ‚ğÁ‚·
+    // ã‚«ãƒ¡ãƒ©ã®ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã‚’æ›´æ–°ã‚“ã—ã¦ã€æ­ªã¿ã‚’æ¶ˆã™
     m_camera.SetAspect(width, height);
 }
 
-// ƒ}ƒEƒXƒsƒbƒLƒ“ƒO‚ÌÀ‘•
+// ãƒã‚¦ã‚¹ãƒ”ãƒƒã‚­ãƒ³ã‚°ã®å®Ÿè£…
 void Application::PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight)
 {
-    // ƒJƒƒ‰‚Ìs—ñ‚ğæ“¾
+    // ã‚«ãƒ¡ãƒ©ã®è¡Œåˆ—ã‚’å–å¾—
     DirectX::XMMATRIX view = m_camera.GetViewMatrix();
     DirectX::XMMATRIX proj = m_camera.GetProjectionMatrix();
     DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
 
-    // 2D‚Ìƒ‚ƒjƒ^[À•W‚©‚çA3D‹óŠÔ‚Ö‚ÌRay‚ğì‚é
+    // 2Dã®ãƒ¢ãƒ‹ã‚¿ãƒ¼åº§æ¨™ã‹ã‚‰ã€3Dç©ºé–“ã¸ã®Rayã‚’ä½œã‚‹
     DirectX::XMVECTOR rayOrigin = DirectX::XMVector3Unproject(
-        DirectX::XMVectorSet(mouseX, mouseY, 0.0f, 0.0f), // ‰æ–Ê‚Ìè‘O
+        DirectX::XMVectorSet(mouseX, mouseY, 0.0f, 0.0f), // ç”»é¢ã®æ‰‹å‰
         0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
         proj, view, world
     );
 
     DirectX::XMVECTOR farPoint = DirectX::XMVector3Unproject(
-        DirectX::XMVectorSet(mouseX, mouseY, 1.0f, 0.0f), // ‰æ–Ê‚Ì‰œ
+        DirectX::XMVectorSet(mouseX, mouseY, 1.0f, 0.0f), // ç”»é¢ã®å¥¥
         0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
         proj, view, world
     );
 
-    DirectX::XMVECTOR rayDir = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(farPoint, rayOrigin)); // ƒŒ[ƒU[‚ÌŒü‚«‚ğŒvZ
+    DirectX::XMVECTOR rayDir = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(farPoint, rayOrigin)); // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®å‘ãã‚’è¨ˆç®—
 
-    // ŠeƒIƒuƒWƒFƒNƒg‚ÌƒŒ[ƒU[‚ª“–‚½‚Á‚Ä‚¢‚é‚©‚ğ’²‚×‚é
-    float minDistance = 1000000.0f; //@ˆê”Ôè‘O‚É‚ ‚éƒŒ[ƒU[‚ğŒ©‚Â‚¯‚é‚æ‚¤
-    int hitIndex = -1; // “–‚½‚Á‚½ƒIƒuƒWƒFƒNƒg‚Ì”Ô†
+    // å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¬ãƒ¼ã‚¶ãƒ¼ãŒå½“ãŸã£ã¦ã„ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+    float minDistance = 1000000.0f; //ã€€ä¸€ç•ªæ‰‹å‰ã«ã‚ã‚‹ãƒ¬ãƒ¼ã‚¶ãƒ¼ã‚’è¦‹ã¤ã‘ã‚‹ã‚ˆã†
+    int hitIndex = -1; // å½“ãŸã£ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç•ªå·
 
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
         auto& t = m_gameObjects[i]->GetTransform();
 
-        // ƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒ‹ƒhs—ñi”z’uƒf[ƒ^j‚ğŒvZ
-        DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(t.scale.x, t.scale.y, t.scale.z);
-        float radX = DirectX::XMConvertToRadians(t.rotation.x);
-        float radY = DirectX::XMConvertToRadians(t.rotation.y);
-        float radZ = DirectX::XMConvertToRadians(t.rotation.z);
-        DirectX::XMMATRIX rot = DirectX::XMMatrixRotationRollPitchYaw(radX, radY, radZ);
-        DirectX::XMMATRIX trans = DirectX::XMMatrixTranslation(t.position.x, t.position.y, t.position.z);
-        DirectX::XMMATRIX objWorld = scale * rot * trans;
+        // ä¸Šã§è¨ˆç®—æ¸ˆã¿ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’ãã®ã¾ã¾èª­ã¿è¾¼ã‚€
+        DirectX::XMMATRIX objWorld = DirectX::XMLoadFloat4x4(&t.worldMatrix);
+       
 
-        // ƒŒ[ƒU[‚ğuƒIƒuƒWƒFƒNƒg‚Ì‹“_iƒ[ƒJƒ‹‹óŠÔjv‚É‹t•ÏŠ·‚·‚é
+        // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã‚’ã€Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¦–ç‚¹ï¼ˆãƒ­ãƒ¼ã‚«ãƒ«ç©ºé–“ï¼‰ã€ã«é€†å¤‰æ›ã™ã‚‹
         DirectX::XMVECTOR det;
         DirectX::XMMATRIX invWorld = DirectX::XMMatrixInverse(&det, objWorld);
 
@@ -446,14 +537,14 @@ void Application::PickObject(float mouseX, float mouseY, float viewWidth, float 
         DirectX::XMVECTOR localDir = DirectX::XMVector3TransformNormal(rayDir, invWorld);
         localDir = DirectX::XMVector3Normalize(localDir);
 
-        // ƒTƒCƒRƒ‚Ì“–‚½‚è”»’è” 
+        // ã‚µã‚¤ã‚³ãƒ­ã®å½“ãŸã‚Šåˆ¤å®šç®±
         DirectX::BoundingBox box(DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 
         float distance = 0.0f;
 
         if (box.Intersects(localOrigin, localDir, distance))
         {
-            // ƒJƒƒ‰‚©‚çˆê”Ô‹ß‚¢iè‘O‚É‚ ‚éj‚à‚Ì‚ğ‘I‘ğ‚·‚é
+            // ã‚«ãƒ¡ãƒ©ã‹ã‚‰ä¸€ç•ªè¿‘ã„ï¼ˆæ‰‹å‰ã«ã‚ã‚‹ï¼‰ã‚‚ã®ã‚’é¸æŠã™ã‚‹
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -462,7 +553,7 @@ void Application::PickObject(float mouseX, float mouseY, float viewWidth, float 
         }
     }
 
-    // 3. “–‚½‚Á‚Ä‚¢‚½‚ç‘I‘ğó‘Ô‚É‚·‚éi‹óU‚è‚È‚ç -1 ‚É‚È‚Á‚Ä‘I‘ğ‰ğœ‚³‚ê‚éj
+    // 3. å½“ãŸã£ã¦ã„ãŸã‚‰é¸æŠçŠ¶æ…‹ã«ã™ã‚‹ï¼ˆç©ºæŒ¯ã‚Šãªã‚‰ -1 ã«ãªã£ã¦é¸æŠè§£é™¤ã•ã‚Œã‚‹ï¼‰
     m_selectedObjectIndex = hitIndex;
 
 }
@@ -472,35 +563,35 @@ void Application::RecordUndo()
 {
     if (m_selectedObjectIndex == -1)
     {
-        return; // ‰½‚à‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î–³‹
+        return; // ä½•ã‚‚é¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°ç„¡è¦–
     }
 
     auto& t = m_gameObjects[m_selectedObjectIndex]->GetTransform();
 
-    // Œ»İ‚Ì”’l‚ğƒƒ‚’ ‚É‘‚«Ê‚·
+    // ç¾åœ¨ã®æ•°å€¤ã‚’ãƒ¡ãƒ¢å¸³ã«æ›¸ãå†™ã™
     UndoRecord rec;
     rec.objectIndex = m_selectedObjectIndex;
     rec.px = t.position.x; rec.py = t.position.y; rec.pz = t.position.z;
     rec.rx = t.rotation.x; rec.ry = t.rotation.y; rec.rz = t.rotation.z;
     rec.sx = t.scale.x;  rec.sy = t.scale.y;  rec.sz = t.scale.z;
 
-    // —š—ğƒŠƒXƒg‚ÌÅŒã‚É’Ç‰Á‚·‚é
+    // å±¥æ­´ãƒªã‚¹ãƒˆã®æœ€å¾Œã«è¿½åŠ ã™ã‚‹
     m_undoStack.push_back(rec);
 }
 
-// Ctrl+Z‚ª‰Ÿ‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ño‚µA‰ß‹‚Ìó‘Ô‚ğ•œŒ³‚·‚é
+// Ctrl+ZãŒæŠ¼ã•ã‚ŒãŸã¨ãã«å‘¼ã³å‡ºã—ã€éå»ã®çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹
 void Application::ExecuteUndo()
 {
     if (m_undoStack.empty())
     {
-        return; // —š—ğ‚ª‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        return; // å±¥æ­´ãŒãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
     }
 
-        // —š—ğƒŠƒXƒg‚Ìˆê”ÔÅŒãiÅV‚Ì‰ß‹j‚ğæ‚èo‚·
+        // å±¥æ­´ãƒªã‚¹ãƒˆã®ä¸€ç•ªæœ€å¾Œï¼ˆæœ€æ–°ã®éå»ï¼‰ã‚’å–ã‚Šå‡ºã™
         UndoRecord rec = m_undoStack.back();
-        m_undoStack.pop_back(); // æ‚èo‚µ‚½—š—ğ‚ÍƒŠƒXƒg‚©‚çÁ‚·
+        m_undoStack.pop_back(); // å–ã‚Šå‡ºã—ãŸå±¥æ­´ã¯ãƒªã‚¹ãƒˆã‹ã‚‰æ¶ˆã™
 
-        // ƒCƒ“ƒfƒbƒNƒX‚ªˆÀ‘S‚©Šm”F‚µ‚Ä‚©‚ç•œŒ³‚·‚é
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒå®‰å…¨ã‹ç¢ºèªã—ã¦ã‹ã‚‰å¾©å…ƒã™ã‚‹
         if (rec.objectIndex >= 0 && rec.objectIndex < m_gameObjects.size())
         {
             auto& t = m_gameObjects[rec.objectIndex]->GetTransform();
@@ -508,7 +599,7 @@ void Application::ExecuteUndo()
             t.rotation = { rec.rx, rec.rz, rec.rz };
             t.scale = { rec.sx, rec.sy, rec.sz };
 
-            // •œŒ³‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğó‘Ô‚É‚·‚é
+            // å¾©å…ƒã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠçŠ¶æ…‹ã«ã™ã‚‹
             m_selectedObjectIndex = rec.objectIndex;
         }
     
@@ -516,32 +607,32 @@ void Application::ExecuteUndo()
 
 
 
-// ƒhƒ‰ƒO•ƒhƒƒbƒv‚ÅƒeƒNƒXƒ`ƒƒ[‚ğ’£‚è•t‚¯‚éˆ—
+// ãƒ‰ãƒ©ã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã§ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’å¼µã‚Šä»˜ã‘ã‚‹å‡¦ç†
 void Application::OnDropFiles(HDROP hDrop)
 {
     char filePath[MAX_PATH];
 
-    // —‚Æ‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì“àA1”Ô–Ú‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ğ“Ç‚İæ‚é
+    // è½ã¨ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å†…ã€1ç•ªç›®ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’èª­ã¿å–ã‚‹
     if (DragQueryFileA(hDrop, 0, filePath, MAX_PATH))
     {
-        // ƒIƒuƒWƒFƒNƒg‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚é‚©Šm”F
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé¸æŠã•ã‚Œã¦ã„ã‚‹ã‹ç¢ºèª
         if (m_selectedObjectIndex != -1)
         {
-            // V‚µ‚¢ƒeƒNƒXƒ`ƒƒ‚ğì‚Á‚Ä“Ç‚İ‚Ş
+            // æ–°ã—ã„ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ä½œã£ã¦èª­ã¿è¾¼ã‚€
             auto newTexture = std::make_shared<Texture>();
 
-            // ƒhƒ‰ƒbƒO•ƒhƒƒbƒv‚È‚çâ‘ÎƒpƒXifilePathj‚ªŠmÀ‚É“ü‚é
+            // ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ãªã‚‰çµ¶å¯¾ãƒ‘ã‚¹ï¼ˆfilePathï¼‰ãŒç¢ºå®Ÿã«å…¥ã‚‹
             if (newTexture->Load(m_dx.GetDevice(), filePath))
             {
-                // ‘I‘ğ’†‚ÌƒIƒuƒWƒFƒNƒg‚É‰æ‘œ‚ğƒZƒbƒg‚µ‚ÄAƒeƒNƒXƒ`ƒƒƒ‚[ƒh‚ğON‚É‚·‚é
+                // é¸æŠä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ç”»åƒã‚’ã‚»ãƒƒãƒˆã—ã¦ã€ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¢ãƒ¼ãƒ‰ã‚’ONã«ã™ã‚‹
                 m_gameObjects[m_selectedObjectIndex]->SetTexture(newTexture);
                 m_gameObjects[m_selectedObjectIndex]->GetUseSolidColor() = false;
 
-                OutputDebugStringA("ƒ}ƒeƒŠƒAƒ‹‚ğ“K‰‚µ‚Ü‚µ‚½");
+                OutputDebugStringA("ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’é©å¿œã—ã¾ã—ãŸ");
             }
         }
     }
-    // Windows‚Éuƒtƒ@ƒCƒ‹‚Ìó‚¯æ‚èˆ—‚ªI‚í‚è‚Ü‚µ‚½v‚Æ•ñ
+    // Windowsã«ã€Œãƒ•ã‚¡ã‚¤ãƒ«ã®å—ã‘å–ã‚Šå‡¦ç†ãŒçµ‚ã‚ã‚Šã¾ã—ãŸã€ã¨å ±å‘Š
     DragFinish(hDrop);
 }
 

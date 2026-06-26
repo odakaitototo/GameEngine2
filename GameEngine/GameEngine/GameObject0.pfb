@@ -1,5 +1,5 @@
 {
-    "TexturePath": "",
+    "UseSolidColor": false,
     "color": [
         1.0,
         1.0,
@@ -7,6 +7,7 @@
         1.0
     ],
     "name": "GameObject0",
+    "texturePath": "",
     "transform": {
         "position": [
             0.0,
@@ -23,6 +24,5 @@
             1.0,
             1.0
         ]
-    },
-    "useSolidcolor": false
+    }
 }

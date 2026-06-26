@@ -1,22 +1,24 @@
 [
     {
+        "ParentIndex": -1,
+        "UseSolidColor": false,
         "color": [
             1.0,
             1.0,
             1.0,
             1.0
         ],
-        "name": "renga",
-        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
+        "name": "GameObject0",
+        "texturePath": "",
         "transform": {
             "position": [
-                1.5999999046325684,
-                2.0,
-                1.0
+                -3.681549310684204,
+                0.0,
+                0.0
             ],
             "rotation": [
                 0.0,
-                0.0,
+                -0.0,
                 0.0
             ],
             "scale": [
@@ -24,63 +26,6 @@
                 1.0,
                 1.0
             ]
-        },
-        "useSolidColor": false
-    },
-    {
-        "color": [
-            1.0,
-            1.0,
-            1.0,
-            1.0
-        ],
-        "name": "GameObject1",
-        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\kusa.png",
-        "transform": {
-            "position": [
-                -1.0,
-                2.0,
-                2.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ]
-        },
-        "useSolidColor": false
-    },
-    {
-        "color": [
-            1.0,
-            1.0,
-            1.0,
-            1.0
-        ],
-        "name": "renga(Clone)",
-        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\renga.png",
-        "transform": {
-            "position": [
-                -2.1999998092651367,
-                2.0,
-                1.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ]
-        },
-        "useSolidColor": false
+        }
     }
 ]

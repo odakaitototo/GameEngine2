@@ -19,7 +19,7 @@ class GameObject
 {
 public:
 	GameObject(std::string name);
-	~GameObject() {}
+	~GameObject();
 
 	// ゲッター・セッター
 	const std::string& GetName() const { return m_name; }
@@ -121,6 +121,25 @@ public: // JSON関係
 	nlohmann::json ToJson() const;
 	void FromJson(const json& JSON, ID3D11Device* device);
 
+
+	public: // 親子関係
+		void SetParent(GameObject* parent); // 親を設定する
+		GameObject* GetParent() const
+		{
+			return m_parent; // 親を取得する
+		}
+		const std::vector<GameObject*>& GetChildren() const 
+		{ 
+			return m_children; // 子供たちを取得する
+		}
+
+		void AddChild(GameObject* child); // 子供を追加する
+		void RemoveChild(GameObject* child); // 子供を外す
+
+		void UpdateTransform(); // 毎フレーム呼んで自分の行列を計算する関数
+
+
+
 private:
 	std::string m_name; // オブジェクト名
 	
@@ -129,6 +148,11 @@ private: // コンポーネント関係
 	std::vector<std::shared_ptr <ComponentBase>> m_component;
 
 	
+private: // 親子関係
+
+	// 親と子を記憶する変数
+	GameObject* m_parent = nullptr; // 自分の親
+	std::vector<GameObject*> m_children; // 自分の子供たち
 
 
 };
