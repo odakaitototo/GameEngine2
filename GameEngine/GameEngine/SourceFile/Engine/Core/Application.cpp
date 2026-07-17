@@ -11,6 +11,8 @@
 // 　　　　　　　　　　　　　　　　　　　　　　　　　　　「同じメッシュを使うオブジェクトをまとめて描画（インスタンシング）」
 // 　　　　　　　　　　　　　　　　　　　　　　　　　　　という最適化が可能
 // 
+// addToList：再起関数（自分自身を呼び出す関数）
+// 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static Application* g_app = nullptr; // WindowProcからApplication本体を操作するためのグローバル変数
@@ -381,18 +383,60 @@ void Application::LoadScene(const std::string& filename)
     }
 }
 
+// GameObjectで生成しているJson形式のオブジェクト情報を確認し親子関係を調べ登録する
 void Application::SavePrefab(int index, const std::string& filename)
 {
     if (index < 0 || index >= m_gameObjects.size())
     {
         return;
     }
+
+    json root = json::array(); // 配列
+
+    std::vector<GameObject*> prefabObjects; // 親と、そのすべての子供を配列にまとめる
+
+    // 再帰的に子供をリストに追加する(親を0番として->子供1番->子供2番)
+    std::function<void(GameObject*)> addToList = [&](GameObject* obj) 
+    {
+            prefabObjects.push_back(obj);
+            for (auto* child : obj->GetChildren())
+            {
+                addToList(child);
+            }
+    };
+
+    // 選択されたオブジェクトを起点に、全階層をリストアップ
+    addToList(m_gameObjects[index].get());
+
+    // まとめたリストをJSON配列にする
+    for (int i = 0; i < prefabObjects.size(); i++)
+    {
+        json j = prefabObjects[i]->ToJson();
+
+        // 親の「プレハブ内での出席番号」を探す
+        int parentIndex = -1;
+        GameObject* parent = prefabObjects[i]->GetParent();
+        if (parent != nullptr)
+        {
+            for (int p = 0; p < prefabObjects.size(); p++)
+            {
+                if (prefabObjects[p] == parent)
+                {
+                    parentIndex = p;
+                    break;
+                }
+            }
+        }
+        j["ParentIndex"] = parentIndex; // 親の番号を保存
+        root.push_back(j);
+    }
+
     // オブジェクト名をファイル名にして出力する
     std::ofstream ofs(filename);
     if (ofs)
-        {
-        ofs << m_gameObjects[index]->ToJson().dump(4);
-        }
+    {
+        ofs << root.dump(4); // まとめたリストを保存する
+    }
 }
 
 void Application::InstantiatePrefab(const std::string& filename)
@@ -400,23 +444,66 @@ void Application::InstantiatePrefab(const std::string& filename)
     std::ifstream ifs(filename);
     if (!ifs)
     {
+        
         return; // ファイルが見つからなければ何もしない
     }
 
-    // JSONデータを読み込む
-    json j;
-    ifs >> j;
+    json root;
 
-    // 新しいオブジェクトを作ってデータを流し込む
-    auto obj = std::make_shared<GameObject>("");
-    obj->FromJson(j, m_dx.GetDevice());
+    // ファイルからデータをrootに読み込む
+    try
+    {
+        ifs >> root;
+    }
+    catch (...)
+    {
+        return;
+    }
 
-    // 名前の末尾に (Clone) を付けて分かりやすくする
-    obj->SetName(obj->GetName() + "(Clone)");
-    obj->SetMesh(m_commonMesh); // 形をセット
+    // 今のシーンのオブジェクト数を記憶しておく(番号のずれを直すため)
+    // カメラなどの既存のオブジェクトにも番号が降られているから
+    int startIndex = (int)m_gameObjects.size();
 
-    // シーンに配置！
-    m_gameObjects.push_back(obj);
+    for (const auto& j : root)
+    {
+        if (!j.is_object())
+        {
+            continue;
+        }
+
+        auto obj = std::make_shared<GameObject>("");
+        obj->FromJson(j, m_dx.GetDevice());
+        obj->SetMesh(m_commonMesh); // 形をセット
+
+        // 大元の親(プレハブの一つ目のデータ)だけに(Clone)を付ける
+        if (m_gameObjects.size() == startIndex)
+        {
+            obj->SetName(obj->GetName() + "(Clone)");
+        }
+
+        // シーンに配置
+        m_gameObjects.push_back(obj);
+    }
+
+    // 出席番号を見て、親子関係を結び直す
+    for (int i = 0; i < root.size(); i++)
+    {
+        if (root[i]["ParentIndex"].is_number())
+        {
+            int parentIdx = root[i]["ParentIndex"];
+            if (parentIdx >= 0)
+            {
+                // プレハブ内の出席番号　+　追加前のシーンオブジェクト数　＝　実際の出席番号
+                int actualParentIndex = startIndex + parentIdx;
+                int actualChildIndex = startIndex + i;
+
+                // 親子関係の復元
+                m_gameObjects[actualChildIndex]->SetParent(m_gameObjects[actualParentIndex].get());
+            }
+        }
+    }
+
+    
 }
 
 // オブジェクトの複製
@@ -437,6 +524,7 @@ void Application::ObujectDuplication()
             cloneObj->SetName(original->GetName() + "_Copy"); // 名前にコピーを付ける
 
             // 新しいオブジェクトリストに追加
+            m_gameObjects.push_back(cloneObj);
 
             // 親を設定
             if (parent != nullptr)

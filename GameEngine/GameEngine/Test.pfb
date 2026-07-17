@@ -1,0 +1,60 @@
+[
+    {
+        "ParentIndex": -1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Test",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "ParentIndex": 0,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject1",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                2.3023226261138916,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    }
+]

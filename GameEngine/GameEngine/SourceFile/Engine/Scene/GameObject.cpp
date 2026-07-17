@@ -71,7 +71,7 @@ nlohmann::json GameObject::ToJson() const
 
 	auto render = GetComponent<MeshRendererComponent>();
 	JSON["color"] = { render->color.x,render->color.y, render->color.z, render->color.w };
-	JSON["UseSolidColor"] = render->useSolidColor;
+	JSON["useSolidColor"] = render->useSolidColor;
 
 	if (render->texture != nullptr)
 	{

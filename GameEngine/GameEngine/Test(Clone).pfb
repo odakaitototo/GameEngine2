@@ -1,0 +1,60 @@
+[
+    {
+        "ParentIndex": -1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Test(Clone)",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                -4.771096706390381,
+                1.7046297788619995,
+                0.0
+            ],
+            "rotation": [
+                53.6794548034668,
+                -12.25242805480957,
+                -23.116846084594727
+            ],
+            "scale": [
+                1.0,
+                0.9999998807907104,
+                0.9999998807907104
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "ParentIndex": 0,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject1",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                2.3023226261138916,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    }
+]
