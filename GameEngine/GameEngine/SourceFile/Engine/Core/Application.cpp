@@ -15,7 +15,7 @@
 // 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static Application* g_app = nullptr; // WindowProcからApplication本体を操作するためのグローバル変数
+static Application * g_app = nullptr; // WindowProcからApplication本体を操作するためのグローバル変数
 
 Application::Application() : m_hWnd(nullptr), m_hInstance(nullptr) {}
 
@@ -39,7 +39,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     // ウィンドウの作成
     m_hWnd = CreateWindow(wc.lpszClassName, L"Project: Rescue Trace - Engine v0.1",
         WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
-        100,100, width, height, NULL, NULL, wc.hInstance, NULL);
+        100, 100, width, height, NULL, NULL, wc.hInstance, NULL);
 
     if (!m_hWnd) return false;
 
@@ -47,7 +47,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
 
 
     // 3. DirectXの初期化
-    if (!m_dx.Initialize(m_hWnd, width, height)) 
+    if (!m_dx.Initialize(m_hWnd, width, height))
     {
         return false; // 初期化に失敗したら起動しない
     }
@@ -80,7 +80,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     // ドッキング機能を有効化する一文
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-   m_commonMesh = std::make_shared<Mesh>();
+    m_commonMesh = std::make_shared<Mesh>();
     std::vector<Vertex> vertices =
     {
         // 前面 (Z = -0.5)
@@ -132,7 +132,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     };
     m_commonMesh = std::make_shared<Mesh>();
 
-    m_commonMesh ->Create(m_dx.GetDevice(), vertices, indices);
+    m_commonMesh->Create(m_dx.GetDevice(), vertices, indices);
 
     // グリッドの頂点データ生成
     std::vector<Vertex> gridVertices;
@@ -145,7 +145,7 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
         gridVertices.push_back({ { (float)i, 0.0f, (float)gridSize },  { 0.4f, 0.4f, 0.4f, 1.0f }, {0.0f,0.0f} });
         gridIndices.push_back(gridIndex++);
         gridIndices.push_back(gridIndex++);
-    
+
     }
 
     for (int i = -gridSize; i <= gridSize; i++) {
@@ -176,22 +176,22 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     cbDesc.MiscFlags = 0;
     cbDesc.StructureByteStride = 0;
 
-     // バッファを生成（初期データは後でマイフレーム送るのでnullptr）
+    // バッファを生成（初期データは後でマイフレーム送るのでnullptr）
     m_dx.GetDevice()->CreateBuffer(&cbDesc, nullptr, &m_pConstantBuffer);
 
-   
+
 
     // レンズの設定
     float aspectRatio = m_screenWidth / m_screenHeight;
     float fovAngle = DirectX::XMConvertToRadians(60.0f);
     m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
 
-   
+
 
     return true;
 }
 
-void Application::Run() 
+void Application::Run()
 {
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
@@ -211,43 +211,43 @@ void Application::Run()
             break;
         }
 
-            // ImGuiのフレーム開始
-            m_imgui.Begin();
+        // ImGuiのフレーム開始
+        m_imgui.Begin();
 
-            //毎フレーム、カメラの行列を最新状態に更新する
-            m_camera.Update();
+        //毎フレーム、カメラの行列を最新状態に更新する
+        m_camera.Update();
 
-            // 親子関係（ワールド行列）の更新
-            for (auto& obj : m_gameObjects)
+        // 親子関係（ワールド行列）の更新
+        for (auto& obj : m_gameObjects)
+        {
+            if (obj->GetParent() == nullptr)
             {
-                if (obj->GetParent() == nullptr)
-                {
-                    obj->UpdateTransform();
-                }
+                obj->UpdateTransform();
             }
+        }
 
-            m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
+        m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
 
-            // 3D空間を描画
-            m_renderer.Render(this);
+        // 3D空間を描画
+        m_renderer.Render(this);
 
-            // メイン画面への描画フェーズ
-            // 描画先をメイン画面に戻し画面をクリアする
-            // エディタ自体の背景色
-            m_dx.BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
-           
-            m_editorUI.Draw(this); // 「this」は、Application自身が「私のポインタを使ってね」 
+        // メイン画面への描画フェーズ
+        // 描画先をメイン画面に戻し画面をクリアする
+        // エディタ自体の背景色
+        m_dx.BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
 
-
-            //// 描画開始
-            //m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-            //m_renderer.Render(this); // 描画処理
+        m_editorUI.Draw(this); // 「this」は、Application自身が「私のポインタを使ってね」 
 
 
-            // ImGuiをDirectXの上に重ねて描画
-            m_imgui.End();
-            m_dx.EndScene(); // 描画終了
-        
+        //// 描画開始
+        //m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
+        //m_renderer.Render(this); // 描画処理
+
+
+        // ImGuiをDirectXの上に重ねて描画
+        m_imgui.End();
+        m_dx.EndScene(); // 描画終了
+
     }
 }
 
@@ -258,9 +258,9 @@ void Application::Terminate()
 
 // Windows OSからの通知（閉じるボタンなど）を処理する
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT mag, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) // ImGuiかWindowsのイベントかを判断
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) // ImGuiかWindowsのイベントかを判断
         return true;
 
     switch (message) {
@@ -291,7 +291,7 @@ void Application::SaveScene(const std::string& filename)
     json root = json::array(); // シーン全体を配列する
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
-        
+
         json j = m_gameObjects[i]->ToJson(); // 全オブジェクトのデータをジェイソン化
 
         if (j.is_object())
@@ -367,7 +367,7 @@ void Application::LoadScene(const std::string& filename)
     // 2. 保存しておいた出席番を見て、親子関係を結び直す
     for (int i = 0; i < root.size(); i++)
     {
-        
+
         if (root[i].is_object() && root[i].contains("ParentIndex"))
         {
 
@@ -396,14 +396,14 @@ void Application::SavePrefab(int index, const std::string& filename)
     std::vector<GameObject*> prefabObjects; // 親と、そのすべての子供を配列にまとめる
 
     // 再帰的に子供をリストに追加する(親を0番として->子供1番->子供2番)
-    std::function<void(GameObject*)> addToList = [&](GameObject* obj) 
-    {
+    std::function<void(GameObject*)> addToList = [&](GameObject* obj)
+        {
             prefabObjects.push_back(obj);
             for (auto* child : obj->GetChildren())
             {
                 addToList(child);
             }
-    };
+        };
 
     // 選択されたオブジェクトを起点に、全階層をリストアップ
     addToList(m_gameObjects[index].get());
@@ -444,7 +444,7 @@ void Application::InstantiatePrefab(const std::string& filename)
     std::ifstream ifs(filename);
     if (!ifs)
     {
-        
+
         return; // ファイルが見つからなければ何もしない
     }
 
@@ -503,7 +503,7 @@ void Application::InstantiatePrefab(const std::string& filename)
         }
     }
 
-    
+
 }
 
 // オブジェクトの複製
@@ -539,8 +539,8 @@ void Application::ObujectDuplication()
             }
 
             return cloneObj;
-    };
-        // 選択中のオブジェクトを親としてコピー開始
+        };
+    // 選択中のオブジェクトを親としてコピー開始
     auto originalObj = m_gameObjects[m_selectedObjectIndex].get();
     auto rootClone = deepCopy(originalObj, originalObj->GetParent());
 
@@ -558,9 +558,9 @@ void Application::ObujectDuplication()
     }
 
 
-    
+
 }
-    
+
 
 
 void Application::ResizeScene(float width, float height)
@@ -615,7 +615,7 @@ void Application::PickObject(float mouseX, float mouseY, float viewWidth, float 
 
         // 上で計算済みのワールド行列をそのまま読み込む
         DirectX::XMMATRIX objWorld = DirectX::XMLoadFloat4x4(&t.worldMatrix);
-       
+
 
         // レーザーを「オブジェクトの視点（ローカル空間）」に逆変換する
         DirectX::XMVECTOR det;
@@ -675,22 +675,22 @@ void Application::ExecuteUndo()
         return; // 履歴がなければ何もしない
     }
 
-        // 履歴リストの一番最後（最新の過去）を取り出す
-        UndoRecord rec = m_undoStack.back();
-        m_undoStack.pop_back(); // 取り出した履歴はリストから消す
+    // 履歴リストの一番最後（最新の過去）を取り出す
+    UndoRecord rec = m_undoStack.back();
+    m_undoStack.pop_back(); // 取り出した履歴はリストから消す
 
-        // インデックスが安全か確認してから復元する
-        if (rec.objectIndex >= 0 && rec.objectIndex < m_gameObjects.size())
-        {
-            auto& t = m_gameObjects[rec.objectIndex]->GetTransform();
-            t.position = { rec.px, rec.py, rec.pz };
-            t.rotation = { rec.rx, rec.rz, rec.rz };
-            t.scale = { rec.sx, rec.sy, rec.sz };
+    // インデックスが安全か確認してから復元する
+    if (rec.objectIndex >= 0 && rec.objectIndex < m_gameObjects.size())
+    {
+        auto& t = m_gameObjects[rec.objectIndex]->GetTransform();
+        t.position = { rec.px, rec.py, rec.pz };
+        t.rotation = { rec.rx, rec.rz, rec.rz };
+        t.scale = { rec.sx, rec.sy, rec.sz };
 
-            // 復元したオブジェクトを選択状態にする
-            m_selectedObjectIndex = rec.objectIndex;
-        }
-    
+        // 復元したオブジェクトを選択状態にする
+        m_selectedObjectIndex = rec.objectIndex;
+    }
+
 }
 
 
@@ -723,8 +723,3 @@ void Application::OnDropFiles(HDROP hDrop)
     // Windowsに「ファイルの受け取り処理が終わりました」と報告
     DragFinish(hDrop);
 }
-
-
-
-
- 

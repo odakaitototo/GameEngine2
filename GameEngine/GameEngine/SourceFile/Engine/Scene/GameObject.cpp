@@ -134,7 +134,20 @@ void GameObject::UpdateTransform()
 
 	// 自分自身の行列を作る
 	DirectX::XMMATRIX scaleMat = DirectX::XMMatrixScaling(trans.scale.x, trans.scale.y, trans.scale.z);
-	DirectX::XMMATRIX rotMat   = DirectX::XMMatrixRotationRollPitchYaw(trans.rotation.x, trans.rotation.y, trans.rotation.z);
+	
+	float radX = DirectX::XMConvertToRadians(trans.rotation.x);
+	float radY = DirectX::XMConvertToRadians(trans.rotation.y);
+	float radZ = DirectX::XMConvertToRadians(trans.rotation.z);
+	
+	// 各軸の回転行列をバラバラに作成する
+	DirectX::XMMATRIX rotX = DirectX::XMMatrixRotationX(radX);
+	DirectX::XMMATRIX rotY = DirectX::XMMatrixRotationY(radY);
+	DirectX::XMMATRIX rotZ = DirectX::XMMatrixRotationZ(radZ);
+
+	DirectX::XMMATRIX rotMat = rotX * rotY * rotZ;
+
+
+
 	DirectX::XMMATRIX transMat = DirectX::XMMatrixTranslation(trans.position.x, trans.position.y, trans.position.z);
 
 	DirectX::XMMATRIX localMatrix = scaleMat * rotMat * transMat;
@@ -151,6 +164,8 @@ void GameObject::UpdateTransform()
 	{
 		worldMat = localMatrix; // 親がいない場合はそのまま
 	}
+
+
 
 	// 計算結果を保存する
 	DirectX::XMStoreFloat4x4(&trans.worldMatrix, worldMat);
@@ -173,8 +188,12 @@ void GameObject::SetParent(GameObject* parent)
 	// 結合解除
 	if (m_parent)
 	{
+
 		m_parent->RemoveChild(this);
+
 	}
+
+
 
 	m_parent = parent;
 
