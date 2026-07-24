@@ -613,4 +613,37 @@ void EditorUI::Draw(Application* app)
 
     ImGui::Columns(1);
     ImGui::End();
+
+
+
+    /////////////////////////////
+    //
+    // モード切り替え
+    // 
+    /////////////////////////////
+
+    ImGui::Begin("Game State");
+
+    if (app->GetEngineMode() == EngineMode::Editor)
+    {
+        // エディタモードの時は緑色の ▶ PLAY ボタンを表示
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+        if (ImGui::Button("PLAY", ImVec2(100, 30)))
+        {
+            app->StartPlayMode();
+        }
+        ImGui::PopStyleColor();
+        
+    }
+    else
+    {
+        // エディタモード時は赤色の ■ STOP ボタンを表示
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+        if (ImGui::Button("STOP", ImVec2(100, 30)))
+        {
+            app->StopPlayMode();
+        }
+        ImGui::PopStyleColor();
+    }
+    ImGui::End();
 }

@@ -723,3 +723,112 @@ void Application::OnDropFiles(HDROP hDrop)
     // Windowsに「ファイルの受け取り処理が終わりました」と報告
     DragFinish(hDrop);
 }
+
+////////////////////////////////
+// 
+// モード切替
+//
+////////////////////////////////
+
+
+// Playモード時の処理
+void Application::StartPlayMode()
+{
+    // モードが既にPlayだったらreturnを返す
+    if (m_engineMode == EngineMode::Play)
+    {
+        return;
+    }
+
+    // Playモードに切り替える前にシーン全体をJson配列としてメモリにバックアップする
+    m_sceneBackup = json::array();
+
+    for (int i = 0; i < m_gameObjects.size(); i++)
+    {
+        json j = m_gameObjects[i]->ToJson(); // i番目のオブジェクトデータをjに保存
+
+        int parentIndex = -1;
+        GameObject* parent = m_gameObjects[i]->GetParent();
+        if (parent != nullptr)
+        {
+            for (int p = 0; p < m_gameObjects.size(); p++)
+            {
+                if (m_gameObjects[p].get() == parent)
+                {
+                    parentIndex = p;
+                    break;
+                }
+            }
+            
+        }
+        j["parentIndex"] = parentIndex;
+        m_sceneBackup.push_back(j);
+       
+    }
+
+    // モードをPlayに切り替える
+    m_engineMode = EngineMode::Play;
+    m_selectedObjectIndex = -1; // 選択状態を解除
+
+    OutputDebugStringA("▶　Play Mode Started\n");
+}
+
+
+void Application::StopPlayMode()
+{
+    // モードがすでにSditorモードならreturnを返す
+    if (m_engineMode == EngineMode::Editor)
+    {
+        return;
+    }
+
+    // Play中にかかった変更を元に戻す
+    m_gameObjects.clear();
+
+    // バックアップしておいたJsonからPlay直前の状態を復元する
+    for (const auto& j : m_sceneBackup)
+    {
+        if (!j.is_object())
+        {
+            continue;
+        }
+
+        auto obj = std::make_shared<GameObject>("");
+        obj->FromJson(j, m_dx.GetDevice());
+        obj->SetMesh(m_commonMesh);
+        m_gameObjects.push_back(obj);
+    }
+
+    // 親子関係の結び直し
+    for (int i = 0; i < m_sceneBackup.size(); i++)
+    {
+        if (m_sceneBackup[i].is_object() && m_sceneBackup[i].contains("parentIndex"))
+        {
+
+            if (m_sceneBackup[i]["parentIndex"].is_number())
+            {
+                int parentIndex = m_sceneBackup[i]["parentIndex"];
+
+                if (parentIndex >= 0 && parentIndex < m_gameObjects.size())
+                {
+                    auto savedPos = m_gameObjects[i]->GetTransform().position;
+                    auto savedRot = m_gameObjects[i]->GetTransform().rotation;
+                    auto saveScl = m_gameObjects[i]->GetTransform().scale;
+
+                    m_gameObjects[i]->SetParent(m_gameObjects[parentIndex].get());
+
+                    m_gameObjects[i]->GetTransform().position = savedPos;
+                    m_gameObjects[i]->GetTransform().rotation = savedRot;
+                    m_gameObjects[i]->GetTransform().scale = saveScl;
+                    m_gameObjects[i]->UpdateTransform();
+                }
+            }
+        }
+    }
+
+    // モードをEditorに切り替える
+    m_engineMode = EngineMode::Editor;
+    m_sceneBackup.clear(); // メモリ句を開放
+
+    OutputDebugStringA("■ Editor Mode Restored\n");
+}

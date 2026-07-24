@@ -23,6 +23,17 @@
 // 
 // 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+// モードの種類を定義(エディタモードとゲームモード)
+enum class EngineMode
+{
+    Editor, // エディタモード(編集・配置するモード)
+    Play    // プレイモード(ゲームを動かすモード)
+};
+
+
+
 // GPUに送るデータの形式をHLSLと一致させる
 struct ConstantBufferTransform
 {
@@ -97,6 +108,19 @@ public: // ショートカットキー関係
     // Ctrl+V（複製）
     void ObujectDuplication(); // 「Ctrl+V」を押した時に複製する
 
+
+
+
+public: // モード関係
+
+    // モードを取得・変更するための関数
+    EngineMode GetEngineMode() const { return m_engineMode; }
+    void SetEngineMode(EngineMode mode);
+
+    // Play/Stopを切り替える関数
+    void StartPlayMode();
+    void StopPlayMode();
+
     
 
 private:
@@ -153,4 +177,10 @@ private: // ショートカットキー関係
 
 private: // テクスチャー関係
     std::shared_ptr<Texture> m_testTexture; // テスト用の画像
+
+
+private: // モード関係
+    EngineMode m_engineMode = EngineMode::Editor; // 初期状態はエディタモード
+    nlohmann::json m_sceneBackup; // プレイ直前の状態を保持するバックアップ変数
+
 };
