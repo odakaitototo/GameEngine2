@@ -132,6 +132,9 @@
     <ClInclude Include="..\Dependencies\ImGui\ImGuizmo.h">
       <Filter>ヘッダー ファイル\Engine\Graphics\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Scene\OrbitCamera.h">
+      <Filter>ヘッダー ファイル\Engine\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\Dependencies\ImGui\ImGuizmo.cpp">
       <Filter>ソース ファイル\Engine\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Scene\OrbitCamera.cpp">
+      <Filter>ソース ファイル\Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

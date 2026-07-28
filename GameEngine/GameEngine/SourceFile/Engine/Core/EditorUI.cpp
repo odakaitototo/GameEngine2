@@ -92,50 +92,70 @@ void EditorUI::Draw(Application* app)
     {
         // マウスの移動量を取得して,カメラを回転させる
         ImVec2 mouseDelta = ImGui::GetIO().MouseDelta;
-        app->m_camera.Rotate(mouseDelta.y * 0.2f, mouseDelta.x * 0.2f);
 
-        // WASDキーでカメラを移動させる
-        float moveSpeed = 0.1f;
-        float dRight = 0.0f, dUp = 0.0f, dForward = 0.0f;
-
-        if (ImGui::IsKeyDown(ImGuiKey_W))
+        if (app->GetEngineMode() == EngineMode::Play)
         {
-            dForward += moveSpeed; // 前
+            // プレイモード中　右クリックドラッグでプレイ用のカメラを動かす
+            app->GetGameCamera().Rotate(mouseDelta.x * 0.3f, -mouseDelta.y * 0.3f);
+        }
+        else
+        {
+            app->m_camera.Rotate(mouseDelta.y * 0.2f, mouseDelta.x * 0.2f);
+
+            // WASDキーでカメラを移動させる
+            float moveSpeed = 0.1f;
+            float dRight = 0.0f, dUp = 0.0f, dForward = 0.0f;
+
+            if (ImGui::IsKeyDown(ImGuiKey_W))
+            {
+                dForward += moveSpeed; // 前
+            }
+
+            if (ImGui::IsKeyDown(ImGuiKey_S))
+            {
+                dForward -= moveSpeed; // 後ろ
+            }
+
+            if (ImGui::IsKeyDown(ImGuiKey_D))
+            {
+                dRight += moveSpeed; // 右
+            }
+
+            if (ImGui::IsKeyDown(ImGuiKey_A))
+            {
+                dRight -= moveSpeed; // 左
+            }
+
+            if (ImGui::IsKeyDown(ImGuiKey_Q))
+            {
+                dUp += moveSpeed;  // 上
+            }
+
+            if (ImGui::IsKeyDown(ImGuiKey_E))
+            {
+                dUp -= moveSpeed; // 下
+            }
+
+            // Shiftキーを押している間は早くなる
+            if (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift))
+            {
+                dRight *= 3.0f;
+                dForward *= 3.0f;
+            }
+
+            app->m_camera.Move(dRight, dUp, dForward);
         }
 
-        if (ImGui::IsKeyDown(ImGuiKey_S))
-        {
-            dForward -= moveSpeed; // 後ろ
-        }
+    }
 
-        if (ImGui::IsKeyDown(ImGuiKey_D))
+    if (ImGui::IsWindowHovered() && app->GetEngineMode() == EngineMode::Play)
+    {
+        float wheelDelta = ImGui::GetIO().MouseWheel;
+        if (wheelDelta != 0.0f)
         {
-            dRight += moveSpeed; // 右
+            // ホイールを回した分だけカメラ距離を変更する
+            app->GetGameCamera().Zoom(wheelDelta * 1.5f);
         }
-
-        if (ImGui::IsKeyDown(ImGuiKey_A))
-        {
-            dRight -= moveSpeed; // 左
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_Q))
-        {
-            dUp += moveSpeed;  // 上
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_E))
-        {
-            dUp -= moveSpeed; // 下
-        }
-
-        // Shiftキーを押している間は早くなる
-        if (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift))
-        {
-            dRight *= 3.0f;
-            dForward *= 3.0f;
-        }
-
-        app->m_camera.Move(dRight, dUp, dForward);
     }
 
     // ImGuizmoによるオブジェクト直感操作システム
@@ -457,9 +477,9 @@ void EditorUI::Draw(Application* app)
 
             // 今の瞬間のキー状態をWindows　APIから直接取得 (ImGuiの横取りを無視)
             bool currRight = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
-            bool currLeft = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
-            bool currUp = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
-            bool currDown = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+            bool currLeft = (GetAsyncKeyState(VK_LEFT) & 0x8000) != 0;
+            bool currUp = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
+            bool currDown = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;
 
 
 
@@ -622,28 +642,38 @@ void EditorUI::Draw(Application* app)
     // 
     /////////////////////////////
 
-    ImGui::Begin("Game State");
+    // 画面上部に常時固定されるバーを作成
+    if (ImGui::BeginMainMenuBar())
+    {
+        float menuBarWidth = ImGui::GetWindowWidth();
+        float buttonWidth = 100.0f;
 
-    if (app->GetEngineMode() == EngineMode::Editor)
-    {
-        // エディタモードの時は緑色の ▶ PLAY ボタンを表示
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
-        if (ImGui::Button("PLAY", ImVec2(100, 30)))
+        // 画面全体の幅とボタンの幅から、真ん中の座標を計算してカーソルを移動
+        ImGui::SetCursorPosX((menuBarWidth - buttonWidth) * 0.5f);
+
+        if (app->GetEngineMode() == EngineMode::Editor)
         {
-            app->StartPlayMode();
+            // エディタモード時は緑色のPlayボタン
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+
+            if (ImGui::Button(" PLAY ", ImVec2(buttonWidth, 0.0f)))
+            {
+                app->StartPlayMode();
+            }
+            ImGui::PopStyleColor();
         }
-        ImGui::PopStyleColor();
-        
-    }
-    else
-    {
-        // エディタモード時は赤色の ■ STOP ボタンを表示
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-        if (ImGui::Button("STOP", ImVec2(100, 30)))
+        else
         {
-            app->StopPlayMode();
+            // プレイモードの時は赤色の STOP ボタンを表示
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+
+            if (ImGui::Button(" STOP ", ImVec2(buttonWidth, 0.0f)))
+            {
+                app->StopPlayMode();
+            }
+            ImGui::PopStyleColor();
         }
-        ImGui::PopStyleColor();
+        ImGui::EndMainMenuBar();
     }
-    ImGui::End();
+    
 }

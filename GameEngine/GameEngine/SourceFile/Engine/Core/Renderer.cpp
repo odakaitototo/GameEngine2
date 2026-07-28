@@ -10,8 +10,8 @@ void Renderer::Render(Application* app)
     app->m_shader->Bind(app->m_dx.GetContext()); // シェイダーを使うためにGPUに指示する
 
     // Cameraクラスから完成済みの行列を持ってくる
-    DirectX::XMMATRIX viewMatrix = app->m_camera.GetViewMatrix();
-    DirectX::XMMATRIX projectionMatrix = app->m_camera.GetProjectionMatrix();
+    DirectX::XMMATRIX viewMatrix = app->GetCurrentViewMatrix();
+    DirectX::XMMATRIX projectionMatrix = app->GetCurrentProjectionMatrix();
 
     // グリッド線を表示
     if (app->m_gridMesh)

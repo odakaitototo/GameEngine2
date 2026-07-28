@@ -214,8 +214,14 @@ void Application::Run()
         // ImGuiのフレーム開始
         m_imgui.Begin();
 
-        //毎フレーム、カメラの行列を最新状態に更新する
-        m_camera.Update();
+        if (m_engineMode == EngineMode::Play)
+        {
+            m_gameCamera.Update(); // プレイ中はゲーム用カメラ
+       }
+        else
+        {
+            m_camera.Update(); // エディタ中はフリーカメラを使用
+        }
 
         // 親子関係（ワールド行列）の更新
         for (auto& obj : m_gameObjects)
@@ -578,8 +584,13 @@ void Application::ResizeScene(float width, float height)
     // DirectXのテクスチャを新しいサイズで作り直す
     m_dx.CreateSceneResources((int)width, (int)height);
 
-    // カメラのアスペクト比を更新んして、歪みを消す
+    // カメラのアスペクト比を更新して、歪みを消す
     m_camera.SetAspect(width, height);
+
+    // ゲーム用のカメラも歪み防止のためにアスペクト比を更新する
+    float aspectRatio = width / height;
+    float fovAngle = DirectX::XMConvertToRadians(60.0f);
+    m_gameCamera.SetPerspective(60.0f, aspectRatio, 0.3f, 1000.0f);
 }
 
 // マウスピッキングの実装
@@ -684,7 +695,7 @@ void Application::ExecuteUndo()
     {
         auto& t = m_gameObjects[rec.objectIndex]->GetTransform();
         t.position = { rec.px, rec.py, rec.pz };
-        t.rotation = { rec.rx, rec.rz, rec.rz };
+        t.rotation = { rec.rx, rec.ry, rec.rz };
         t.scale = { rec.sx, rec.sy, rec.sz };
 
         // 復元したオブジェクトを選択状態にする
@@ -831,4 +842,35 @@ void Application::StopPlayMode()
     m_sceneBackup.clear(); // メモリ句を開放
 
     OutputDebugStringA("■ Editor Mode Restored\n");
+
+
+    
+}
+
+////////////////////////
+    //
+    // モードごとのカメラの変更
+    //
+    ////////////////////////
+
+DirectX::XMMATRIX Application::GetCurrentViewMatrix() const
+{
+    if (m_engineMode == EngineMode::Play)
+    {
+        // プレイ中はゲーム用のカメラに切り替える
+        return m_gameCamera.GetViewMatrix();
+    }
+
+    // エディタモード中はゲーム用のカメラレンズを使う
+    return m_camera.GetViewMatrix();
+}
+
+DirectX::XMMATRIX Application::GetCurrentProjectionMatrix()const
+{
+    if (m_engineMode == EngineMode::Play)
+    {
+        return m_gameCamera.GetProjectionMatrix();
+    }
+
+    return m_camera.GetProjectionMatrix();
 }

@@ -15,6 +15,7 @@
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Core/EditorUI.h"
 #include "Engine/Core/Renderer.h"
+#include "Engine/Scene/OrbitCamera.h"
 
 /////////////////////////////////-------- メモ ---------//////////////////////////////////////////////
 // 
@@ -121,6 +122,18 @@ public: // モード関係
     void StartPlayMode();
     void StopPlayMode();
 
+
+public: // カメラ関係
+
+    // 今のモードに合わせて、正しいカメラの行列を返す便利関数
+    DirectX::XMMATRIX GetCurrentViewMatrix() const;
+    DirectX::XMMATRIX GetCurrentProjectionMatrix() const;
+
+    // ゲームカメラそのものを取得する関数
+    OrbitCamera& GetGameCamera()
+    {
+        return m_gameCamera; // ゲームプレイ時のカメラ
+    }
     
 
 private:
@@ -182,5 +195,9 @@ private: // テクスチャー関係
 private: // モード関係
     EngineMode m_engineMode = EngineMode::Editor; // 初期状態はエディタモード
     nlohmann::json m_sceneBackup; // プレイ直前の状態を保持するバックアップ変数
+
+    private:
+
+        OrbitCamera m_gameCamera; // ゲームプレイ用のカメラ
 
 };
