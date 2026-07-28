@@ -36,17 +36,17 @@ void OrbitCamera::Update()
 
 void OrbitCamera::Rotate(float deltaYaw, float deltaPitch)
 {
-	m_yaw += deltaYaw;
-	m_pitch += deltaPitch;
+	m_yaw += deltaYaw * m_rotateSpeed;
+	m_pitch += deltaPitch * m_rotateSpeed;
 
 	// ã‰º‚Ì‰ñ“]‚É§ŒÀ‚ğ‚©‚¯‚é
-	m_pitch = std::clamp(m_pitch, 8.0f, 80.0f);
+	m_pitch = std::clamp(m_pitch, m_minPitch, m_maxPitch);
 }
 
 void OrbitCamera::Zoom(float deltaDistance)
 {
-	m_distance -= deltaDistance;
-	m_distance = std::clamp(m_distance, 2.0f, 50.0f); // ‘OŒã‚É‚à§ŒÀ‚ğ‘‚¯‚é
+	m_distance -= deltaDistance * m_zoomSpeed;
+	m_distance = std::clamp(m_distance, m_minDistance, m_maxDistance); // ‘OŒã‚É‚à§ŒÀ‚ğ‘‚¯‚é
 }
 
 void OrbitCamera::SetPerspective(float fovDeg, float aspect, float nearZ, float farZ)

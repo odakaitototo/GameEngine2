@@ -96,7 +96,7 @@ void EditorUI::Draw(Application* app)
         if (app->GetEngineMode() == EngineMode::Play)
         {
             // プレイモード中　右クリックドラッグでプレイ用のカメラを動かす
-            app->GetGameCamera().Rotate(mouseDelta.x * 0.3f, -mouseDelta.y * 0.3f);
+            app->GetGameCamera().Rotate(mouseDelta.x, -mouseDelta.y);
         }
         else
         {
@@ -154,7 +154,7 @@ void EditorUI::Draw(Application* app)
         if (wheelDelta != 0.0f)
         {
             // ホイールを回した分だけカメラ距離を変更する
-            app->GetGameCamera().Zoom(wheelDelta * 1.5f);
+            app->GetGameCamera().Zoom(wheelDelta);
         }
     }
 
@@ -286,7 +286,26 @@ void EditorUI::Draw(Application* app)
         app->InstantiatePrefab(prefabLoadBuf);
     }
     ImGui::Separator(); // 区切るための線
+
+    // 最上部にMainCameraを常時表示
+    ImGuiTreeNodeFlags camFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+    if (app->m_isCameraSelected)
+    {
+        camFlags |= ImGuiTreeNodeFlags_Selected; // 選択中ならハイライトする
+    }
+
+    ImGui::TreeNodeEx("GameCameraNode", camFlags, "Main Camera (OrbitCamera)");
+
+    if (ImGui::IsItemClicked())
+    {
+        app->m_selectedObjectIndex = -1; // 普通のオブジェクトの選択を解除
+        app->m_isCameraSelected = true; // カメラを選択状態にする
+    }
    
+    ImGui::Separator();
+    
+
     std::function<void(GameObject*, int)> drawNode = [&](GameObject* obj, int index)
     {
            
@@ -307,6 +326,12 @@ void EditorUI::Draw(Application* app)
 
 
             bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)index, flags, "%s", displayLabel.c_str());
+
+            if (ImGui::IsItemClicked())
+            {
+                app->m_selectedObjectIndex = index;
+                app->m_isCameraSelected = false; // 通常のオブジェクトを選んだらカメラ選択を解除
+            }
 
             if (ImGui::IsItemClicked())
             {
@@ -404,7 +429,43 @@ void EditorUI::Draw(Application* app)
     ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Inspector"); // ウィンドウ名
-    if (app->m_selectedObjectIndex != -1 && app->m_selectedObjectIndex < app->m_gameObjects.size())
+
+    // カメラが選択されていたら、カメラ調節パネルを表示
+    if (app->m_isCameraSelected)
+    {
+        ImGui::Text("Main Camera Settings");
+        ImGui::Separator();
+
+        auto& cam = app->GetGameCamera();
+
+        // プレビュー機能のスイッチ
+        ImGui::Checkbox("Preview Game Camera", &app->m_previewGameCamera);
+        ImGui::Separator();
+
+        ImGui::Text("Target & Position");
+        ImGui::DragFloat3("Target Pos", &cam.GetTarget().x, 0.1f);
+
+        if (ImGui::Button("ResetDefaultView"))
+        {
+            cam.GetTarget() = { 0.0f,0.0f,0.0f };
+            cam.GetDistance() = 15.0f;
+            cam.GetYaw() = 45.0f;
+            cam.GetPitch() = 30.0f;
+        }
+
+        ImGui::Separator();
+        ImGui::DragFloat("Distance", &cam.GetDistance(), 0.5f, cam.GetMinDistance(), cam.GetMaxDistance());
+        ImGui::DragFloat("Yaw (Angle X)", &cam.GetYaw(), 1.0f);
+        ImGui::DragFloat("Pitch (Angle Y)", &cam.GetPitch(), 0.5f, cam.GetMinPitch(), cam.GetMaxPitch());
+
+        ImGui::Separator();
+        ImGui::Text("Limits & Speed");
+        ImGui::DragFloatRange2("Pitch Limit", &cam.GetMinPitch(), &cam.GetMaxPitch(), 1.0f, -89.0f, 89.0f);
+        ImGui::DragFloatRange2("Distance Limit", &cam.GetMinDistance(), &cam.GetMaxDistance(), 1.0f, 0.1f, 500.0f);
+        ImGui::DragFloat("Rotate Speed", &cam.GetRotateSpeed(), 0.01f, 0.01f, 2.0f);
+        ImGui::DragFloat("Zoom Speed", &cam.GetZoomSpeed(), 0.1f, 0.1f, 10.0f);
+    }
+    else if (app->m_selectedObjectIndex != -1 && app->m_selectedObjectIndex < app->m_gameObjects.size())
     {
         auto& obj = app->m_gameObjects[app->m_selectedObjectIndex];
 
@@ -535,6 +596,8 @@ void EditorUI::Draw(Application* app)
 
         }
     }
+
+   
 
 
 

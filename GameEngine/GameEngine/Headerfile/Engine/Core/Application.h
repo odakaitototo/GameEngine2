@@ -134,7 +134,9 @@ public: // カメラ関係
     {
         return m_gameCamera; // ゲームプレイ時のカメラ
     }
-    
+
+    // エディタ中でゲームカメラをプレビューするかどうかのフラグ
+    bool m_previewGameCamera = false;
 
 private:
     // Windowsのメッセージを処理する関数
@@ -175,7 +177,15 @@ private: //定数場hhぁの実態
     ComPtr<ID3D11Buffer> m_pConstantBuffer;
 
 private: // カメラ関係
-    Camera m_camera;
+    Camera m_camera; // エディタモード用のカメラ
+    OrbitCamera m_gameCamera; // ゲームプレイ用のカメラ
+
+    // Play直前のカメラの状態を記録しておくバックアップ変数
+    OrbitCamera m_gameCameraBuckup;
+
+    // 今、Hierarchyでカメラが選択されているかどうかのフラグ
+    bool m_isCameraSelected = false;
+
 private:
     Renderer m_renderer;
 
@@ -196,8 +206,5 @@ private: // モード関係
     EngineMode m_engineMode = EngineMode::Editor; // 初期状態はエディタモード
     nlohmann::json m_sceneBackup; // プレイ直前の状態を保持するバックアップ変数
 
-    private:
-
-        OrbitCamera m_gameCamera; // ゲームプレイ用のカメラ
 
 };

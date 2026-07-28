@@ -214,7 +214,7 @@ void Application::Run()
         // ImGuiのフレーム開始
         m_imgui.Begin();
 
-        if (m_engineMode == EngineMode::Play)
+        if (m_engineMode == EngineMode::Play || m_previewGameCamera)
         {
             m_gameCamera.Update(); // プレイ中はゲーム用カメラ
        }
@@ -777,6 +777,9 @@ void Application::StartPlayMode()
        
     }
 
+    // 現在のゲームカメラの状態をバックアップへ保存
+    m_gameCameraBuckup = m_gameCamera;
+
     // モードをPlayに切り替える
     m_engineMode = EngineMode::Play;
     m_selectedObjectIndex = -1; // 選択状態を解除
@@ -837,6 +840,9 @@ void Application::StopPlayMode()
         }
     }
 
+    // 記憶したカメラの状態を書き戻す
+    m_gameCamera = m_gameCameraBuckup;
+
     // モードをEditorに切り替える
     m_engineMode = EngineMode::Editor;
     m_sceneBackup.clear(); // メモリ句を開放
@@ -855,7 +861,7 @@ void Application::StopPlayMode()
 
 DirectX::XMMATRIX Application::GetCurrentViewMatrix() const
 {
-    if (m_engineMode == EngineMode::Play)
+    if (m_engineMode == EngineMode::Play || m_previewGameCamera)
     {
         // プレイ中はゲーム用のカメラに切り替える
         return m_gameCamera.GetViewMatrix();
@@ -867,7 +873,7 @@ DirectX::XMMATRIX Application::GetCurrentViewMatrix() const
 
 DirectX::XMMATRIX Application::GetCurrentProjectionMatrix()const
 {
-    if (m_engineMode == EngineMode::Play)
+    if (m_engineMode == EngineMode::Play || m_previewGameCamera)
     {
         return m_gameCamera.GetProjectionMatrix();
     }
