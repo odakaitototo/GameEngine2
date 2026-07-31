@@ -1,0 +1,60 @@
+[
+    {
+        "ParentIndex": -1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject05",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\tuti.png",
+        "transform": {
+            "position": [
+                -1.7311677932739258,
+                -0.09038026630878448,
+                -0.0026824185624718666
+            ],
+            "rotation": [
+                1.6999934911727905,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                1.1100000143051147,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "ParentIndex": 0,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject1",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                1.6594594717025757,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                -1.6999996900558472,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                0.9009009003639221,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    }
+]

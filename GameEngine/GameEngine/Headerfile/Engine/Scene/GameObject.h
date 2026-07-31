@@ -137,6 +137,8 @@ public: // JSON関係
 		void RemoveChild(GameObject* child); // 子供を外す
 
 		void UpdateTransform(); // 毎フレーム呼んで自分の行列を計算する関数
+		void Update(); // コンポーネントのLateUpdateを呼ぶもの
+		void LateUpdate(); // コンポーネントのUpdateを呼ぶもの
 
 
 

@@ -76,6 +76,8 @@ public:
     // 終了処理
     void Terminate();
 
+    DirectXManager m_dx; // DirectX管理クラス
+
 public: // 保存と読み込みの関数
 
     // シーンの保存と読み込みの関数
@@ -100,6 +102,9 @@ public: // オブジェクト関係
 
     void PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight); // マウスクリックでオブジェクトを選択する関数
 
+    //ゲームオブジェクトのリスト（スマートポインターで完全に管理）
+    std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+
 public: // ショートカットキー関係
 
     // Ctrl+Z（ひとつ前の状態に戻る）
@@ -122,6 +127,12 @@ public: // モード関係
     void StartPlayMode();
     void StopPlayMode();
 
+public://定数バッファの実態
+
+    ComPtr<ID3D11Buffer> m_pConstantBuffer;
+
+public: // メッシュ関係
+    std::shared_ptr<Mesh> m_commonMesh; // シーン全体で使いまわす、共通の三角形メッシュ
 
 public: // カメラ関係
 
@@ -145,7 +156,7 @@ private:
     float m_screenWidth; // Window画面の横幅の変数
     float m_screenHeight; // Window画面の縦幅の変数
 
-    DirectXManager m_dx; // DirectX管理クラス
+    
 
     HWND m_hWnd;
     HINSTANCE m_hInstance;
@@ -159,22 +170,18 @@ private:
     
 
 private:
-    //ゲームオブジェクトのリスト（スマートポインターで完全に管理）
-    std::vector<std::shared_ptr<GameObject>> m_gameObjects;
 
 	// 現在選択されているゲームオブジェクトインデックス（Inspectorで編集するため）
     int m_selectedObjectIndex = -1;  
 
 private: // メッシュ関係
-    std::shared_ptr<Mesh> m_commonMesh; // シーン全体で使いまわす、共通の三角形メッシュ
-
+    
     std::shared_ptr<Mesh> m_gridMesh; // グリッド専用メッシュ
 
 private: // シェーダー関係
     std::unique_ptr<Shader> m_shader; // シェーダーの管理用
 
-private: //定数場hhぁの実態
-    ComPtr<ID3D11Buffer> m_pConstantBuffer;
+private: 
 
 private: // カメラ関係
     Camera m_camera; // エディタモード用のカメラ

@@ -14,4 +14,5 @@ public:
 
 	// 毎フレーム呼ばれる更新処理
 	virtual void Update(){}
+	virtual void LateUpdate(){} // 行列計算後に呼ばれる後処理
 };

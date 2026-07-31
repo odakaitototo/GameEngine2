@@ -2,6 +2,10 @@
 #include "Engine/Core/Application.h"
 #include "imgui.h"
 #include "ImGuizmo.h"
+#include "Engine/Component/ColliderBase.h"
+#include "Engine/Component/AABBColliderComponent.h"
+#include "Engine/Component/OBBColliderComponent.h"
+
 
 #include <string>
 #include <functional>
@@ -503,6 +507,33 @@ void EditorUI::Draw(Application* app)
 
         // 単色化虹色か切り替えるチェックボックス
         ImGui::Checkbox("Use Solid Color", &obj->GetUseSolidColor());
+
+        
+        // コンポーネント追加UI 
+        ImGui::Separator();
+        ImGui::Text("Components");
+
+        // AABB追加ボタン
+        if (ImGui::Button("Add AABB Collider (Fixed)"))
+        {
+            // まだColliderを持っていなければ追加する
+            if (!obj->GetComponent<ColliderBase>())
+            {
+                obj->AddComponent<AABBColliderComponent>();
+            }
+        }
+
+        ImGui::SameLine(); // ボタンを横に並べる
+
+        // OBB追加ボタン
+        if (ImGui::Button("Add OBB Collider (Rotatable)"))
+        {
+            // まだColliderを持っていなければ追加する
+            if (!obj->GetComponent<ColliderBase>())
+            {
+                obj->AddComponent<OBBColliderComponent>();
+            }
+        }
     }
     else
     {

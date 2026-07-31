@@ -135,6 +135,18 @@
     <ClInclude Include="Headerfile\Engine\Scene\OrbitCamera.h">
       <Filter>ヘッダー ファイル\Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\AABBColliderComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Core\DebugRenderer.h">
+      <Filter>ヘッダー ファイル\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\ColliderBase.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\OBBColliderComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -199,6 +211,15 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Scene\OrbitCamera.cpp">
       <Filter>ソース ファイル\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Component\AABBColliderComponent.cpp">
+      <Filter>ソース ファイル\Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Core\DebugRenderere.cpp">
+      <Filter>ソース ファイル\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Component\OBBColliderComponent.cpp">
+      <Filter>ソース ファイル\Engine\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

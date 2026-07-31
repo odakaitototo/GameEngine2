@@ -1,6 +1,8 @@
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Component/TransformComponent.h"
 #include "Engine/Component/MeshRendererComponent.h"
+#include "Engine/Component/AABBColliderComponent.h"
+#include "Engine/Component/OBBColliderComponent.h"
 #include "ImGuizmo.h"
 
 #include <algorithm>
@@ -13,6 +15,7 @@ GameObject::GameObject(std::string name) : m_name(name)
 	// 生まれた瞬間に、自分自身に必要なコンポーネントをセットする
 	AddComponent<TransformComponent>();
 	AddComponent<MeshRendererComponent>();
+	
 }
 
 GameObject::~GameObject()
@@ -32,6 +35,30 @@ GameObject::~GameObject()
 
 }
 
+void GameObject::Update()
+{
+	 // コンポーネントのUpdateだけ呼ぶ
+	for (auto& comp : m_component)
+	{
+		if (comp != nullptr)
+		{
+			comp->Update();
+		}
+	}
+}
+
+
+void GameObject::LateUpdate()
+{
+	// コンポーネントのLateUpdateだけを呼ぶ
+	for (auto& comp : m_component)
+	{
+		if (comp != nullptr)
+		{
+			comp->LateUpdate();
+		}
+	}
+}
 
 // 自分自身のコピー（分身）を作成して返す関数
 std::shared_ptr<GameObject> GameObject::Clone()const

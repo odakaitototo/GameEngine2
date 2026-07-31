@@ -214,10 +214,17 @@ void Application::Run()
         // ImGuiのフレーム開始
         m_imgui.Begin();
 
+        // コンポーネントの基本更新
+        for (auto& obj : m_gameObjects)
+        {
+            obj->Update();
+        }
+
+        // カメラのモードごとの切り替え
         if (m_engineMode == EngineMode::Play || m_previewGameCamera)
         {
             m_gameCamera.Update(); // プレイ中はゲーム用カメラ
-       }
+        }
         else
         {
             m_camera.Update(); // エディタ中はフリーカメラを使用
@@ -230,6 +237,13 @@ void Application::Run()
             {
                 obj->UpdateTransform();
             }
+        }
+
+        // 後処理のUpdate
+        for (auto& obj : m_gameObjects)
+        {
+            // UpdateTransformで確定した最新の絶対座標を使って、動かす
+            obj->LateUpdate();
         }
 
         m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);

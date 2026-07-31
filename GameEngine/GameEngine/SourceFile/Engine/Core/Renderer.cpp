@@ -46,7 +46,11 @@ void Renderer::Render(Application* app)
         // 描画処理
         app->m_gridMesh->Bind(app->m_dx.GetContext());
         app->m_gridMesh->Draw(app->m_dx.GetContext());
+
+        
     }
+
+    
 
 
     // シーンに存在する全てのゲームオブジェクトをループ描画する
@@ -129,5 +133,10 @@ void Renderer::Render(Application* app)
         // データの準備完了　描画
         app->m_gameObjects[i]->Draw(app->m_dx.GetContext());
 
+    }
+
+    if (app->GetEngineMode() == EngineMode::Editor)
+    {
+        m_debugRenderer.DrawColliders(app, viewMatrix, projectionMatrix);
     }
 }

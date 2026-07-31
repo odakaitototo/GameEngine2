@@ -132,9 +132,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\ImGui\ImGuizmo.h" />
+    <ClInclude Include="Headerfile\Engine\Component\AABBColliderComponent.h" />
+    <ClInclude Include="Headerfile\Engine\Component\ColliderBase.h" />
     <ClInclude Include="Headerfile\Engine\Component\ComponentBase.h" />
+    <ClInclude Include="Headerfile\Engine\Component\OBBColliderComponent.h" />
     <ClInclude Include="Headerfile\Engine\Component\TransformComponent.h" />
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
+    <ClInclude Include="Headerfile\Engine\Core\DebugRenderer.h" />
     <ClInclude Include="Headerfile\Engine\Core\EditorUI.h" />
     <ClInclude Include="Headerfile\Engine\Core\Renderer.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Camera.h" />
@@ -158,7 +162,10 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Headerfile\Engine\Component\MeshRendererComponent.h" />
+    <ClCompile Include="SourceFile\Engine\Component\AABBColliderComponent.cpp" />
+    <ClCompile Include="SourceFile\Engine\Component\OBBColliderComponent.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
+    <ClCompile Include="SourceFile\Engine\Core\DebugRenderere.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\EditorUI.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Renderer.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Camera.cpp" />
