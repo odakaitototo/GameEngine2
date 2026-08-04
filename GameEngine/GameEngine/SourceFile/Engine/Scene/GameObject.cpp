@@ -4,6 +4,7 @@
 #include "Engine/Component/AABBColliderComponent.h"
 #include "Engine/Component/OBBColliderComponent.h"
 #include "ImGuizmo.h"
+#include "Engine/Component/ColliderBase.h"
 
 #include <algorithm>
 
@@ -108,6 +109,40 @@ nlohmann::json GameObject::ToJson() const
 	{
 		JSON["texturePath"] = "";
 	}
+
+	// ìñÇΩÇËîªíËÇÃèÓïÒ
+	auto collider = GetComponent<ColliderBase>();
+	if (collider != nullptr)
+	{
+		nlohmann::json colliderJson;
+
+		// AABBÇÃï€ë∂
+		if (collider->GetColliderType() == ColliderType::AABB)
+		{
+			auto aabb = std::static_pointer_cast<AABBColliderComponent>(collider);
+			auto& box = aabb->localBoundingBox;
+
+			colliderJson["Type"] = "AABB";
+			colliderJson["Center"] = { box.Center.x, box.Center.y , box.Center.z };
+			colliderJson["Extents"] = { box.Extents.x, box.Extents.y, box.Extents.z };
+		}
+		// OBBÇÃï€ë∂
+		else if (collider->GetColliderType() == ColliderType::OBB)
+		{
+			auto obb = std::static_pointer_cast<OBBColliderComponent>(collider);
+			auto& box = obb->localBoundingBox;
+
+			colliderJson["Type"] = "OBB";
+			colliderJson["Center"] = { box.Center.x, box.Center.y, box.Center.z };
+			colliderJson["Extents"] = { box.Extents.x, box.Extents.y, box.Extents.z };
+			colliderJson["Orientation"] = { box.Orientation.x, box.Orientation.y, box.Orientation.z, box.Orientation.w };
+		}
+
+		JSON["Collider"] = colliderJson; // JSONÉfÅ[É^Ç…í«â¡
+	}
+
+
+
 	return JSON;
 }
 	
@@ -146,6 +181,34 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 	else
 	{
 		render->texture = nullptr;
+	}
+
+	// ColliderÇÃì«Ç›çûÇ›
+	if (JSON.contains("Collider"))
+	{
+		auto colliderJson = JSON["Collider"];
+		std::string type = colliderJson["Type"];
+
+		// AABBÇÃïúå≥
+		if (type == "AABB")
+		{
+			auto aabb = AddComponent<AABBColliderComponent>();
+
+			aabb->localBoundingBox.Center = DirectX::XMFLOAT3(colliderJson["Center"][0], colliderJson["Center"][1], colliderJson["Center"][2]);
+
+			aabb->localBoundingBox.Extents = DirectX::XMFLOAT3(colliderJson["Extents"][0], colliderJson["Extents"][1], colliderJson["Extents"][2]);
+		}
+		// OBBÇÃïúå≥
+		else if (type == "OBB")
+		{
+			auto obb = AddComponent<OBBColliderComponent>();
+
+			obb->localBoundingBox.Center = DirectX::XMFLOAT3(colliderJson["Center"][0], colliderJson["Center"][1], colliderJson["Center"][2]);
+
+			obb->localBoundingBox.Extents = DirectX::XMFLOAT3(colliderJson["Extents"][0], colliderJson["Extents"][1], colliderJson["Extents"][2]);
+
+			obb->localBoundingBox.Orientation = DirectX::XMFLOAT4(colliderJson["Oriention"][0], colliderJson["Oriention"][1], colliderJson["Oriention"][2],colliderJson["Oriention"][3]);
+		}
 	}
 
 }

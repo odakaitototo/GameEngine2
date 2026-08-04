@@ -19,6 +19,9 @@ public:
 	// ©•ª‚Ìí—Ş‚ğ•Ô‚·ŠÖ”
 	ColliderType GetColliderType() const { return m_colliderType; }
 
+	// ’N‚©‚É‚Ô‚Â‚©‚Á‚Ä‚¢‚é‚©‚ğ”»’è‚·‚éƒtƒ‰ƒO
+	bool isColliding = false;
+
 protected:
 	ColliderType m_colliderType;
 };

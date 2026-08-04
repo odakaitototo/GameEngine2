@@ -9,13 +9,14 @@
 #include "DirectXMath.h"
 
 #include "Engine/Graphics/DirectXManager.h"
-#include "Engine/Graphics/ImGuiManager.h"
+#include "Engine/Editor/ImGuiManager.h"
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Graphics/Shader.h"
 #include "Engine/Graphics/Camera.h"
-#include "Engine/Core/EditorUI.h"
-#include "Engine/Core/Renderer.h"
+#include "Engine/Editor/EditorUI.h"
+#include "Engine/Graphics/Renderer.h"
 #include "Engine/Scene/OrbitCamera.h"
+#include "Engine/Physics/PhysicsSystem.h"
 
 /////////////////////////////////-------- メモ ---------//////////////////////////////////////////////
 // 
@@ -212,6 +213,10 @@ private: // テクスチャー関係
 private: // モード関係
     EngineMode m_engineMode = EngineMode::Editor; // 初期状態はエディタモード
     nlohmann::json m_sceneBackup; // プレイ直前の状態を保持するバックアップ変数
+
+private: // 物理関係
+    PhysicsSystem m_physicsSystem; // 物理システムの追加
+
 
 
 };

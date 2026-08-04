@@ -246,6 +246,7 @@ void Application::Run()
             obj->LateUpdate();
         }
 
+        m_physicsSystem.Update(m_gameObjects);
         m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
 
         // 3D空間を描画
