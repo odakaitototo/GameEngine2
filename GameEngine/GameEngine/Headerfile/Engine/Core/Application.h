@@ -16,7 +16,8 @@
 #include "Engine/Editor/EditorUI.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Scene/OrbitCamera.h"
-#include "Engine/Physics/PhysicsSystem.h"
+#include "Engine/System/Physics/PhysicsSystem.h"
+#include "Engine/System/Physics/RigidbodySystem.h"
 
 /////////////////////////////////-------- メモ ---------//////////////////////////////////////////////
 // 
@@ -216,6 +217,7 @@ private: // モード関係
 
 private: // 物理関係
     PhysicsSystem m_physicsSystem; // 物理システムの追加
+    RigidbodySystem m_rigidbodySystem;
 
 
 

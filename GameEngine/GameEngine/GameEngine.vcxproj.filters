@@ -91,10 +91,16 @@
     <Filter Include="ソース ファイル\Engine\Editor\ImGui">
       <UniqueIdentifier>{f48d594b-b332-475e-a212-b87877d68806}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Engine\Physics">
+    <Filter Include="ソース ファイル\Engine\System">
+      <UniqueIdentifier>{0bae416d-046c-4310-beac-734a58afb16e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\System\Physics">
       <UniqueIdentifier>{d2f390ae-a2bb-41ff-89b0-1f11c6863bc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\Physics">
+    <Filter Include="ヘッダー ファイル\Engine\System">
+      <UniqueIdentifier>{456b38bb-9326-4406-b66c-20a42c0b3a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\System\Physics">
       <UniqueIdentifier>{879f6791-570e-49ff-87c2-37cfc212315c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -159,8 +165,11 @@
     <ClInclude Include="Headerfile\Engine\Editor\ImGuiManager.h">
       <Filter>ヘッダー ファイル\Engine\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Headerfile\Engine\Physics\PhysicsSystem.h">
-      <Filter>ヘッダー ファイル\Engine\Physics</Filter>
+    <ClInclude Include="Headerfile\Engine\System\Physics\PhysicsSystem.h">
+      <Filter>ヘッダー ファイル\Engine\System\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h">
+      <Filter>ヘッダー ファイル\Engine\System\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -236,8 +245,14 @@
     <ClCompile Include="SourceFile\Engine\Editor\ImGuiManager.cpp">
       <Filter>ソース ファイル\Engine\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\Engine\Physics\PhysicsSysten.cpp">
-      <Filter>ソース ファイル\Engine\Physics</Filter>
+    <ClCompile Include="Headerfile\Engine\Component\RigidbodyComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\System\Physics\PhysicsSysten.cpp">
+      <Filter>ソース ファイル\Engine\System\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp">
+      <Filter>ソース ファイル\Engine\System\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

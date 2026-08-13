@@ -148,9 +148,10 @@
     <ClInclude Include="Headerfile\Engine\Graphics\Shader.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\stb_image.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Texture.h" />
-    <ClInclude Include="Headerfile\Engine\Physics\PhysicsSystem.h" />
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
     <ClInclude Include="Headerfile\Engine\Scene\OrbitCamera.h" />
+    <ClInclude Include="Headerfile\Engine\System\Physics\PhysicsSystem.h" />
+    <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Headerfile\Engine\Component\MeshRendererComponent.h" />
+    <ClCompile Include="Headerfile\Engine\Component\RigidbodyComponent.h" />
     <ClCompile Include="SourceFile\Engine\Component\AABBColliderComponent.cpp" />
     <ClCompile Include="SourceFile\Engine\Component\OBBColliderComponent.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
@@ -175,9 +177,10 @@
     <ClCompile Include="SourceFile\Engine\Graphics\Renderer.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp" />
-    <ClCompile Include="SourceFile\Engine\Physics\PhysicsSysten.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\OrbitCamera.cpp" />
+    <ClCompile Include="SourceFile\Engine\System\Physics\PhysicsSysten.cpp" />
+    <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <ItemGroup>

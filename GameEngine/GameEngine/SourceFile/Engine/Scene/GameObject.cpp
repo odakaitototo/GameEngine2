@@ -5,6 +5,7 @@
 #include "Engine/Component/OBBColliderComponent.h"
 #include "ImGuizmo.h"
 #include "Engine/Component/ColliderBase.h"
+#include "Engine/Component/RigidbodyComponent.h"
 
 #include <algorithm>
 
@@ -141,6 +142,19 @@ nlohmann::json GameObject::ToJson() const
 		JSON["Collider"] = colliderJson; // JSONÉfÅ[É^Ç…í«â¡
 	}
 
+	// RigidbodyÇÃï€ë∂
+	auto rb = GetComponent<RigidbodyComponent>();
+	if (rb != nullptr)
+	{
+		nlohmann::json rbJson;
+		rbJson["useGravity"] = rb->useGravity;
+		rbJson["gravityScale"] = rb->gravityScale;
+		rbJson["drag"] = rb->drag;
+		rbJson["freezePosX"] = rb->freezePosX;
+		rbJson["freezePosY"] = rb->freezePosY;
+		rbJson["freezePosZ"] = rb->freezePosZ;
+		JSON["Rigidbody"] = rbJson;
+	}
 
 
 	return JSON;
@@ -207,8 +221,22 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 
 			obb->localBoundingBox.Extents = DirectX::XMFLOAT3(colliderJson["Extents"][0], colliderJson["Extents"][1], colliderJson["Extents"][2]);
 
-			obb->localBoundingBox.Orientation = DirectX::XMFLOAT4(colliderJson["Oriention"][0], colliderJson["Oriention"][1], colliderJson["Oriention"][2],colliderJson["Oriention"][3]);
+			obb->localBoundingBox.Orientation = DirectX::XMFLOAT4(colliderJson["Orientation"][0], colliderJson["Orientation"][1], colliderJson["Orientation"][2],colliderJson["Orientation"][3]);
 		}
+	}
+
+	// RigidbodyÇÃïúå≥
+	if (JSON.contains("Rigidbody"))
+	{
+		auto rb = AddComponent<RigidbodyComponent>();
+		auto rbJson = JSON["Rigidbody"];
+
+		if (rbJson.contains("useGravity")) rb->useGravity = rbJson["useGravity"];
+		if (rbJson.contains("gravityScale")) rb->gravityScale = rbJson["gravityScale"];
+		if (rbJson.contains("drag")) rb->drag = rbJson["drag"];
+		if (rbJson.contains("freezePosX")) rb->freezePosX = rbJson["freezePosX"];
+		if (rbJson.contains("freezePosY")) rb->freezePosY = rbJson["freezePosY"];
+		if (rbJson.contains("freezePosZ")) rb->freezePosZ = rbJson["freezePosZ"];
 	}
 
 }

@@ -246,7 +246,13 @@ void Application::Run()
             obj->LateUpdate();
         }
 
-        m_physicsSystem.Update(m_gameObjects);
+        if (m_engineMode == EngineMode::Play)
+        {
+            m_rigidbodySystem.Update(m_gameObjects);
+            m_physicsSystem.Update(m_gameObjects);
+        }
+
+
         m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
 
         // 3D空間を描画
@@ -799,7 +805,7 @@ void Application::StartPlayMode()
     m_engineMode = EngineMode::Play;
     m_selectedObjectIndex = -1; // 選択状態を解除
 
-    OutputDebugStringA("▶　Play Mode Started\n");
+    OutputDebugStringA("Play Mode Started\n");
 }
 
 
@@ -862,7 +868,7 @@ void Application::StopPlayMode()
     m_engineMode = EngineMode::Editor;
     m_sceneBackup.clear(); // メモリ句を開放
 
-    OutputDebugStringA("■ Editor Mode Restored\n");
+    OutputDebugStringA("Editor Mode Restored\n");
 
 
     

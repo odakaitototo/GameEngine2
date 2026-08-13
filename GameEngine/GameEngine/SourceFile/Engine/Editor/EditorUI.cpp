@@ -5,6 +5,7 @@
 #include "Engine/Component/ColliderBase.h"
 #include "Engine/Component/AABBColliderComponent.h"
 #include "Engine/Component/OBBColliderComponent.h"
+#include "Engine/Component/RigidbodyComponent.h"
 
 
 #include <string>
@@ -537,6 +538,28 @@ void EditorUI::Draw(Application* app)
                 ImGui::DragFloat3("Size (Extents)", &obb->localBoundingBox.Extents.x, 0.05f, 0.0f, 100.0f);
             }
         }
+        ///////////////////////////////////
+        // 
+        // RigidbodyComponentのUI表示設定
+        // 
+        ///////////////////////////////////
+        auto rb = obj->GetComponent<RigidbodyComponent>();
+        if (rb != nullptr)
+        {
+            ImGui::Separator();
+            ImGui::Text("Rigidbody");
+
+            ImGui::Checkbox("Use Gravity", &rb->useGravity);
+
+            // 数値をドラッグで変更できるUI
+            ImGui::DragFloat("Gravity Scale", &rb->gravityScale, 0.1f - 10.0f, 10.0f);
+            ImGui::DragFloat("Drag (Resistance)", &rb->drag, 0.1f, 0.0f, 10.0f);
+
+            ImGui::Text("Freeze Position");
+            ImGui::Checkbox("X##Pos", &rb->freezePosX); ImGui::SameLine();
+            ImGui::Checkbox("Y##Pos", &rb->freezePosY); ImGui::SameLine();
+            ImGui::Checkbox("Z##Pos", &rb->freezePosZ);
+        }
 
         
         // コンポーネント追加UI 
@@ -562,6 +585,15 @@ void EditorUI::Draw(Application* app)
             if (!obj->GetComponent<ColliderBase>())
             {
                 obj->AddComponent<OBBColliderComponent>();
+            }
+        }
+
+        // Rigidbodyの追加ボタン
+        if (ImGui::Button("Add Rigidbody"))
+        {
+            if (!obj->GetComponent<RigidbodyComponent>())
+            {
+                obj->AddComponent<RigidbodyComponent>();
             }
         }
     }
