@@ -82,10 +82,6 @@ public:
 
 public: // 保存と読み込みの関数
 
-    // シーンの保存と読み込みの関数
-    void SaveScene(const std::string& filename);
-	void LoadScene(const std::string& filename);
-
     // プレハブの保存と読み込みの関数
     void SavePrefab(int index, const std::string& filename);
     void InstantiatePrefab(const std::string& filename);

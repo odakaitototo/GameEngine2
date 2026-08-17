@@ -1,18 +1,5 @@
 [
     {
-        "Collider": {
-            "Center": [
-                -0.05000000074505806,
-                0.0,
-                0.0
-            ],
-            "Extents": [
-                2.1500000953674316,
-                1.649999976158142,
-                0.5
-            ],
-            "Type": "AABB"
-        },
         "ParentIndex": -1,
         "color": [
             1.0,
@@ -21,7 +8,7 @@
             1.0
         ],
         "name": "GameObject0",
-        "texturePath": "",
+        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\renga.png",
         "transform": {
             "position": [
                 0.0,

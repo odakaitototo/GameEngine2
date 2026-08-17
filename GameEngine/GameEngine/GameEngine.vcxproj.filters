@@ -171,6 +171,9 @@
     <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h">
       <Filter>ヘッダー ファイル\Engine\System\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\Engine\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp">
       <Filter>ソース ファイル\Engine\System\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Scene\SceneManager.cpp">
+      <Filter>ソース ファイル\Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

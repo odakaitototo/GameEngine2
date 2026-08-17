@@ -6,11 +6,14 @@
 #include "Engine/Component/AABBColliderComponent.h"
 #include "Engine/Component/OBBColliderComponent.h"
 #include "Engine/Component/RigidbodyComponent.h"
+#include "Engine/Scene/SceneManager.h"
+#include "Engine/Component/MeshRendererComponent.h"
 
 
 #include <string>
 #include <functional>
 #include <filesystem>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -36,9 +39,9 @@ void EditorUI::Draw(Application* app)
     }
     // Ctrl+Dが押されたときに呼び出し、選択中のオブジェクトを複製する
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_D, false))
-        {
+    {
         app->ObujectDuplication();
-        }
+    }
 
     // Deleteキーでオブジェクトの消去
     if (ImGui::IsKeyPressed(ImGuiKey_Delete, false) && app->m_selectedObjectIndex != -1)
@@ -79,7 +82,7 @@ void EditorUI::Draw(Application* app)
             }
         }
         ImGui::EndDragDropTarget();
-        
+
     }
 
     // ギズモを描画するために、画像の座標とサイズを記憶しておく
@@ -90,7 +93,7 @@ void EditorUI::Draw(Application* app)
     bool isImageHovered = ImGui::IsItemHovered();
     bool isMouseClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-   
+
 
     // エディタカメラの操作
     if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
@@ -261,13 +264,28 @@ void EditorUI::Draw(Application* app)
     ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Hierarchy");
 
+
+    ImGui::Separator(); // 見た目を区切る横線
+    ImGui::Text("Scene Management");
+
+    // 文字を記憶するためのバッファを用意する
+    static char sceneNameBuffer[128] = "Stage1";
+
+    // 文字が入力できるテキストボックス
+    ImGui::InputText("Scene Name", sceneNameBuffer, sizeof(sceneNameBuffer));
+
     if (ImGui::Button("Save Scene"))
     {
-        app->SaveScene("scene.txt"); // シーンを保存
+        std::string filename = std::string(sceneNameBuffer) + ".json";
+        SceneManager::SaveScene(app, filename);// シーンを保存
     }
+
+    ImGui::SameLine(); // 改行しないようにする
+
     if (ImGui::Button("Load Scene"))
     {
-        app->LoadScene("scene.txt"); // シーンを読み込み
+        std::string filename = std::string(sceneNameBuffer) + ".json";
+        SceneManager::LoadScene(app, filename);// シーンを読み込み
     }
     ImGui::Separator();
     // オブジェクト作成ボタン
@@ -307,20 +325,20 @@ void EditorUI::Draw(Application* app)
         app->m_selectedObjectIndex = -1; // 普通のオブジェクトの選択を解除
         app->m_isCameraSelected = true; // カメラを選択状態にする
     }
-   
+
     ImGui::Separator();
-    
+
 
     std::function<void(GameObject*, int)> drawNode = [&](GameObject* obj, int index)
-    {
-           
+        {
+
             ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
             if (app->m_selectedObjectIndex == index)
             {
                 flags |= ImGuiTreeNodeFlags_Selected; // 選択中なら色を変える
             }
 
-            
+
             if (obj->GetChildren().empty())
             {
                 flags |= ImGuiTreeNodeFlags_Leaf;
@@ -387,7 +405,7 @@ void EditorUI::Draw(Application* app)
 
                 ImGui::TreePop();
             }
-    };
+        };
 
     // 親がいない単体のオブジェクト表示
     for (int i = 0; i < app->m_gameObjects.size(); ++i)
@@ -422,11 +440,11 @@ void EditorUI::Draw(Application* app)
 
 
         ImGui::EndDragDropTarget();
-    
-    }
-    
 
-    
+    }
+
+
+
 
     ImGui::End();
 
@@ -509,6 +527,39 @@ void EditorUI::Draw(Application* app)
         // 単色化虹色か切り替えるチェックボックス
         ImGui::Checkbox("Use Solid Color", &obj->GetUseSolidColor());
 
+        ImGui::Separator();
+        ImGui::Text("Texture Settings");
+
+        // ドロップを受け付けるためのダミーボタン（枠）を描画
+        ImGui::Button("Drop Texture Here (.png / .jpg)", ImVec2(-1, 40));
+
+        // もしこの枠に何かがドロップされたら
+        if (ImGui::BeginDragDropTarget())
+        {
+            // Project Browser から運ばれてきたデータ（CONTENT_BROWSER_ITEM）を受け取る
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+            {
+                std::string filePath = (const char*)payload->Data;
+
+                // 拡張子が画像（.png か .jpg）かどうかをチェック
+                if (filePath.find(".png") != std::string::npos || filePath.find(".jpg") != std::string::npos)
+                {
+                    // オブジェクトが持つ MeshRenderer を取得する
+                    auto render = obj->GetComponent<MeshRendererComponent>();
+                    if (render != nullptr)
+                    {
+                        // 新しいテクスチャをメモリ上に作り、画像をロードして上書きする！
+                        auto newTex = std::make_shared<Texture>();
+                        if (newTex->Load(app->m_dx.GetDevice(), filePath))
+                        {
+                            render->texture = newTex;
+                        }
+                    }
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         auto collider = obj->GetComponent<ColliderBase>();
         if (collider != nullptr) // 当たり判定を持っていたらUIを表示！
         {
@@ -561,7 +612,7 @@ void EditorUI::Draw(Application* app)
             ImGui::Checkbox("Z##Pos", &rb->freezePosZ);
         }
 
-        
+
         // コンポーネント追加UI 
         ImGui::Separator();
         ImGui::Text("Components");
@@ -683,14 +734,14 @@ void EditorUI::Draw(Application* app)
 
             // 状態を更新
             prevRight = currRight;
-            prevLeft  = currLeft;
-            prevUp    = currUp;
+            prevLeft = currLeft;
+            prevUp = currUp;
             prevDown = currDown;
 
         }
     }
 
-   
+
 
 
 
@@ -737,44 +788,154 @@ void EditorUI::Draw(Application* app)
             ofs << "// New Shader";
             ofs.close();
         }
-       
+
         ImGui::EndPopup();
     }
 
-    ImGui::Text("Current Directory: ./ (Right-click to create files)");
     ImGui::Separator();
 
-    // ファイルを横に並べるための準備
-    float cellSize = 100.0f;
-    float panelWidth = ImGui::GetContentRegionAvail().x;
-    int columnCount = (int)(panelWidth) / cellSize;
-    if (columnCount < 1)
+    // フォルダ移動
+
+    static fs::path currentDirectory = fs::current_path();
+    if (currentDirectory != fs::current_path())
     {
-        columnCount = 1;
+        // もし現在の階層が一番上ではないときだけ戻るボタンを表示
+        if (ImGui::Button("<- Back"))
+        {
+            currentDirectory = currentDirectory.parent_path();
+        }
+
+        ImGui::SameLine();
     }
+
+    // ========================================================
+    // 🌟 アップグレード1：検索バーとアイコンサイズ変更スライダー
+    // ========================================================
+    static char searchBuffer[128] = "";
+    ImGui::SetNextItemWidth(200.0f); // 検索バーの幅
+    ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer));
+
+    ImGui::SameLine(); // 横に並べる
+
+    static float thumbnailSize = 74.0f; // staticにして大きさを記憶させる
+    ImGui::SetNextItemWidth(150.0f); // スライダーの幅
+    ImGui::SliderFloat("Icon Size", &thumbnailSize, 32.0f, 128.0f); // 32〜128の間で自由に変更可能！
+
+    ImGui::Separator();
+
+    // グリッドの計算（thumbnailSize が変動するのでここで計算）
+    float padding = 16.0f;
+    float cellSize = thumbnailSize + padding;
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columnCount = (int)(panelWidth / cellSize);
+    if (columnCount < 1) columnCount = 1;
 
     ImGui::Columns(columnCount, 0, false);
 
-    // プロジェクトの実行フォルダの中身をループで取得する
-    std::string currentPath = ".";
-    for (const auto& entry : fs::directory_iterator(currentPath))
+    // フォルダとファイルを分けて整理（ソート）する
+    std::vector<fs::directory_entry> folders;
+    std::vector<fs::directory_entry> files;
+
+    for (const auto& entry : fs::directory_iterator(currentDirectory))
     {
-        auto path = entry.path();
-        std::string filename  = path.filename().string();
+        if (entry.is_directory()) {
+            folders.push_back(entry);
+        }
+        else {
+            files.push_back(entry);
+        }
+    }
+
+    std::vector<fs::directory_entry> sortedEntries;
+    sortedEntries.insert(sortedEntries.end(), folders.begin(), folders.end());
+    sortedEntries.insert(sortedEntries.end(), files.begin(), files.end());
+
+    // 検索キーワードを string 型にしておく
+    std::string searchStr = searchBuffer;
+
+    for (const auto& entry : sortedEntries)
+    {
+        const auto& path = entry.path();
+        std::string filename = path.filename().string();
         std::string extension = path.extension().string();
 
-        // プレハブ(pfb)とシェーダー・スクリプト(hlsl, txt)、画像(png)だけを表示する
-        if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg")
+        // ========================================================
+        // 🌟 アップグレード2：検索フィルター機能
+        // ========================================================
+        // 検索ボックスに文字が入っている場合、ファイル名に含まれていなければスキップ
+        if (!searchStr.empty() && filename.find(searchStr) == std::string::npos)
+        {
+            continue;
+        }
+
+        bool isDrawn = false; // 🌟 描画したかどうかを記録するフラグ
+
+        if (entry.is_directory())
         {
             ImGui::PushID(filename.c_str());
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.5f, 0.15f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.6f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.4f, 0.1f, 1.0f));
 
-            // アイコン代わりのボタン
-            ImGui::Button(filename.c_str(), ImVec2(90, 90));
+            if (ImGui::Button(" FOLDER ", ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                currentDirectory /= path.filename();
+            }
+            ImGui::PopStyleColor(3);
+            ImGui::TextWrapped("%s", filename.c_str());
+            ImGui::PopID();
 
-            // ドラッグ＆ドロップ
+            isDrawn = true; // 描画した！
+        }
+        else if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg" || extension == ".json" || extension == ".cpp" || extension == ".h")
+        {
+            ImGui::PushID(filename.c_str());
+            ImVec4 btnColor = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+            ImVec4 hoverColor = ImVec4(0.3f, 0.3f, 0.3f, 1.0f);
+            ImVec4 activeColor = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);
+            std::string iconText = " FILE ";
+
+            if (extension == ".pfb")
+            {
+                btnColor = ImVec4(0.15f, 0.35f, 0.55f, 1.0f); 
+                hoverColor = ImVec4(0.2f, 0.45f, 0.65f, 1.0f); 
+                activeColor = ImVec4(0.1f, 0.25f, 0.45f, 1.0f);
+                iconText = "Prefab\n(.pfb)";
+            }
+            else if (extension == ".json")
+            {
+                btnColor = ImVec4(0.2f, 0.45f, 0.25f, 1.0f); 
+                hoverColor = ImVec4(0.25f, 0.55f, 0.3f, 1.0f); 
+                activeColor = ImVec4(0.15f, 0.35f, 0.2f, 1.0f);
+                iconText = "Scene\n(.json)";
+            }
+            else if (extension == ".png" || extension == ".jpg")
+            {
+                btnColor = ImVec4(0.45f, 0.25f, 0.45f, 1.0f); 
+                hoverColor = ImVec4(0.55f, 0.3f, 0.55f, 1.0f); 
+                activeColor = ImVec4(0.35f, 0.15f, 0.35f, 1.0f);
+                iconText = "Image\n(Tex)";
+            }
+            else if (extension == ".hlsl") 
+            {
+                btnColor = ImVec4(0.6f, 0.35f, 0.15f, 1.0f);
+                hoverColor = ImVec4(0.7f, 0.45f, 0.2f, 1.0f); 
+                activeColor = ImVec4(0.5f, 0.25f, 0.1f, 1.0f);
+                iconText = "Shader\n(.hlsl)";
+            }
+
+            ImGui::PushStyleColor(ImGuiCol_Button, btnColor);
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hoverColor);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, activeColor);
+
+            if (ImGui::Button(iconText.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                if (extension == ".json") SceneManager::LoadScene(app, path.string());
+            }
+            ImGui::PopStyleColor(3);
+
             if (ImGui::BeginDragDropSource())
             {
-                // ファイルパを文字列として詰める
                 std::string itemPath = path.string();
                 ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath.c_str(), itemPath.size() + 1);
                 ImGui::Text("Load %s", filename.c_str());
@@ -782,54 +943,60 @@ void EditorUI::Draw(Application* app)
             }
 
             ImGui::TextWrapped("%s", filename.c_str());
-            ImGui::NextColumn();
             ImGui::PopID();
+
+            isDrawn = true; // 描画した
+        }
+
+        
+        if (isDrawn)
+        {
+            ImGui::NextColumn();
         }
     }
 
     ImGui::Columns(1);
-    ImGui::End();
+        ImGui::End();
 
 
 
-    /////////////////////////////
-    //
-    // モード切り替え
-    // 
-    /////////////////////////////
+        /////////////////////////////
+        //
+        // モード切り替え
+        // 
+        /////////////////////////////
 
-    // 画面上部に常時固定されるバーを作成
-    if (ImGui::BeginMainMenuBar())
-    {
-        float menuBarWidth = ImGui::GetWindowWidth();
-        float buttonWidth = 100.0f;
-
-        // 画面全体の幅とボタンの幅から、真ん中の座標を計算してカーソルを移動
-        ImGui::SetCursorPosX((menuBarWidth - buttonWidth) * 0.5f);
-
-        if (app->GetEngineMode() == EngineMode::Editor)
+        // 画面上部に常時固定されるバーを作成
+        if (ImGui::BeginMainMenuBar())
         {
-            // エディタモード時は緑色のPlayボタン
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+            float menuBarWidth = ImGui::GetWindowWidth();
+            float buttonWidth = 100.0f;
 
-            if (ImGui::Button(" PLAY ", ImVec2(buttonWidth, 0.0f)))
-            {
-                app->StartPlayMode();
-            }
-            ImGui::PopStyleColor();
-        }
-        else
-        {
-            // プレイモードの時は赤色の STOP ボタンを表示
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+            // 画面全体の幅とボタンの幅から、真ん中の座標を計算してカーソルを移動
+            ImGui::SetCursorPosX((menuBarWidth - buttonWidth) * 0.5f);
 
-            if (ImGui::Button(" STOP ", ImVec2(buttonWidth, 0.0f)))
+            if (app->GetEngineMode() == EngineMode::Editor)
             {
-                app->StopPlayMode();
+                // エディタモード時は緑色のPlayボタン
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+
+                if (ImGui::Button(" PLAY ", ImVec2(buttonWidth, 0.0f)))
+                {
+                    app->StartPlayMode();
+                }
+                ImGui::PopStyleColor();
             }
-            ImGui::PopStyleColor();
+            else
+            {
+                // プレイモードの時は赤色の STOP ボタンを表示
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+
+                if (ImGui::Button(" STOP ", ImVec2(buttonWidth, 0.0f)))
+                {
+                    app->StopPlayMode();
+                }
+                ImGui::PopStyleColor();
+            }
+            ImGui::EndMainMenuBar();
         }
-        ImGui::EndMainMenuBar();
-    }
-    
 }

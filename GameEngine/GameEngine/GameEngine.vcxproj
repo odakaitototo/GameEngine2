@@ -150,6 +150,7 @@
     <ClInclude Include="Headerfile\Engine\Graphics\Texture.h" />
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
     <ClInclude Include="Headerfile\Engine\Scene\OrbitCamera.h" />
+    <ClInclude Include="Headerfile\Engine\Scene\SceneManager.h" />
     <ClInclude Include="Headerfile\Engine\System\Physics\PhysicsSystem.h" />
     <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\OrbitCamera.cpp" />
+    <ClCompile Include="SourceFile\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Physics\PhysicsSysten.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />

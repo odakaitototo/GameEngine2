@@ -140,6 +140,11 @@ public: // JSON関係
 		void Update(); // コンポーネントのLateUpdateを呼ぶもの
 		void LateUpdate(); // コンポーネントのUpdateを呼ぶもの
 
+public: // シーン関係
+	// シーンの切り替え時に自分を消去させないフラグ
+	bool dontDestroyOnLoad = false;
+
+
 
 
 private:
