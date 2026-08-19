@@ -110,11 +110,11 @@ void SceneManager::LoadScene(Application* app, const std::string& filename)
 	// 親子関係の結び直し
 	for (int i = 0; i < root.size(); i++)
 	{
-		if (root[i].is_object() && root[i].contains("ParentIndex"))
+		if (root[i].is_object() && root[i].contains("parentIndex"))
 		{
-			if (root[i]["ParentIndex"].is_number())
+			if (root[i]["parentIndex"].is_number())
 			{
-				int parentIndex = root[i]["ParentIndex"];
+				int parentIndex = root[i]["parentIndex"];
 				if (parentIndex >= 0)
 				{
 					// 避難したオブジェクトの数だけ、出席番号が後ろにズレているので補正する
@@ -124,7 +124,18 @@ void SceneManager::LoadScene(Application* app, const std::string& filename)
 
 					if (actualParent < app->m_gameObjects.size() && actualChild < app->m_gameObjects.size())
 					{
+
+						auto savedPos = app->m_gameObjects[actualChild]->GetTransform().position;
+						auto savedRot = app->m_gameObjects[actualChild]->GetTransform().rotation;
+						auto savedScl = app->m_gameObjects[actualChild]->GetTransform().scale;
+
 						app->m_gameObjects[actualChild]->SetParent(app->m_gameObjects[actualParent].get());
+
+						app->m_gameObjects[actualChild]->GetTransform().position = savedPos;
+						app->m_gameObjects[actualChild]->GetTransform().rotation = savedRot;
+						app->m_gameObjects[actualChild]->GetTransform().scale = savedScl;
+
+						app->m_gameObjects[actualChild]->UpdateTransform();
 					}
 				}
 			}
