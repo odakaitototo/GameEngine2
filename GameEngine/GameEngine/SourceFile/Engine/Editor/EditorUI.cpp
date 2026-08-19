@@ -8,6 +8,7 @@
 #include "Engine/Component/RigidbodyComponent.h"
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Component/MeshRendererComponent.h"
+#include "Engine/Scene/GameObject.h"
 
 
 #include <string>
@@ -566,6 +567,13 @@ void EditorUI::Draw(Application* app)
             ImGui::Separator();
             ImGui::Text("Collider Settings");
 
+            // Component消去ボタン
+            ImGui::SameLine(ImGui::GetWindowWidth() - 70);
+            if (ImGui::Button("Remove##Col"))
+            {
+                obj->RemoveComponent(collider);
+            }
+
             ImGui::Checkbox("Is Trigger", &collider->isTrigger);
 
             // AABB（緑の箱）の場合のUI
@@ -596,22 +604,29 @@ void EditorUI::Draw(Application* app)
         // RigidbodyComponentのUI表示設定
         // 
         ///////////////////////////////////
-        auto rb = obj->GetComponent<RigidbodyComponent>();
-        if (rb != nullptr)
+        auto rigidbody = obj->GetComponent<RigidbodyComponent>();
+        if (rigidbody != nullptr)
         {
             ImGui::Separator();
             ImGui::Text("Rigidbody");
 
-            ImGui::Checkbox("Use Gravity", &rb->useGravity);
+            // Component消去ボタン
+            ImGui::SameLine(ImGui::GetWindowWidth() - 70);
+            if (ImGui::Button("Remove##RB"))
+            {
+                obj->RemoveComponent(rigidbody);
+            }
+
+            ImGui::Checkbox("Use Gravity", &rigidbody->useGravity);
 
             // 数値をドラッグで変更できるUI
-            ImGui::DragFloat("Gravity Scale", &rb->gravityScale, 0.1f - 10.0f, 10.0f);
-            ImGui::DragFloat("Drag (Resistance)", &rb->drag, 0.1f, 0.0f, 10.0f);
+            ImGui::DragFloat("Gravity Scale", &rigidbody->gravityScale, 0.1f - 10.0f, 10.0f);
+            ImGui::DragFloat("Drag (Resistance)", &rigidbody->drag, 0.1f, 0.0f, 10.0f);
 
             ImGui::Text("Freeze Position");
-            ImGui::Checkbox("X##Pos", &rb->freezePosX); ImGui::SameLine();
-            ImGui::Checkbox("Y##Pos", &rb->freezePosY); ImGui::SameLine();
-            ImGui::Checkbox("Z##Pos", &rb->freezePosZ);
+            ImGui::Checkbox("X##Pos", &rigidbody->freezePosX); ImGui::SameLine();
+            ImGui::Checkbox("Y##Pos", &rigidbody->freezePosY); ImGui::SameLine();
+            ImGui::Checkbox("Z##Pos", &rigidbody->freezePosZ);
         }
 
 

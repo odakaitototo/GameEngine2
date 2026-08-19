@@ -139,6 +139,7 @@ public: // JSON関係
 		void UpdateTransform(); // 毎フレーム呼んで自分の行列を計算する関数
 		void Update(); // コンポーネントのLateUpdateを呼ぶもの
 		void LateUpdate(); // コンポーネントのUpdateを呼ぶもの
+		void RemoveComponent(std::shared_ptr<ComponentBase> component); // アタッチしたコンポーネントを外すもの
 
 public: // シーン関係
 	// シーンの切り替え時に自分を消去させないフラグ

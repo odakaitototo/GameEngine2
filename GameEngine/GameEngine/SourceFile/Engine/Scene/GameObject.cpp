@@ -371,4 +371,22 @@ void GameObject::RemoveChild(GameObject* child)
 	}
 }
 
-	
+////////////////////////
+//
+// コンポーネントの取り外し
+// 
+/////////////////////////	
+
+void GameObject::RemoveComponent(std::shared_ptr<ComponentBase> component)
+{
+	if (component == nullptr) // コンポーネントがついていなかったら何もしない
+	{
+		return;
+	}
+
+	// m_componentから一致するものを探して消す
+	m_component.erase(
+		std::remove(m_component.begin(), m_component.end(), component),
+		m_component.end()
+	);
+}
