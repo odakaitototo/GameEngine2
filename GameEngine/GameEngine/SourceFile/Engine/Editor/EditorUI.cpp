@@ -566,6 +566,8 @@ void EditorUI::Draw(Application* app)
             ImGui::Separator();
             ImGui::Text("Collider Settings");
 
+            ImGui::Checkbox("Is Trigger", &collider->isTrigger);
+
             // AABB（緑の箱）の場合のUI
             if (collider->GetColliderType() == ColliderType::AABB)
             {
@@ -808,9 +810,8 @@ void EditorUI::Draw(Application* app)
         ImGui::SameLine();
     }
 
-    // ========================================================
-    // 🌟 アップグレード1：検索バーとアイコンサイズ変更スライダー
-    // ========================================================
+   
+    // 検索バーとアイコンサイズ変更スライダー
     static char searchBuffer[128] = "";
     ImGui::SetNextItemWidth(200.0f); // 検索バーの幅
     ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer));
@@ -859,16 +860,15 @@ void EditorUI::Draw(Application* app)
         std::string filename = path.filename().string();
         std::string extension = path.extension().string();
 
-        // ========================================================
-        // 🌟 アップグレード2：検索フィルター機能
-        // ========================================================
+        
+        // 検索フィルター機能
         // 検索ボックスに文字が入っている場合、ファイル名に含まれていなければスキップ
         if (!searchStr.empty() && filename.find(searchStr) == std::string::npos)
         {
             continue;
         }
 
-        bool isDrawn = false; // 🌟 描画したかどうかを記録するフラグ
+        bool isDrawn = false; // 描画したかどうかを記録するフラグ
 
         if (entry.is_directory())
         {
@@ -885,7 +885,7 @@ void EditorUI::Draw(Application* app)
             ImGui::TextWrapped("%s", filename.c_str());
             ImGui::PopID();
 
-            isDrawn = true; // 描画した！
+            isDrawn = true; // 描画した
         }
         else if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg" || extension == ".json" || extension == ".cpp" || extension == ".h")
         {

@@ -1,6 +1,9 @@
 ﻿#include "Engine/Core/Application.h"
 #include "Engine/Scene/GameObject.h"
+#include "Engine/System/Input/Input.h"
 #include "imgui.h"
+#include "Engine/System/Time/Time.h"
+#include "Engine/Component/ScriptComponent.h"
 
 ////////////////////////////////////////////////////////-----メモ----////////////////////////////////////////////////////////////////////
 //
@@ -51,6 +54,9 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     {
         return false; // 初期化に失敗したら起動しない
     }
+
+    Input::Intialize();
+    Time::Initialize();
 
     // Scene窓口の裏紙リソースを初期サイズで作っておく
     if (!m_dx.CreateSceneResources(width, height))
@@ -210,6 +216,9 @@ void Application::Run()
         {
             break;
         }
+
+        Input::Update();
+        Time::Update();
 
         // ImGuiのフレーム開始
         m_imgui.Begin();
@@ -701,6 +710,15 @@ void Application::StartPlayMode()
     // モードをPlayに切り替える
     m_engineMode = EngineMode::Play;
     m_selectedObjectIndex = -1; // 選択状態を解除
+
+    for (auto& obj : m_gameObjects)
+    {
+        auto script = obj->GetComponent<ScriptComponent>();
+        if (script != nullptr)
+        {
+            script->Start();
+        }
+    }
 
     OutputDebugStringA("Play Mode Started\n");
 }

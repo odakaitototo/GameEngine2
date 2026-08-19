@@ -4,6 +4,8 @@
 #include "Engine/Component/AABBColliderComponent.h"
 #include "Engine/Component/OBBColliderComponent.h"
 #include "Engine/Component/RigidbodyComponent.h"
+#include "Engine/Component/ScriptComponent.h"
+
 
 static bool CalculateOBBPenetration(const DirectX::BoundingOrientedBox& obbA, const DirectX::BoundingOrientedBox& obbB, DirectX::XMFLOAT3& outMTV)
 {
@@ -145,99 +147,101 @@ void PhysicsSystem::Update(const std::vector<std::shared_ptr<GameObject>>& gameO
 					float overlapZ = ez - std::abs(dz);
 
 					
-					
-
-					// Rigidbodyを持っているかを見る
-					// 持っていなかったらnullptr
-					auto rigidbodyObjectA = gameObjects[i]->GetComponent<RigidbodyComponent>();
-					auto rigidbodyObjectB = gameObjects[j]->GetComponent<RigidbodyComponent>();
-
-					// weight（動く割合）1.0なら動く、0.0なら動かない
-					float weightA = (rigidbodyObjectA != nullptr) ? 1.0f : 0.0f; // 変数宣言と同時に書くif文： ? = trueの時  : = falseの時
-					float weightB = (rigidbodyObjectB != nullptr) ? 1.0f : 0.0f;
-
-					// もし両方 rigidbodyを持っていたら半分ずつ押し出すことで反発させる
-					if (rigidbodyObjectA != nullptr && rigidbodyObjectB != nullptr)	
+					if (!colA->isTrigger && !colB->isTrigger)
 					{
-						weightA = 0.5f;
-						weightB = 0.5f;
-					}
 
-					// 両方TRigidbodyを持っていなかったらBを動かす
-					if (rigidbodyObjectA == nullptr && rigidbodyObjectB == nullptr)
-					{
-						weightB = 1.0f;
-					}
+						// Rigidbodyを持っているかを見る
+						// 持っていなかったらnullptr
+						auto rigidbodyObjectA = gameObjects[i]->GetComponent<RigidbodyComponent>();
+						auto rigidbodyObjectB = gameObjects[j]->GetComponent<RigidbodyComponent>();
 
+						// weight（動く割合）1.0なら動く、0.0なら動かない
+						float weightA = (rigidbodyObjectA != nullptr) ? 1.0f : 0.0f; // 変数宣言と同時に書くif文： ? = trueの時  : = falseの時
+						float weightB = (rigidbodyObjectB != nullptr) ? 1.0f : 0.0f;
 
-					
-					auto& tA = gameObjects[i]->GetTransform();
-					auto& tB = gameObjects[j]->GetTransform();
-
-
-
-					// 一番めり込みが浅い方向を探して押し出す
-					if (overlapX <= overlapY && overlapX <= overlapZ)
-					{
-						// 押し出すことでめり込まないようにする
-						float pushX = (dx > 0) ? overlapX : -overlapX;
-						tA.position.x -= pushX * weightA;
-						tB.position.x += pushX * weightB;
-
-
-						if (rigidbodyObjectA != nullptr)
+						// もし両方 rigidbodyを持っていたら半分ずつ押し出すことで反発させる
+						if (rigidbodyObjectA != nullptr && rigidbodyObjectB != nullptr)
 						{
-							rigidbodyObjectA->velocity.x = 0.0f;
+							weightA = 0.5f;
+							weightB = 0.5f;
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						// 両方TRigidbodyを持っていなかったらBを動かす
+						if (rigidbodyObjectA == nullptr && rigidbodyObjectB == nullptr)
 						{
-							rigidbodyObjectB->velocity.x = 0.0f;
-						}
-					}
-					else if (overlapY <= overlapX && overlapY <= overlapZ)
-					{
-						float pushY = (dy > 0) ? overlapY : -overlapY;
-						tA.position.y -= pushY * weightA;
-						tB.position.y += pushY * weightB;
-
-						if (rigidbodyObjectA != nullptr)
-						{
-							rigidbodyObjectA->velocity.y = 0.0f;
+							weightB = 1.0f;
 						}
 
-						if (rigidbodyObjectB != nullptr)
+
+
+						auto& tA = gameObjects[i]->GetTransform();
+						auto& tB = gameObjects[j]->GetTransform();
+
+
+
+						// 一番めり込みが浅い方向を探して押し出す
+						if (overlapX <= overlapY && overlapX <= overlapZ)
 						{
-							rigidbodyObjectB->velocity.y = 0.0f;
+							// 押し出すことでめり込まないようにする
+							float pushX = (dx > 0) ? overlapX : -overlapX;
+							tA.position.x -= pushX * weightA;
+							tB.position.x += pushX * weightB;
+
+
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.x = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.x = 0.0f;
+							}
+						}
+						else if (overlapY <= overlapX && overlapY <= overlapZ)
+						{
+							float pushY = (dy > 0) ? overlapY : -overlapY;
+							tA.position.y -= pushY * weightA;
+							tB.position.y += pushY * weightB;
+
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.y = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.y = 0.0f;
+							}
+
+						}
+						else if (overlapZ <= overlapX && overlapZ <= overlapY)
+						{
+							float pushZ = (dy > 0) ? overlapZ : -overlapZ;
+							tA.position.z -= pushZ * weightA;
+							tB.position.z += pushZ * weightB;
+
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.z = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.z = 0.0f;
+							}
 						}
 
-					}
-					else if (overlapZ <= overlapX && overlapZ <= overlapY)
-					{
-						float pushZ = (dy > 0) ? overlapZ : -overlapZ;
-						tA.position.z -= pushZ * weightA;
-						tB.position.z += pushZ * weightB;
-
-						if (rigidbodyObjectA != nullptr)
+						// 動かした時だけTransform更新して最新状態にする
+						if (weightA > 0.0f)
 						{
-							rigidbodyObjectA->velocity.z = 0.0f;
+							gameObjects[i]->UpdateTransform();
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						if (weightB > 0.0f)
 						{
-							rigidbodyObjectB->velocity.z = 0.0f;
+							gameObjects[j]->UpdateTransform();
 						}
-					}
-
-					// 動かした時だけTransform更新して最新状態にする
-					if (weightA > 0.0f)
-					{
-						gameObjects[i]->UpdateTransform();
-					}
-
-					if (weightB > 0.0f)
-					{
-						gameObjects[j]->UpdateTransform();
 					}
 
 				}
@@ -274,68 +278,72 @@ void PhysicsSystem::Update(const std::vector<std::shared_ptr<GameObject>>& gameO
 						weightB = 1.0f;
 					}
 
-					// Transformの取得
-					auto& tA = gameObjects[i]->GetTransform();
-					auto& tB = gameObjects[j]->GetTransform();
-
-					// OBBの複雑な回転を考慮した上で、正しい方向へ押し出す！
-					tA.position.x -= mtv.x * weightA;
-					tA.position.y -= mtv.y * weightA;
-					tA.position.z -= mtv.z * weightA;
-
-					tB.position.x += mtv.x * weightB;
-					tB.position.y += mtv.y * weightB;
-					tB.position.z += mtv.z * weightB;
-
-					// 押し出された方向のスピードを0にする
-					if (std::abs(mtv.x) > 0.0001f) 
+					if (!colA->isTrigger && !colB->isTrigger)
 					{
-						if (rigidbodyObjectA != nullptr)
+
+						// Transformの取得
+						auto& tA = gameObjects[i]->GetTransform();
+						auto& tB = gameObjects[j]->GetTransform();
+
+						// OBBの複雑な回転を考慮した上で、正しい方向へ押し出す！
+						tA.position.x -= mtv.x * weightA;
+						tA.position.y -= mtv.y * weightA;
+						tA.position.z -= mtv.z * weightA;
+
+						tB.position.x += mtv.x * weightB;
+						tB.position.y += mtv.y * weightB;
+						tB.position.z += mtv.z * weightB;
+
+						// 押し出された方向のスピードを0にする
+						if (std::abs(mtv.x) > 0.0001f)
 						{
-							rigidbodyObjectA->velocity.x = 0.0f;
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.x = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.x = 0.0f;
+							}
 						}
 
-						if (rigidbodyObjectB != nullptr) 
+						if (std::abs(mtv.y) > 0.0001f)
 						{
-							rigidbodyObjectB->velocity.x = 0.0f;
-						}
-					}
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.y = 0.0f;
+							}
 
-					if (std::abs(mtv.y) > 0.0001f) 
-					{
-						if (rigidbodyObjectA != nullptr)
-						{
-							rigidbodyObjectA->velocity.y = 0.0f;
-						}
-
-						if (rigidbodyObjectB != nullptr)
-						{
-							rigidbodyObjectB->velocity.y = 0.0f;
-						}
-					}
-
-					if (std::abs(mtv.z) > 0.0001f) 
-					{
-						if (rigidbodyObjectA != nullptr)
-						{
-							rigidbodyObjectA->velocity.z = 0.0f;
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.y = 0.0f;
+							}
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						if (std::abs(mtv.z) > 0.0001f)
 						{
-							rigidbodyObjectB->velocity.z = 0.0f;
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.z = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.z = 0.0f;
+							}
 						}
-					}
 
-					// 動いたオブジェクトだけ行列を更新
-					if (weightA > 0.0f)
-					{
-						gameObjects[i]->UpdateTransform();
-					}
+						// 動いたオブジェクトだけ行列を更新
+						if (weightA > 0.0f)
+						{
+							gameObjects[i]->UpdateTransform();
+						}
 
-					if (weightB > 0.0f)
-					{
-						gameObjects[j]->UpdateTransform();
+						if (weightB > 0.0f)
+						{
+							gameObjects[j]->UpdateTransform();
+						}
 					}
 				}
 			}
@@ -375,88 +383,91 @@ void PhysicsSystem::Update(const std::vector<std::shared_ptr<GameObject>>& gameO
 				{
 					hit = true; // ぶつかっている
 
-					// RigidBodyがついてるかどうか　ついていなかったらnullptr
-					auto rigidbodyObjectA = gameObjects[i]->GetComponent<RigidbodyComponent>();
-					auto rigidbodyObjectB = gameObjects[j]->GetComponent<RigidbodyComponent>();
-
-					// weight（動く割合）1.0なら動く、0.0なら動かない 
-					float weightA = (rigidbodyObjectA != nullptr) ? 1.0f : 0.0f;
-					float weightB = (rigidbodyObjectB != nullptr) ? 1.0f : 0.0f;
-
-					if (rigidbodyObjectA != nullptr && rigidbodyObjectB != nullptr)
+					if (!colA->isTrigger && !colB->isTrigger)
 					{
-						weightA = 0.5f;
-						weightB = 0.5f;
-					}
+						// RigidBodyがついてるかどうか　ついていなかったらnullptr
+						auto rigidbodyObjectA = gameObjects[i]->GetComponent<RigidbodyComponent>();
+						auto rigidbodyObjectB = gameObjects[j]->GetComponent<RigidbodyComponent>();
 
-					if (rigidbodyObjectA == nullptr && rigidbodyObjectB == nullptr)
-					{
+						// weight（動く割合）1.0なら動く、0.0なら動かない 
+						float weightA = (rigidbodyObjectA != nullptr) ? 1.0f : 0.0f;
+						float weightB = (rigidbodyObjectB != nullptr) ? 1.0f : 0.0f;
 
-						weightB = 1.0f;
-					}
-
-					// Transformの取得
-					auto& tA = gameObjects[i]->GetTransform();
-					auto& tB = gameObjects[j]->GetTransform();
-
-					// OBBの複雑な回転を考慮した上で、正しい方向へ押し出す！
-					tA.position.x -= mtv.x * weightA;
-					tA.position.y -= mtv.y * weightA;
-					tA.position.z -= mtv.z * weightA;
-
-					tB.position.x += mtv.x * weightB;
-					tB.position.y += mtv.y * weightB;
-					tB.position.z += mtv.z * weightB;
-
-					// 押し出された方向のスピードを0にする
-					if (std::abs(mtv.x) > 0.0001f)
-					{
-						if (rigidbodyObjectA != nullptr)
+						if (rigidbodyObjectA != nullptr && rigidbodyObjectB != nullptr)
 						{
-							rigidbodyObjectA->velocity.x = 0.0f;
+							weightA = 0.5f;
+							weightB = 0.5f;
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						if (rigidbodyObjectA == nullptr && rigidbodyObjectB == nullptr)
 						{
-							rigidbodyObjectB->velocity.x = 0.0f;
-						}
-					}
 
-					if (std::abs(mtv.y) > 0.0001f)
-					{
-						if (rigidbodyObjectA != nullptr)
-						{
-							rigidbodyObjectA->velocity.y = 0.0f;
+							weightB = 1.0f;
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						// Transformの取得
+						auto& tA = gameObjects[i]->GetTransform();
+						auto& tB = gameObjects[j]->GetTransform();
+
+						// OBBの複雑な回転を考慮した上で、正しい方向へ押し出す！
+						tA.position.x -= mtv.x * weightA;
+						tA.position.y -= mtv.y * weightA;
+						tA.position.z -= mtv.z * weightA;
+
+						tB.position.x += mtv.x * weightB;
+						tB.position.y += mtv.y * weightB;
+						tB.position.z += mtv.z * weightB;
+
+						// 押し出された方向のスピードを0にする
+						if (std::abs(mtv.x) > 0.0001f)
 						{
-							rigidbodyObjectB->velocity.y = 0.0f;
-						}
-					}
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.x = 0.0f;
+							}
 
-					if (std::abs(mtv.z) > 0.0001f)
-					{
-						if (rigidbodyObjectA != nullptr)
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.x = 0.0f;
+							}
+						}
+
+						if (std::abs(mtv.y) > 0.0001f)
 						{
-							rigidbodyObjectA->velocity.z = 0.0f;
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.y = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.y = 0.0f;
+							}
 						}
 
-						if (rigidbodyObjectB != nullptr)
+						if (std::abs(mtv.z) > 0.0001f)
 						{
-							rigidbodyObjectB->velocity.z = 0.0f;
+							if (rigidbodyObjectA != nullptr)
+							{
+								rigidbodyObjectA->velocity.z = 0.0f;
+							}
+
+							if (rigidbodyObjectB != nullptr)
+							{
+								rigidbodyObjectB->velocity.z = 0.0f;
+							}
 						}
-					}
 
-					// 動いたオブジェクトだけ行列を更新
-					if (weightA > 0.0f)
-					{
-						gameObjects[i]->UpdateTransform();
-					}
+						// 動いたオブジェクトだけ行列を更新
+						if (weightA > 0.0f)
+						{
+							gameObjects[i]->UpdateTransform();
+						}
 
-					if (weightB > 0.0f)
-					{
-						gameObjects[j]->UpdateTransform();
+						if (weightB > 0.0f)
+						{
+							gameObjects[j]->UpdateTransform();
+						}
 					}
 				}
 			}
@@ -466,6 +477,18 @@ void PhysicsSystem::Update(const std::vector<std::shared_ptr<GameObject>>& gameO
 			{
 				colA->isColliding = true;
 				colB->isColliding = true;
+
+				auto scriptA = gameObjects[i]->GetComponent<ScriptComponent>();
+					if (scriptA != nullptr)
+					{
+						scriptA->OnTriggerStay(colB.get());
+					}
+
+					auto scriptB = gameObjects[j]->GetComponent<ScriptComponent>();
+					if (scriptB != nullptr)
+					{
+						scriptB->OnTriggerStay(colA.get());
+					}
 			}
 		}
 	}

@@ -136,6 +136,7 @@
     <ClInclude Include="Headerfile\Engine\Component\ColliderBase.h" />
     <ClInclude Include="Headerfile\Engine\Component\ComponentBase.h" />
     <ClInclude Include="Headerfile\Engine\Component\OBBColliderComponent.h" />
+    <ClInclude Include="Headerfile\Engine\Component\ScriptComponent.h" />
     <ClInclude Include="Headerfile\Engine\Component\TransformComponent.h" />
     <ClInclude Include="Headerfile\Engine\Core\Application.h" />
     <ClInclude Include="Headerfile\Engine\Editor\EditorUI.h" />
@@ -151,8 +152,11 @@
     <ClInclude Include="Headerfile\Engine\Scene\GameObject.h" />
     <ClInclude Include="Headerfile\Engine\Scene\OrbitCamera.h" />
     <ClInclude Include="Headerfile\Engine\Scene\SceneManager.h" />
+    <ClInclude Include="Headerfile\Engine\System\Input\Input.h" />
     <ClInclude Include="Headerfile\Engine\System\Physics\PhysicsSystem.h" />
+    <ClInclude Include="Headerfile\Engine\System\Physics\RaycastSystem.h" />
     <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h" />
+    <ClInclude Include="Headerfile\Engine\System\Time\Time.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,8 +185,11 @@
     <ClCompile Include="SourceFile\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\OrbitCamera.cpp" />
     <ClCompile Include="SourceFile\Engine\Scene\SceneManager.cpp" />
+    <ClCompile Include="SourceFile\Engine\System\Input\input.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Physics\PhysicsSysten.cpp" />
+    <ClCompile Include="SourceFile\Engine\System\Physics\RaycastSystem.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp" />
+    <ClCompile Include="SourceFile\Engine\System\Time\Time.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <ItemGroup>

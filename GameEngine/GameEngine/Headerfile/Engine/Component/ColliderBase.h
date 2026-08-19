@@ -22,6 +22,10 @@ public:
 	// 誰かにぶつかっているかを判定するフラグ
 	bool isColliding = false;
 
+	// トリガーにするかどうかのフラグ
+	bool isTrigger = false;
+
+
 protected:
 	ColliderType m_colliderType;
 };

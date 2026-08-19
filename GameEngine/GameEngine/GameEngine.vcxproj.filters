@@ -103,6 +103,18 @@
     <Filter Include="ヘッダー ファイル\Engine\System\Physics">
       <UniqueIdentifier>{879f6791-570e-49ff-87c2-37cfc212315c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\System\Input">
+      <UniqueIdentifier>{d6d924ae-f1f0-4e61-87e5-7703925e1b84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\System\Input">
+      <UniqueIdentifier>{cbf049e9-6c97-43cb-b3a4-8aaf756b5a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\System\Time">
+      <UniqueIdentifier>{7fc34e2c-87f3-40c1-a02f-c596ad3455df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\System\Time">
+      <UniqueIdentifier>{cf1418f7-7111-4991-9507-f02a282e6472}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -173,6 +185,18 @@
     </ClInclude>
     <ClInclude Include="Headerfile\Engine\Scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\System\Physics\RaycastSystem.h">
+      <Filter>ヘッダー ファイル\Engine\System\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Component\ScriptComponent.h">
+      <Filter>ヘッダー ファイル\Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\System\Input\Input.h">
+      <Filter>ヘッダー ファイル\Engine\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\System\Time\Time.h">
+      <Filter>ヘッダー ファイル\Engine\System\Time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +283,15 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\Scene\SceneManager.cpp">
       <Filter>ソース ファイル\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\System\Physics\RaycastSystem.cpp">
+      <Filter>ソース ファイル\Engine\System\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\System\Input\input.cpp">
+      <Filter>ソース ファイル\Engine\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\System\Time\Time.cpp">
+      <Filter>ソース ファイル\Engine\System\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
