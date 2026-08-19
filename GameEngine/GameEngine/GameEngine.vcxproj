@@ -157,6 +157,7 @@
     <ClInclude Include="Headerfile\Engine\System\Physics\RaycastSystem.h" />
     <ClInclude Include="Headerfile\Engine\System\Physics\RigidbodySystem.h" />
     <ClInclude Include="Headerfile\Engine\System\Time\Time.h" />
+    <ClInclude Include="Headerfile\Game\Script\EngineTestScriipt\TestController.h" />
     <ClInclude Include="SourceFile\Engine\Json\json.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +191,7 @@
     <ClCompile Include="SourceFile\Engine\System\Physics\RaycastSystem.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Physics\RigidbodySystem.cpp" />
     <ClCompile Include="SourceFile\Engine\System\Time\Time.cpp" />
+    <ClCompile Include="SourceFile\Game\Script\EngineTestScriipt\TestController.cpp" />
     <ClCompile Include="SourceFile\Main\Main.cpp" />
   </ItemGroup>
   <ItemGroup>

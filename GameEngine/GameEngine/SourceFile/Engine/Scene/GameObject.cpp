@@ -7,6 +7,9 @@
 #include "Engine/Component/ColliderBase.h"
 #include "Engine/Component/RigidbodyComponent.h"
 
+// 自作スクリプトを呼び出す場所
+#include "../Headerfile/Game/Script/EngineTestScriipt/TestController.h"
+
 #include <algorithm>
 
 
@@ -156,6 +159,14 @@ nlohmann::json GameObject::ToJson() const
 		JSON["Rigidbody"] = rbJson;
 	}
 
+	auto script = GetComponent<ScriptComponent>();
+	if (script != nullptr)
+	{
+		nlohmann::json scriptJson;
+		// どのスクリプトが付いているか、名前を文字列として保存する
+		scriptJson["ScriptName"] = script->GetScriptName();
+		JSON["ScriptComponent"] = scriptJson;
+	}
 
 	return JSON;
 }
@@ -237,6 +248,19 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 		if (rbJson.contains("freezePosX")) rb->freezePosX = rbJson["freezePosX"];
 		if (rbJson.contains("freezePosY")) rb->freezePosY = rbJson["freezePosY"];
 		if (rbJson.contains("freezePosZ")) rb->freezePosZ = rbJson["freezePosZ"];
+	}
+
+	if (JSON.contains("ScriptComponent"))
+	{
+		auto scriptJson = JSON["ScriptComponent"];
+		std::string scriptName = scriptJson["ScriptName"];
+
+		// 保存された名前を見て、該当する自作スクリプトをアタッチする！
+		if (scriptName == "TestController")
+		{
+			AddComponent<TestController>();
+		}
+		// 今後自作のスクリプトを作ったらここに追加していくelse　ifで
 	}
 
 }

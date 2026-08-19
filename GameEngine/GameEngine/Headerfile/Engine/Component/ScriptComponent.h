@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Component/ComponentBase.h"
+#include <string>
 
 // ‘O•ûéŒ¾
 class ColliderBase;
@@ -23,5 +24,10 @@ public:
 	virtual void OnTriggerStay(ColliderBase* other)
 	{
 
+	}
+
+	virtual std::string GetScriptName() const // ©•ª‚ÌƒNƒ‰ƒX–¼‚ğ•¶š—ñ‚Å•Ô‚·ŠÖ”
+	{
+		return "UnknownScript";
 	}
 };

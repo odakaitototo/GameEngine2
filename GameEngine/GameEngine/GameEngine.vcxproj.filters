@@ -115,6 +115,9 @@
     <Filter Include="ヘッダー ファイル\Engine\System\Time">
       <UniqueIdentifier>{cf1418f7-7111-4991-9507-f02a282e6472}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Scripts\EngineTestScriipt">
+      <UniqueIdentifier>{88800878-cd70-4ecc-93b3-4a567131c675}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="Headerfile\Engine\System\Time\Time.h">
       <Filter>ヘッダー ファイル\Engine\System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Game\Script\EngineTestScriipt\TestController.h">
+      <Filter>ヘッダー ファイル\Game\Scripts\EngineTestScriipt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="SourceFile\Engine\System\Time\Time.cpp">
       <Filter>ソース ファイル\Engine\System\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Game\Script\EngineTestScriipt\TestController.cpp">
+      <Filter>ソース ファイル\Game\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

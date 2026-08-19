@@ -24,8 +24,8 @@ void Input::Update()
 		s_currentKeys[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
 	}
 }
-
-bool Input::GetKey(KeyCode key) // ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
+// ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
+bool Input::GetKey(KeyCode key)// ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
 {
 	return s_currentKeys[static_cast<int>(key)];
 }

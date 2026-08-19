@@ -9,12 +9,15 @@
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Component/MeshRendererComponent.h"
 #include "Engine/Scene/GameObject.h"
-
+#include "Engine/Component/ScriptComponent.h"
 
 #include <string>
 #include <functional>
 #include <filesystem>
 #include <vector>
+
+// 自作スクリプトを呼び出す場所
+#include "../Headerfile/Game/Script/EngineTestScriipt/TestController.h"
 
 namespace fs = std::filesystem;
 
@@ -629,6 +632,26 @@ void EditorUI::Draw(Application* app)
             ImGui::Checkbox("Z##Pos", &rigidbody->freezePosZ);
         }
 
+        ////////////////////////////
+        //
+        // 自作スクリプト
+        //
+        ////////////////////////////
+        auto script = obj->GetComponent<ScriptComponent>();
+        if (script)
+        {
+            ImGui::Separator();
+            ImGui::Text("Script: %s", script->GetScriptName().c_str());// スクリプト名表示
+
+            ImGui::SameLine(ImGui::GetWindowWidth() - 70);
+            if (ImGui::Button("Remove##Script"))
+            {
+                obj->RemoveComponent(script);
+            }
+
+
+        }
+
 
         // コンポーネント追加UI 
         ImGui::Separator();
@@ -662,6 +685,15 @@ void EditorUI::Draw(Application* app)
             if (!obj->GetComponent<RigidbodyComponent>())
             {
                 obj->AddComponent<RigidbodyComponent>();
+            }
+        }
+
+        // TestControllerの追加ボタン
+        if (ImGui::Button("Add TestController"))
+        {
+            if (!obj->GetComponent<ScriptComponent>())
+            {
+                obj->AddComponent<TestController>();
             }
         }
     }

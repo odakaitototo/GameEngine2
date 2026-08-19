@@ -25,9 +25,22 @@ public:
 	static void Intialize(); // 初期化
 	static void Update(); // 毎フレーム更新
 
-	static bool GetKey(KeyCode Key); // 押され続けているか
-	static bool GetKeyDown(KeyCode key); // 押した瞬間か
-	static bool GetKeyUp(KeyCode key); // 話した瞬間か
+
+	// 指定したキーが押されている間反応します
+	// 使い方：GetKey(KeyCode::W)
+	static bool GetKey(KeyCode Key);
+
+
+	
+	// 指定したキーが押された瞬間（押下が開始されたフレーム）かどうかを判定します。
+	// 使い方：GetKeyDown(KeyCode::W)
+	static bool GetKeyDown(KeyCode key);
+
+
+	
+	// 指定したキーが離されたかどうかを取得します。
+	// 使い方：GetKeyUp(KeyCode::W)
+	static bool GetKeyUp(KeyCode key);
 
 private:
 	// キーの現在の状態と1フレーム前の状態を記憶する配列

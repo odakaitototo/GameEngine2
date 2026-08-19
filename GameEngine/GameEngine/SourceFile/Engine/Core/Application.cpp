@@ -224,9 +224,12 @@ void Application::Run()
         m_imgui.Begin();
 
         // コンポーネントの基本更新
-        for (auto& obj : m_gameObjects)
+        if (m_engineMode == EngineMode::Play)
         {
-            obj->Update();
+            for (auto& obj : m_gameObjects)
+            {
+                obj->Update();
+            }
         }
 
         // カメラのモードごとの切り替え
@@ -248,11 +251,14 @@ void Application::Run()
             }
         }
 
-        // 後処理のUpdate
-        for (auto& obj : m_gameObjects)
+        if (m_engineMode == EngineMode::Play)
         {
-            // UpdateTransformで確定した最新の絶対座標を使って、動かす
-            obj->LateUpdate();
+            // 後処理のUpdate
+            for (auto& obj : m_gameObjects)
+            {
+                // UpdateTransformで確定した最新の絶対座標を使って、動かす
+                obj->LateUpdate();
+            }
         }
 
         if (m_engineMode == EngineMode::Play)
