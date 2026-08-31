@@ -147,6 +147,9 @@ public: // カメラ関係
     // エディタ中でゲームカメラをプレビューするかどうかのフラグ
     bool m_previewGameCamera = false;
 
+public:
+    static Application* GetInstance(); // エンジン本体を取得する関数
+
 private:
     // Windowsのメッセージを処理する関数
     static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

@@ -224,12 +224,9 @@ void Application::Run()
         m_imgui.Begin();
 
         // コンポーネントの基本更新
-        if (m_engineMode == EngineMode::Play)
+        for (auto& obj : m_gameObjects)
         {
-            for (auto& obj : m_gameObjects)
-            {
-                obj->Update();
-            }
+            obj->Update();
         }
 
         // カメラのモードごとの切り替え
@@ -251,14 +248,11 @@ void Application::Run()
             }
         }
 
-        if (m_engineMode == EngineMode::Play)
+        // 後処理のUpdate
+        for (auto& obj : m_gameObjects)
         {
-            // 後処理のUpdate
-            for (auto& obj : m_gameObjects)
-            {
-                // UpdateTransformで確定した最新の絶対座標を使って、動かす
-                obj->LateUpdate();
-            }
+            // UpdateTransformで確定した最新の絶対座標を使って、動かす
+            obj->LateUpdate();
         }
 
         if (m_engineMode == EngineMode::Play)
@@ -821,4 +815,9 @@ DirectX::XMMATRIX Application::GetCurrentProjectionMatrix()const
     }
 
     return m_camera.GetProjectionMatrix();
+}
+
+Application* Application::GetInstance() // 自作スクリプトでApplicationを呼び出すためのもの
+{
+    return g_app;
 }
