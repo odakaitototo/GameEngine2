@@ -24,15 +24,15 @@ void Input::Update()
 		s_currentKeys[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
 	}
 }
-// ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
-bool Input::GetKey(KeyCode key)// ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
+
+bool Input::GetKey(KeyCode key) // ‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚é‚©
 {
 	return s_currentKeys[static_cast<int>(key)];
 }
 
 bool Input::GetKeyDown(KeyCode key) // ‰Ÿ‚µ‚½uŠÔ‚©
 {
-	return s_currentKeys[static_cast<int>(key)];
+	return s_currentKeys[static_cast<int>(key)] && !s_prevKeys[static_cast<int>(key)];
 }
 
 bool Input::GetKeyUp(KeyCode key)

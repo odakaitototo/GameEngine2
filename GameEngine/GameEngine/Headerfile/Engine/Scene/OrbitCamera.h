@@ -25,6 +25,10 @@ public:
 	// 画面サイズが変った時にアスペクト比を調整する
 	void SetPerspective(float fovDeg, float aspect, float nearZ, float farZ);
 
+	// カメラの横回転の動き
+	void AddTargetYaw(float angle);
+	
+
 public: // Editorでカメラの数値をいじれるようにするための関数
 
 	// ImGuiから直接数値を返せるようにするために、参照(&)で返す
@@ -57,4 +61,7 @@ private: // Editorでカメラの数値をいじれるようにするための変数
 	float m_maxDistance = 50.0f; // ズームアウトの限界値の初期値
 	float m_rotateSpeed = 0.3f; // 回転スピードの初期値
 	float m_zoomSpeed = 1.5f; // ズームイン・アウトのスピードの初期値
+
+	float m_targetYaw = 0.0f; // oRbitCameraの初期Yawに合わせる
+	bool m_isSmoothRotating = false;
 };
