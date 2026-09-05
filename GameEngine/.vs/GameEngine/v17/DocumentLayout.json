@@ -248,7 +248,7 @@
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\System\\Physics\\PhysicsSysten.cpp",
               "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\System\\Physics\\PhysicsSysten.cpp",
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\System\\Physics\\PhysicsSysten.cpp",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAAO4BAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMEBAAAAAAAAAAAAAO4BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-08T22:00:00.356Z",
               "EditorCaption": ""
@@ -275,8 +275,7 @@
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
               "ViewState": "AgIAAJYAAAAAAAAAAAAAAAYBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-06-10T00:46:56.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-10T00:46:56.136Z"
             },
             {
               "$type": "Document",
@@ -288,8 +287,7 @@
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Scene\\SceneManager.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-08-13T18:42:54.255Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-13T18:42:54.255Z"
             },
             {
               "$type": "Document",

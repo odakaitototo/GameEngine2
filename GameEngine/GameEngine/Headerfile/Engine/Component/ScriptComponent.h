@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Component/ComponentBase.h"
+#include "Engine/Core/Application.h"
 #include <string>
 
 // 前方宣言
@@ -16,10 +17,17 @@ public:
 
 	}
 
-	virtual void Update() override // Playモードの時に毎フレーム呼ばれる
+	void Update() override final
 	{
+		if (Application::GetInstance()->GetEngineMode() != EngineMode::Play) // プレイモード中は処理をしない
+		{
+			return;
+		}
 
+		OnUpdate();
 	}
+
+	
 
 	virtual void OnTriggerStay(ColliderBase* other)
 	{
@@ -30,4 +38,12 @@ public:
 	{
 		return "UnknownScript";
 	}
+
+protected:
+
+	virtual void OnUpdate() // Playモードの時に毎フレーム呼ばれる
+	{
+
+	}
+
 };
