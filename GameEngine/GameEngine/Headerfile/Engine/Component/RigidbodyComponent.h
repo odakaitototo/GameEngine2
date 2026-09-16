@@ -13,7 +13,7 @@ public:
 	DirectX::XMFLOAT3 velocity = { 0.0f, 0.0f, 0.0f }; // オブジェクトのXYZ方向の移動速度の初期値
 
 	// エディタから調節できるパラメータ
-	float gravityScale = 1.0f; // 重力の強さ(1.0が通常0が無重力、マイナスなら上に落ちる)
+	float gravityScale = 20.0f; // 重力の強さ(1.0が通常0が無重力、マイナスなら上に落ちる)
 	float drag = 0.0f; // 空気抵抗(0.0で抵抗なし、値が大きいほど抵抗力が強くなる)
 
 	RigidbodyComponent() = default;

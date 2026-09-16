@@ -8,7 +8,7 @@ std::string TestController::GetScriptName() const
 	return "TestController";
 }
 
-void TestController::Update()
+void TestController::OnUpdate()
 {
 	// 自分がアタッチされているオブジェクトのTransformを取得
 	auto& transform = gameObject->GetTransform();

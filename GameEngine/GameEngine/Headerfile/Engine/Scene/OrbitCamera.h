@@ -45,6 +45,13 @@ public: // Editorでカメラの数値をいじれるようにするための関数
 	float& GetRotateSpeed() { return m_rotateSpeed; }
 	float& GetZoomSpeed() { return m_zoomSpeed; }
 
+	bool IsSmoothRotating() const // 外部から回転中かどうか見るための関数
+	{
+		return m_isSmoothRotating;
+	}
+
+	void RotatePitch(float deltaPitch); // 独立して動く横回転の関数
+
 private:
 	DirectX::XMFLOAT3 m_target; // 見つめる中心点
 	float m_distance; // ターゲットからの距離
@@ -56,7 +63,7 @@ private:
 
 private: // Editorでカメラの数値をいじれるようにするための変数
 	float m_minPitch = 8.0f; // 下を向く限界値の初期値
-	float m_maxPitch = 80.0f; // 上を向く限界値の初期値
+	float m_maxPitch = 89.0f; // 上を向く限界値の初期値
 	float m_minDistance = 2.0f; // ズームインの限界値の初期値
 	float m_maxDistance = 50.0f; // ズームアウトの限界値の初期値
 	float m_rotateSpeed = 0.3f; // 回転スピードの初期値

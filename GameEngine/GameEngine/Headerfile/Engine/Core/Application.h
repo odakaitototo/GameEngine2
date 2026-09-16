@@ -50,6 +50,11 @@ struct ConstantBufferTransform
     DirectX::XMFLOAT3 dummy; // 12バイト（これで合計16バイト）
 };
 
+struct BoneBuffer
+{
+    DirectX::XMFLOAT4X4 transforms[100];
+};
+
 
 struct UndoRecord
 {
@@ -128,9 +133,15 @@ public: // モード関係
 public://定数バッファの実態
 
     ComPtr<ID3D11Buffer> m_pConstantBuffer;
+    ComPtr<ID3D11Buffer> m_pBoneBuffer; // アニメーションデータ送信用
 
 public: // メッシュ関係
     std::shared_ptr<Mesh> m_commonMesh; // シーン全体で使いまわす、共通の三角形メッシュ
+
+    std::shared_ptr<Mesh> m_uiQuadMesh; // UI描画用の板ポリゴン
+
+    std::shared_ptr<Mesh> m_skyMesh; // スカイドーム用の球体メッシュ
+
 
 public: // カメラ関係
 
@@ -211,7 +222,14 @@ private: // テクスチャー関係
 
 
 private: // モード関係
+#ifdef _DEBUG
+    // デバッグ時はEditorモードから
     EngineMode m_engineMode = EngineMode::Editor; // 初期状態はエディタモード
+#else
+    // リリース時はゲーム本編
+    EngineMode m_engineMode = EngineMode::Play;
+
+#endif
     nlohmann::json m_sceneBackup; // プレイ直前の状態を保持するバックアップ変数
 
 private: // 物理関係

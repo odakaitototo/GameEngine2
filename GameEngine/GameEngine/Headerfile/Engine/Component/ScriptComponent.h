@@ -2,6 +2,7 @@
 #include "Engine/Component/ComponentBase.h"
 #include "Engine/Core/Application.h"
 #include <string>
+#include "../SourceFile/Engine/Json/json.hpp"
 
 // 前方宣言
 class ColliderBase;
@@ -26,6 +27,14 @@ public:
 
 		OnUpdate();
 	}
+
+public: // エディタ上で数値をいじれるようにするための関数
+
+	virtual void DrawImGui() {};
+
+	virtual void SaveToJson(nlohmann::json& json){}
+
+	virtual void LoadFromJson(const nlohmann::json& json) {}
 
 	
 

@@ -1,4 +1,5 @@
 #include "Engine/Graphics/Camera.h"
+#include "Engine/System/Time/Time.h"
 
 Camera::Camera()
 {
@@ -36,8 +37,12 @@ void Camera::SetAspect(float width, float height)
 	SetPerspective(DirectX::XMConvertToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
 }
 
+
 void Camera::Update()
 {
+	
+	
+
 	// 横回転（ピッチ）の制限　（真上や真下を向きすぎて首が折れないようにする）
 	if (m_pitch > 89.0f)
 	{

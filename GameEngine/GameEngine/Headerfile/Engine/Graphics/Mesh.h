@@ -14,6 +14,10 @@ struct Vertex
 	DirectX::XMFLOAT4 color; // 色 (r,g,b,a)
 	DirectX::XMFLOAT2 uv;
 
+	// アニメーション用のボーンデータ（最大4つまで影響を受ける設定）
+	UINT boneIndices[4] = { 0, 0, 0, 0 }; // 影響を与える骨の番号（インデックス）
+	float boneWeights[4] = { 1.0f, 0.0f, 0.0f, 0.0f }; // その骨からの影響度（合計が1.0になる）
+
 };
 
 class Mesh

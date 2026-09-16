@@ -121,6 +121,24 @@ void DirectXManager::BeginScene(float r, float g, float b, float a) {
     m_pContext->OMSetBlendState(nullptr, nullptr, 0xffffffff); // ブレンドステート（透明度）をリセット
    
     m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0); // 作った深度ルールをここで適応
+
+    // UI用のｚテスト無効かステート作成
+    D3D11_DEPTH_STENCIL_DESC dsDescUI = {};
+    dsDescUI.DepthEnable = FALSE; // zテストオフ（常に手前に描画）
+    dsDescUI.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // 深度の書き込み無し
+    m_pDevice->CreateDepthStencilState(&dsDescUI, &m_pDepthStencilState_UI);
+
+    // UI用の アルファブレンド（半透明・透過）ステートの作成
+    D3D11_BLEND_DESC blendDesc = {};
+    blendDesc.RenderTarget[0].BlendEnable = TRUE; // ブレンドを有効化
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 元の画像のアルファ値を使う
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 背景と合成する計算式
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    m_pDevice->CreateBlendState(&blendDesc, &m_pBlendState_Alpha);
 }
 
 void DirectXManager::EndScene() {
@@ -232,4 +250,21 @@ void DirectXManager::BeginSceneTexture(float width, float height, float r, float
     m_pContext->RSSetState(m_pRasterizerState.Get());
     m_pContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
     m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
+
+    
+}
+
+void DirectXManager::Set3DMode()
+{
+    // ｚテストあり、透過なし
+    m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
+    m_pContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+}
+
+void DirectXManager::SetUIMode()
+{
+    // zテストなし(常に手前),α透過あり
+    m_pContext->OMSetDepthStencilState(m_pDepthStencilState_UI.Get(), 0);
+    m_pContext->OMSetBlendState(m_pBlendState_Alpha.Get(), nullptr, 0xffffffff);
+        
 }

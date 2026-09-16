@@ -11,6 +11,6 @@ public:
 	std::string GetScriptName() const override;
 
 	// –ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚éˆ—
-	void Update() override;
+	void OnUpdate() override;
 	
 };

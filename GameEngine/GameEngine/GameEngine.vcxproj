@@ -74,9 +74,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions);WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)Dependencies/ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/ImGui;C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)packages\Assimp_native_4.1_v142.4.1.0\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -90,9 +90,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions);WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)Dependencies/ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/ImGui;C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)packages\Assimp_native_4.1_v142.4.1.0\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -104,9 +104,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions);_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)Dependencies/ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/ImGui;C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)packages\Assimp_native_4.1_v142.4.1.0\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -120,9 +120,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions);NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)Dependencies/ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/ImGui;C:\HAL\Game\DX\GameEngine\GameEngine\GameEngine\Headerfile;$(SolutionDir)packages\Assimp_native_4.1_v142.4.1.0\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\ImGui\ImGuizmo.h" />
+    <ClInclude Include="Headerfile\Engine\Animation\Animation.h" />
+    <ClInclude Include="Headerfile\Engine\Animation\Animator.h" />
     <ClInclude Include="Headerfile\Engine\Component\AABBColliderComponent.h" />
     <ClInclude Include="Headerfile\Engine\Component\ColliderBase.h" />
     <ClInclude Include="Headerfile\Engine\Component\ComponentBase.h" />
@@ -145,6 +147,7 @@
     <ClInclude Include="Headerfile\Engine\Graphics\DebugRenderer.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\DirectXManager.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Mesh.h" />
+    <ClInclude Include="Headerfile\Engine\Graphics\Model.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Renderer.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\Shader.h" />
     <ClInclude Include="Headerfile\Engine\Graphics\stb_image.h" />
@@ -171,6 +174,8 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Headerfile\Engine\Component\MeshRendererComponent.h" />
     <ClCompile Include="Headerfile\Engine\Component\RigidbodyComponent.h" />
+    <ClCompile Include="SourceFile\Engine\Animation\Animation.cpp" />
+    <ClCompile Include="SourceFile\Engine\Animation\Animator.cpp" />
     <ClCompile Include="SourceFile\Engine\Component\AABBColliderComponent.cpp" />
     <ClCompile Include="SourceFile\Engine\Component\OBBColliderComponent.cpp" />
     <ClCompile Include="SourceFile\Engine\Core\Application.cpp" />
@@ -180,6 +185,7 @@
     <ClCompile Include="SourceFile\Engine\Graphics\DebugRenderere.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\DirectXManager.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Mesh.cpp" />
+    <ClCompile Include="SourceFile\Engine\Graphics\Model.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Renderer.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Shader.cpp" />
     <ClCompile Include="SourceFile\Engine\Graphics\Texture.cpp" />
@@ -199,7 +205,17 @@
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets" Condition="Exists('..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets'))" />
+  </Target>
 </Project>

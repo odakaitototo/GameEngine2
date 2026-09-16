@@ -6,9 +6,11 @@
 #include "ImGuizmo.h"
 #include "Engine/Component/ColliderBase.h"
 #include "Engine/Component/RigidbodyComponent.h"
+#include "Engine/Component/ModelRendererComponent.h"
+#include "Engine/Component/SkyDomeController.h"
 
 // 自作スクリプトを呼び出す場所
-#include "../Headerfile/Game/Script/EngineTestScriipt/TestController.h"
+#include "Game/Script/EngineTestScriipt/TestController.h"
 
 #include <algorithm>
 
@@ -76,15 +78,38 @@ std::shared_ptr<GameObject> GameObject::Clone()const
 	auto& cloneTransform = clone->GetTransform();
 	cloneTransform.position = myTransform.position;
 	cloneTransform.rotation = myTransform.rotation;
-	cloneTransform.scale    = myTransform.scale;
+	cloneTransform.scale = myTransform.scale;
 
-	auto myRender = this->GetComponent<MeshRendererComponent>();
-	auto cloneRender = clone->GetComponent<MeshRendererComponent>();
-	cloneRender->color = myRender->color;
-	cloneRender->useSolidColor = myRender->useSolidColor;
-	cloneRender->mesh = myRender->mesh;
-	cloneRender->texture = myRender->texture;
-	
+	// 元のオブジェクトが持っているコンポーネントに合わせてコピーする
+	// MeshRendererのコピー
+	auto myMeshRender = this->GetComponent<MeshRendererComponent>();
+	if (myMeshRender)
+	{
+		auto cloneMeshRender = clone->GetComponent<MeshRendererComponent>();
+		if (!cloneMeshRender) cloneMeshRender = clone->AddComponent<MeshRendererComponent>(); // 無ければ付ける
+
+		cloneMeshRender->color = myMeshRender->color;
+		cloneMeshRender->useSolidColor = myMeshRender->useSolidColor;
+		cloneMeshRender->mesh = myMeshRender->mesh;
+		cloneMeshRender->texture = myMeshRender->texture;
+	}
+	else
+	{
+		// Meshが無い場合は、初期状態で付いているMeshRendererを外しておく
+		auto cloneMeshRender = clone->GetComponent<MeshRendererComponent>();
+		if (cloneMeshRender) clone->RemoveComponent(cloneMeshRender);
+	}
+
+	// ModelRendererのコピー
+	auto myModelRender = this->GetComponent<ModelRendererComponent>();
+	if (myModelRender)
+	{
+		auto cloneModelRender = clone->AddComponent<ModelRendererComponent>();
+		cloneModelRender->color = myModelRender->color;
+		cloneModelRender->useSolidColor = myModelRender->useSolidColor;
+		cloneModelRender->model = myModelRender->model; // 同じModelを使い回す（メモリ節約）
+		cloneModelRender->texture = myModelRender->texture;
+	}
 
 	return clone;
 } 
@@ -101,18 +126,66 @@ nlohmann::json GameObject::ToJson() const
 		{"scale", {transform.scale.x, transform.scale.y, transform.scale.z}},
 	};
 
-	auto render = GetComponent<MeshRendererComponent>();
-	JSON["color"] = { render->color.x,render->color.y, render->color.z, render->color.w };
-	JSON["useSolidColor"] = render->useSolidColor;
+	// どちらのRendererがついているか確認して色・テクスチャを保存
+	DirectX::XMFLOAT4 saveColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	bool saveSolid = false;
+	std::string texPath = "";
 
-	if (render->texture != nullptr)
+	// モデルかメッシュのどちらかを持っているかを判定するためのフラグ
+	bool hasRenderer = false;
+	std::string rendererType = "None"; // どのコンポーネントを付けるべきか記憶
+
+	auto meshR = GetComponent<MeshRendererComponent>();
+	if (meshR)
 	{
-		JSON["texturePath"] = render->texture->GetFilePath();
+		saveColor = meshR->color;
+		saveSolid = meshR->useSolidColor;
+		if (meshR->texture) texPath = meshR->texture->GetFilePath();
+		hasRenderer = true;
+		rendererType = "Mesh";
 	}
 	else
 	{
-		JSON["texturePath"] = "";
+		auto modelRenderer = GetComponent<ModelRendererComponent>();
+		if (modelRenderer)
+		{
+			saveColor = modelRenderer->color;
+			saveSolid = modelRenderer->useSolidColor;
+			if (modelRenderer->texture) texPath = modelRenderer->texture->GetFilePath();
+			hasRenderer = true;
+			rendererType = "Model";
+
+			 // FBXのファイルパスの保存
+			if (modelRenderer->model != nullptr)
+			{
+				JSON["ModelPath"] = modelRenderer->model->GetFilePath();
+			}
+		}
+		else // UIコンポーネント用のセーブ処理
+		{
+			auto uiRenderer = GetComponent<UIRendererComponent>();
+			if (uiRenderer)
+			{
+				saveColor = uiRenderer->color;
+				if (uiRenderer->texture) texPath = uiRenderer->texture->GetFilePath();
+				hasRenderer = true;
+				rendererType = "UI"; // 種類をUIとして記録
+				// UI固有のパラメータ（位置とサイズ）を保存
+				JSON["ui_position"] = { uiRenderer->position.x, uiRenderer->position.y };
+				JSON["ui_size"] = { uiRenderer->size.x, uiRenderer->size.y };
+			}
+		}
 	}
+
+	// レンダラー情報がある場合のみJSONに書き込む
+	if (hasRenderer)
+	{
+		JSON["RendererType"] = rendererType; // 再読み込み時にどちらのコンポーネントか判別するため
+		JSON["color"] = { saveColor.x, saveColor.y, saveColor.z, saveColor.w };
+		JSON["useSolidColor"] = saveSolid;
+		JSON["texturePath"] = texPath;
+	}
+
 
 	// 当たり判定の情報
 	auto collider = GetComponent<ColliderBase>();
@@ -159,13 +232,23 @@ nlohmann::json GameObject::ToJson() const
 		JSON["Rigidbody"] = rbJson;
 	}
 
-	auto script = GetComponent<ScriptComponent>();
-	if (script != nullptr)
+	nlohmann::json scriptsArray = nlohmann::json::array();
+	for (auto& comp : m_component)
 	{
-		nlohmann::json scriptJson;
-		// どのスクリプトが付いているか、名前を文字列として保存する
-		scriptJson["ScriptName"] = script->GetScriptName();
-		JSON["ScriptComponent"] = scriptJson;
+		auto script = std::dynamic_pointer_cast<ScriptComponent>(comp);
+		if (script != nullptr)
+		{
+			nlohmann::json scriptJson;
+			scriptJson["ScriptName"] = script->GetScriptName();
+
+			script->SaveToJson(scriptJson);
+
+			scriptsArray.push_back(scriptJson);
+		}
+	}
+	if (!scriptsArray.empty())
+	{
+		JSON["Scripts"] = scriptsArray;
 	}
 
 	return JSON;
@@ -178,35 +261,96 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 	auto& transformData = JSON.at("transform");
 	transform.position = { transformData["position"][0], transformData["position"][1],transformData["position"][2] };
 	transform.rotation = { transformData["rotation"][0],transformData["rotation"][1],transformData["rotation"][2] };
-	transform.scale    = { transformData["scale"][0],transformData["scale"][1],transformData["scale"][2] };
+	transform.scale = { transformData["scale"][0],transformData["scale"][1],transformData["scale"][2] };
 
-	auto render = GetComponent<MeshRendererComponent>();
-	if (JSON.contains("color"))
+	// 保存されたレンダラーの種類に応じてコンポーネントを設定
+	if (JSON.contains("RendererType"))
 	{
-		render->color.x = JSON["color"][0];
-		render->color.y = JSON["color"][1];
-		render->color.z = JSON["color"][2];
-		render->color.w = JSON["color"][3];
-	}
+		std::string type = JSON["RendererType"];
 
-	if (JSON.contains("useSolidColor"))
-	{
-		render->useSolidColor = JSON["useSolidColor"];
-	}
+		// 色とテクスチャの読み込み用の一時変数
+		DirectX::XMFLOAT4 loadColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		bool loadSolid = false;
+		std::shared_ptr<Texture> loadTex = nullptr;
 
-	if (JSON.contains("texturePath") && JSON["texturePath"] != "")
-	{
-		std::string path = JSON["texturePath"];
-		auto loadedTex = std::make_shared<Texture>();
-		if (loadedTex->Load(device, path))
+		if (JSON.contains("color"))
 		{
-			render->texture = loadedTex;
+			loadColor = { JSON["color"][0], JSON["color"][1], JSON["color"][2], JSON["color"][3] };
+		}
+		if (JSON.contains("useSolidColor"))
+		{
+			loadSolid = JSON["useSolidColor"];
+		}
+		if (JSON.contains("texturePath") && JSON["texturePath"] != "")
+		{
+			std::string path = JSON["texturePath"];
+			loadTex = std::make_shared<Texture>();
+			if (!loadTex->Load(device, path))
+			{
+				loadTex = nullptr; // 読み込み失敗時はnullにする
+			}
+		}
+
+		// コンポーネントへの適用
+		if (type == "Mesh")
+		{
+			// MeshRendererは初期化時に付いているのでそのまま使う
+			auto meshR = GetComponent<MeshRendererComponent>();
+			if (meshR)
+			{
+				meshR->color = loadColor;
+				meshR->useSolidColor = loadSolid;
+				meshR->texture = loadTex;
+			}
+		}
+		else if (type == "Model")
+		{
+			// Modelの場合は初期搭載のMeshを消してModelを付ける
+			auto meshRenderer = GetComponent<MeshRendererComponent>();
+			if (meshRenderer) RemoveComponent(meshRenderer);
+
+			auto modelRenderer = AddComponent<ModelRendererComponent>();
+			modelRenderer->color = loadColor;
+			modelRenderer->useSolidColor = loadSolid;
+			modelRenderer->texture = loadTex;
+
+			// 保存されたパスからFBXを読み込み直す
+			if (JSON.contains("ModelPath"))
+			{
+				std::string modelPath = JSON["ModelPath"];
+				auto newModel = std::make_shared<Model>();
+				if (newModel->Load(device, modelPath))
+				{
+					modelRenderer->model = newModel;
+				}
+			}
+		}
+		else if (type == "UI") // UIコンポーネント用のロード処理
+		{
+			// 最初から付いているMeshを外してからUIを付ける
+			auto meshRenderer = GetComponent<MeshRendererComponent>();
+			if (meshRenderer)
+			{
+				RemoveComponent(meshRenderer);
+			}
+
+			auto uiRenderer = AddComponent<UIRendererComponent>();
+			uiRenderer->color = loadColor;
+			uiRenderer->texture = loadTex;
+
+
+			// JSONに保存された位置とサイズを復元
+			if (JSON.contains("ui_position"))
+			{
+				uiRenderer->position = { JSON["ui_position"][0], JSON["ui_position"][1] };
+			}
+			if (JSON.contains("ui_size"))
+			{
+				uiRenderer->size = { JSON["ui_size"][0], JSON["ui_size"][1] };
+			}
 		}
 	}
-	else
-	{
-		render->texture = nullptr;
-	}
+
 
 	// Colliderの読み込み
 	if (JSON.contains("Collider"))
@@ -232,7 +376,7 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 
 			obb->localBoundingBox.Extents = DirectX::XMFLOAT3(colliderJson["Extents"][0], colliderJson["Extents"][1], colliderJson["Extents"][2]);
 
-			obb->localBoundingBox.Orientation = DirectX::XMFLOAT4(colliderJson["Orientation"][0], colliderJson["Orientation"][1], colliderJson["Orientation"][2],colliderJson["Orientation"][3]);
+			obb->localBoundingBox.Orientation = DirectX::XMFLOAT4(colliderJson["Orientation"][0], colliderJson["Orientation"][1], colliderJson["Orientation"][2], colliderJson["Orientation"][3]);
 		}
 	}
 
@@ -256,18 +400,48 @@ void GameObject::FromJson(const json& JSON, ID3D11Device* device)
 		std::string scriptName = scriptJson["ScriptName"];
 
 		// 保存された名前を見て、該当する自作スクリプトをアタッチする！
-		if (scriptName == "TestController")
+		if (scriptName == "TestController") AddComponent<TestController>();
+
+		// 今後自作のスクリプトを作ったらここに追加していくelse ifで
+		else if (scriptName == "SKyDomeController") AddComponent<SkyDomeController>();
+		
+		
+		
+	}
+
+
+	if (JSON.contains("Scripts"))
+	{
+		for (const auto& scriptJson : JSON["Scripts"])
 		{
-			AddComponent<TestController>();
+			std::string scriptName = scriptJson["ScriptName"];
+			if (scriptName == "TestController") AddComponent<TestController>();
+			// 今後新しいスクリプトを追加していく
+			
+			else if (scriptName == "SkyDomeController") AddComponent<SkyDomeController>();
+			
 		}
-		// 今後自作のスクリプトを作ったらここに追加していくelse　ifで
 	}
 
 }
 
 void GameObject::Draw(ID3D11DeviceContext* context)
 {
-	GetComponent<MeshRendererComponent>()->Draw(context);
+	// メッシュを持っていればメッシュ描画
+	auto meshRenderer = GetComponent<MeshRendererComponent>();
+	if (meshRenderer)
+	{
+		meshRenderer->Draw(context);
+		return;
+	}
+
+	// モデルを持っている場合はモデルを描画
+	auto modelRenderer = GetComponent<ModelRendererComponent>();
+	if (modelRenderer && modelRenderer->model != nullptr)
+	{
+		modelRenderer->model->Draw(context);
+		return;
+	}
 }
 
 void GameObject::UpdateTransform()

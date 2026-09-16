@@ -49,6 +49,7 @@ public:
 
 	void SetAspect(float width, float height); // 画面のサイズからアスペクト比を更新する関数
 
+
 private:
 	DirectX::XMMATRIX m_viewMatrix;
 	DirectX::XMMATRIX m_projectionMatrix;
@@ -58,4 +59,5 @@ private:
 	DirectX::XMFLOAT3 m_position = { 0.0f, 1.0f, -10.0f }; // 初期位置
 	float m_pitch = 0.0f; // 縦の回転数（おじぎ）
 	float m_yaw = 0.0f; // 横の回転角度（首振り）
+
 };

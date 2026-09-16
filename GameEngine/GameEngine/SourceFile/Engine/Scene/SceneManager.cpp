@@ -5,8 +5,17 @@
 
 #include <fstream>
 #include <vector>
+#include <Engine/Component/ScriptComponent.h>
 
 using json = nlohmann::json;
+
+std::string SceneManager::s_targetScene = "";
+
+void SceneManager::LoadWithLoadingScreen(Application* app, const std::string& targetFilename)
+{
+	s_targetScene = targetFilename; // 本当に遷移したいシーンを記憶する
+	LoadScene(app, "LoadingScene.json"); // ロード画面
+}
 
 void SceneManager::SaveScene(Application* app, const std::string& filename)
 {
@@ -49,9 +58,30 @@ void SceneManager::SaveScene(Application* app, const std::string& filename)
 	}
 }
 
+static std::string s_nextScene = "";
+static bool s_shouldLoadScene = false;
 
+// シーン遷移が一瞬過ぎてPlayerの入力が次のシーンに影響してしまうのでシーンの読み込み予約
 void SceneManager::LoadScene(Application* app, const std::string& filename)
 {
+	s_nextScene = filename;
+	s_shouldLoadScene = true;
+}
+
+void SceneManager::ExecuteLoadScene(Application* app)
+{
+	// 読み込み予約が無ければ何もしない
+	if (!s_shouldLoadScene)
+	{
+		return;
+	}
+
+
+	s_shouldLoadScene = false;
+
+	std::string filename = s_nextScene;
+
+
 	std::ifstream ifs(filename);
 	if (!ifs)
 	{
@@ -103,7 +133,15 @@ void SceneManager::LoadScene(Application* app, const std::string& filename)
 
 		auto obj = std::make_shared<GameObject>("");
 		obj->FromJson(j, app->m_dx.GetDevice());
-		obj->SetMesh(app->m_commonMesh);
+		// スカイドームの時は球体のメッシュで復元する
+		if (obj->GetName() == "SkyDome")
+		{
+			obj->SetMesh(app->m_skyMesh);
+		}
+		else
+		{
+			obj->SetMesh(app->m_commonMesh);
+		}
 		app->m_gameObjects.push_back(obj);
 	}
 
@@ -139,6 +177,17 @@ void SceneManager::LoadScene(Application* app, const std::string& filename)
 					}
 				}
 			}
+		}
+	}
+	// 新しくロードされたオブジェクトの Start() を呼び出す処理
+	int offset = (int)keepObjects.size();
+	for (int i = offset; i < app->m_gameObjects.size(); i++)
+	{
+		// オブジェクトにアタッチされている全てのスクリプトを取得
+		auto scripts = app->m_gameObjects[i]->GetComponents<ScriptComponent>();
+		for (auto& script : scripts)
+		{
+			script->Start(); // 新しいシーンが始まったのでStartを呼ぶ
 		}
 	}
 }

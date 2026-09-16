@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "Engine/System/Time/Time.h"
 #include "Engine/Component/ScriptComponent.h"
+#include "Engine/Scene/SceneManager.h"
 
 ////////////////////////////////////////////////////////-----メモ----////////////////////////////////////////////////////////////////////
 //
@@ -86,6 +87,71 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     // ドッキング機能を有効化する一文
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    // スカイドーム用球体メッシュ
+    std::vector<Vertex> skyVertices;
+    std::vector<UINT> skyIndices;
+    int latBands = 30; // 縦の分割数
+    int longBands = 30; // 横の分割数
+
+    for (int lat = 0; lat <= latBands; lat++)
+    {
+        float theta = lat * 3.14159265f / latBands;
+        float sinTheta = sin(theta);
+        float cosTheta = cos(theta);
+
+        for (int lon = 0; lon <= longBands; lon++)
+        {
+            float phi = lon * 2.0f * 3.14159265f / longBands;
+            float sinPhi = sin(phi);
+            float cosPhi = cos(phi);
+
+            Vertex v;
+            v.pos = { cosPhi * sinTheta, cosTheta, sinPhi * sinTheta }; // 球の座標
+            v.uv = { 1.0f -(float)lon / longBands, (float)lat / latBands }; // パノラマ画像用uv
+            v.color = { 1.0f,1.0f,1.0f,1.0f };
+            v.boneIndices[0] = 0; v.boneWeights[0] = 1.0f;
+            skyVertices.push_back(v);
+        }
+    }
+
+    for (int lat = 0; lat < latBands; lat++)
+    {
+        for (int lon = 0; lon < longBands; lon++)
+        {
+            int first = (lat * (longBands + 1)) + lon;
+            int second = first + longBands + 1;
+
+            // 内側から空を見上げるために面の裏表を逆（反時計回り）にして結ぶ
+            skyIndices.push_back(first);
+            skyIndices.push_back(second);
+            skyIndices.push_back(first + 1);
+
+            skyIndices.push_back(second);
+            skyIndices.push_back(second + 1);
+            skyIndices.push_back(first + 1);
+        }
+    }
+
+    m_skyMesh = std::make_shared<Mesh>();
+    m_skyMesh->Create(m_dx.GetDevice(), skyVertices, skyIndices);
+
+
+
+
+    // UI用の板ポリゴンの作成
+    // 左上を(0,0)右下を(1,1)
+    std::vector<Vertex> uiVertices = {
+        { { 0.0f, 0.0f, 0.0f }, { 1,1,1,1 }, { 0.0f, 0.0f }, {0,0,0,0}, {1,0,0,0} }, // 左上
+        { { 1.0f, 0.0f, 0.0f }, { 1,1,1,1 }, { 1.0f, 0.0f }, {0,0,0,0}, {1,0,0,0} }, // 右上
+        { { 0.0f, 1.0f, 0.0f }, { 1,1,1,1 }, { 0.0f, 1.0f }, {0,0,0,0}, {1,0,0,0} }, // 左下
+        { { 1.0f, 1.0f, 0.0f }, { 1,1,1,1 }, { 1.0f, 1.0f }, {0,0,0,0}, {1,0,0,0} }  // 右下
+    };
+    std::vector<UINT> uiIndices = { 0,1,2, 2,1,3 };
+
+    m_uiQuadMesh = std::make_shared<Mesh>();
+    m_uiQuadMesh->Create(m_dx.GetDevice(), uiVertices, uiIndices);
+
+
     m_commonMesh = std::make_shared<Mesh>();
     std::vector<Vertex> vertices =
     {
@@ -161,6 +227,14 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
         gridIndices.push_back(gridIndex++);
     }
 
+
+    // 四角形のウェイトを1.0にする
+    for (auto& v : vertices) { v.boneWeights[0] = 1.0f; }
+    m_commonMesh->Create(m_dx.GetDevice(), vertices, indices);
+
+    // グリッド線のウェイトも 1.0 にする
+    for (auto& v : gridVertices) { v.boneWeights[0] = 1.0f; }
+
     m_gridMesh = std::make_shared<Mesh>();
     m_gridMesh->Create(m_dx.GetDevice(), gridVertices, gridIndices);
     m_gridMesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
@@ -185,14 +259,22 @@ bool Application::Initialize(HINSTANCE hInstance, int width, int height)
     // バッファを生成（初期データは後でマイフレーム送るのでnullptr）
     m_dx.GetDevice()->CreateBuffer(&cbDesc, nullptr, &m_pConstantBuffer);
 
-
+    // ボーン用のバッファも生成
+    D3D11_BUFFER_DESC boneDesc = {};
+    boneDesc.Usage = D3D11_USAGE_DEFAULT;
+    boneDesc.ByteWidth = sizeof(BoneBuffer);
+    boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    m_dx.GetDevice()->CreateBuffer(&boneDesc, nullptr, m_pBoneBuffer.GetAddressOf());
 
     // レンズの設定
     float aspectRatio = m_screenWidth / m_screenHeight;
     float fovAngle = DirectX::XMConvertToRadians(60.0f);
     m_camera.SetPerspective(fovAngle, aspectRatio, 0.3f, 1000.0f);
 
-
+#ifndef _DEBUG
+    // リリース時のみ自動でタイトルシーンを読み込む
+    SceneManager::LoadScene(this, "TitleScene.json");
+#endif
 
     return true;
 }
@@ -216,12 +298,15 @@ void Application::Run()
         {
             break;
         }
+        SceneManager::ExecuteLoadScene(this);
 
         Input::Update();
         Time::Update();
 
-        // ImGuiのフレーム開始
+#ifdef _DEBUG
+        // ImGuiのフレーム開始(デバッグ時のみ)
         m_imgui.Begin();
+#endif
 
         // コンポーネントの基本更新
         for (auto& obj : m_gameObjects)
@@ -262,26 +347,22 @@ void Application::Run()
         }
 
 
+#ifdef _DEBUG
+        // デバッグ時（エディタあり）の描画
+        // テクスチャ（エディタの画面枠内用）にゲームを描画する
         m_dx.BeginSceneTexture(m_sceneWidth, m_sceneHeight, 0.2f, 0.f, 0.2f, 1.0f);
-
-        // 3D空間を描画
         m_renderer.Render(this);
-
-        // メイン画面への描画フェーズ
-        // 描画先をメイン画面に戻し画面をクリアする
-        // エディタ自体の背景色
+        // 実際のウィンドウの背景を灰色で塗りつぶす
         m_dx.BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
-
-        m_editorUI.Draw(this); // 「this」は、Application自身が「私のポインタを使ってね」 
-
-
-        //// 描画開始
-        //m_dx.BeginScene(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-        //m_renderer.Render(this); // 描画処理
-
-
-        // ImGuiをDirectXの上に重ねて描画
-        m_imgui.End();
+        // エディタのUI（枠やボタン）を描画し、その中にテクスチャを貼る
+        m_editorUI.Draw(this);
+        m_imgui.End(); // ImGuiの終了処理
+#else
+        // リリース時（エディタなし）の描画
+        // ウィンドウ全体に直接ゲーム画面を描画する
+        m_dx.BeginScene(0.0f, 0.0f, 0.0f, 1.0f); // 画面を黒でクリア
+        m_renderer.Render(this); // 直接画面に描画
+#endif
         m_dx.EndScene(); // 描画終了
 
     }
@@ -731,6 +812,13 @@ void Application::StopPlayMode()
     {
         return;
     }
+    for (auto& obj : m_gameObjects)
+    {
+        if (obj->GetParent() != nullptr)
+        {
+            obj->SetParent(nullptr);
+        }
+    }
 
     // Play中にかかった変更を元に戻す
     m_gameObjects.clear();
@@ -745,7 +833,15 @@ void Application::StopPlayMode()
 
         auto obj = std::make_shared<GameObject>("");
         obj->FromJson(j, m_dx.GetDevice());
-        obj->SetMesh(m_commonMesh);
+        // スカイドームの時は球体のメッシュで復元する
+        if (obj->GetName() == "SkyDome")
+        {
+            obj->SetMesh(m_skyMesh);
+        }
+        else
+        {
+            obj->SetMesh(m_commonMesh);
+        }
         m_gameObjects.push_back(obj);
     }
 
@@ -820,4 +916,9 @@ DirectX::XMMATRIX Application::GetCurrentProjectionMatrix()const
 Application* Application::GetInstance() // 自作スクリプトでApplicationを呼び出すためのもの
 {
     return g_app;
+}
+
+void Application::SetEngineMode(EngineMode mode)
+{
+    m_engineMode = mode;
 }

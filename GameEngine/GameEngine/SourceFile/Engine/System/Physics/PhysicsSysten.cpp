@@ -169,7 +169,8 @@ void PhysicsSystem::Update(const std::vector<std::shared_ptr<GameObject>>& gameO
 						// —¼•ûTRigidbody‚ğ‚Á‚Ä‚¢‚È‚©‚Á‚½‚çB‚ğ“®‚©‚·
 						if (rigidbodyObjectA == nullptr && rigidbodyObjectB == nullptr)
 						{
-							weightB = 1.0f;
+							weightB = 0.0f;
+							weightA = 0.0f;
 						}
 
 

@@ -10,6 +10,9 @@
 #include "Engine/Component/MeshRendererComponent.h"
 #include "Engine/Scene/GameObject.h"
 #include "Engine/Component/ScriptComponent.h"
+#include "Engine/Graphics/Model.h"
+#include "Engine/Component/ModelRendererComponent.h"
+#include "Engine/Component/SkyDomeController.h"
 
 #include <string>
 #include <functional>
@@ -18,6 +21,7 @@
 
 // 自作スクリプトを呼び出す場所
 #include "../Headerfile/Game/Script/EngineTestScriipt/TestController.h"
+
 
 namespace fs = std::filesystem;
 
@@ -108,7 +112,7 @@ void EditorUI::Draw(Application* app)
         if (app->GetEngineMode() == EngineMode::Play)
         {
             // プレイモード中　右クリックドラッグでプレイ用のカメラを動かす
-            app->GetGameCamera().Rotate(mouseDelta.x, -mouseDelta.y);
+            //app->GetGameCamera().Rotate(mouseDelta.x, -mouseDelta.y);
         }
         else
         {
@@ -160,15 +164,15 @@ void EditorUI::Draw(Application* app)
 
     }
 
-    if (ImGui::IsWindowHovered() && app->GetEngineMode() == EngineMode::Play)
-    {
-        float wheelDelta = ImGui::GetIO().MouseWheel;
-        if (wheelDelta != 0.0f)
-        {
-            // ホイールを回した分だけカメラ距離を変更する
-            app->GetGameCamera().Zoom(wheelDelta);
-        }
-    }
+    //if (ImGui::IsWindowHovered() && app->GetEngineMode() == EngineMode::Play)
+    //{
+    //    float wheelDelta = ImGui::GetIO().MouseWheel;
+    //    if (wheelDelta != 0.0f)
+    //    {
+    //        // ホイールを回した分だけカメラ距離を変更する
+    //        app->GetGameCamera().Zoom(wheelDelta);
+    //    }
+    //}
 
     // ImGuizmoによるオブジェクト直感操作システム
     ImGuizmo::BeginFrame();
@@ -303,15 +307,21 @@ void EditorUI::Draw(Application* app)
 
         app->m_gameObjects.push_back(newObj);
     }
-    ImGui::Separator();
-    static char prefabLoadBuf[128] = "Yuka.pfb";
-    ImGui::InputText("Prefab File", prefabLoadBuf, sizeof(prefabLoadBuf));
 
-    // 上で入力された名前（prefabLoadBuf）のファイルを読み込む！
-    if (ImGui::Button("Instantiate Prefab"))
+    ImGui::SameLine();
+    
+    if (ImGui::Button("Create SkyDome"))
     {
-        app->InstantiatePrefab(prefabLoadBuf);
+        auto skyObj = std::make_shared<GameObject>("SkyDome");
+        skyObj->SetMesh(app->m_skyMesh); // 球体メッシュをセット
+
+        // 遠くの背景として機能するように、スケールを大きくする
+        skyObj->GetTransform().scale = { 500.0f,500.0f,500.0f };
+
+        skyObj->AddComponent<SkyDomeController>(); // 追従スクリプト
+        app->m_gameObjects.push_back(skyObj);
     }
+   
     ImGui::Separator(); // 区切るための線
 
     // 最上部にMainCameraを常時表示
@@ -548,24 +558,58 @@ void EditorUI::Draw(Application* app)
                 // 拡張子が画像（.png か .jpg）かどうかをチェック
                 if (filePath.find(".png") != std::string::npos || filePath.find(".jpg") != std::string::npos)
                 {
-                    // オブジェクトが持つ MeshRenderer を取得する
-                    auto render = obj->GetComponent<MeshRendererComponent>();
-                    if (render != nullptr)
+                    auto newTex = std::make_shared<Texture>();
+                    if (newTex->Load(app->m_dx.GetDevice(), filePath))
                     {
-                        // 新しいテクスチャをメモリ上に作り、画像をロードして上書きする！
-                        auto newTex = std::make_shared<Texture>();
-                        if (newTex->Load(app->m_dx.GetDevice(), filePath))
-                        {
-                            render->texture = newTex;
-                        }
+                        obj->SetTexture(newTex);
+                        obj->GetUseSolidColor() = false;
                     }
+                    
                 }
             }
             ImGui::EndDragDropTarget();
         }
+           
+        // FBXモデルのドラッグ＆ドロップ受付
+            ImGui::Separator();
+            ImGui::Text("Model Settings");
+            ImGui::Button("Drop FBX Model Here (.fbx)", ImVec2(-1, 40));
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+                {
+                    std::string filePath = (const char*)payload->Data;
+
+                    // 拡張子が .fbx のときだけ反応するようにする
+                    if (filePath.find(".fbx") != std::string::npos || filePath.find(".FBX") != std::string::npos)
+                    {
+                        // オブジェクトが ModelRendererComponent を持っていなければ自動で追加する
+                        auto modelRender = obj->GetComponent<ModelRendererComponent>();
+                        if (modelRender == nullptr)
+                        {
+                            // もし初期の MeshRenderer があれば外す
+                            auto meshR = obj->GetComponent<MeshRendererComponent>();
+                            if (meshR) obj->RemoveComponent(meshR);
+
+                            modelRender = obj->AddComponent<ModelRendererComponent>();
+                        }
+
+                        // 新しい Model を作ってドロップされたFBXを読み込ませる
+                        auto newModel = std::make_shared<Model>();
+                        if (newModel->Load(app->m_dx.GetDevice(), filePath))
+                        {
+                            modelRender->model = newModel;
+                            OutputDebugStringA("Model Dropped & Loaded Successfully!\n");
+                        }
+                    }
+                }
+                ImGui::EndDragDropTarget();
+
+            }
 
         auto collider = obj->GetComponent<ColliderBase>();
-        if (collider != nullptr) // 当たり判定を持っていたらUIを表示！
+        if (collider != nullptr) // 当たり判定を持っていたらUIを表示
         {
             ImGui::Separator();
             ImGui::Text("Collider Settings");
@@ -637,19 +681,38 @@ void EditorUI::Draw(Application* app)
         // 自作スクリプト
         //
         ////////////////////////////
-        auto script = obj->GetComponent<ScriptComponent>();
-        if (script)
+        auto scripts = obj->GetComponents<ScriptComponent>();
+        for (auto& script : scripts)
+        {
+            if (script)
+            {
+                ImGui::Separator();
+                ImGui::Text("Script: %s", script->GetScriptName().c_str());// スクリプト名表示
+                // ボタンのID（##以降）が被らないようにスクリプト名を合成する
+                std::string btnLabel = "Remove##" + script->GetScriptName();
+                ImGui::SameLine(ImGui::GetWindowWidth() - 70);
+                if (ImGui::Button(btnLabel.c_str()))
+                {
+                    obj->RemoveComponent(script);
+                }
+
+                if (ImGui::TreeNode(("Settings##" + script->GetScriptName()).c_str()))
+                {
+                    script->DrawImGui(); // それぞれのスクリプトの専用UIを描画
+                    ImGui::TreePop();
+                }
+            }
+        }
+
+        // UIコンポーネントがついている場合、位置やサイズをエディタから変更できるようにする
+        auto uiRenderer = obj->GetComponent<UIRendererComponent>();
+        if (uiRenderer)
         {
             ImGui::Separator();
-            ImGui::Text("Script: %s", script->GetScriptName().c_str());// スクリプト名表示
-
-            ImGui::SameLine(ImGui::GetWindowWidth() - 70);
-            if (ImGui::Button("Remove##Script"))
-            {
-                obj->RemoveComponent(script);
-            }
-
-
+            ImGui::Text("--- UI Renderer ---");
+            ImGui::DragFloat2("UI Position (X,Y)", &uiRenderer->position.x, 1.0f);
+            ImGui::DragFloat2("UI Size (W,H)", &uiRenderer->size.x, 1.0f);
+            ImGui::ColorEdit4("UI Color (RGBA)", &uiRenderer->color.x);
         }
 
 
@@ -688,14 +751,40 @@ void EditorUI::Draw(Application* app)
             }
         }
 
-        // TestControllerの追加ボタン
-        if (ImGui::Button("Add TestController"))
+        ImGui::SameLine();
+
+        // UIコンポーネントの追加ボタン
+        if (ImGui::Button("Add UIRendererComponent"))
         {
-            if (!obj->GetComponent<ScriptComponent>())
+            if (!obj->GetComponent<UIRendererComponent>())
             {
-                obj->AddComponent<TestController>();
+                // UIを追加する前に、最初からついているMeshやModelを外す
+                auto mesh = obj->GetComponent<MeshRendererComponent>();
+                if (mesh)
+                {
+                    obj->RemoveComponent(mesh);
+                }
+
+                auto model = obj->GetComponent<ModelRendererComponent>();
+                if (model)
+                {
+                    obj->RemoveComponent(model);
+                }
+
+                obj->AddComponent<UIRendererComponent>();
             }
         }
+
+
+
+        // TestControllerの追加ボタン
+        if (ImGui::Button("Add TestController"))
+        { 
+           obj->AddComponent<TestController>();
+        }
+
+        
+        
     }
     else
     {
@@ -934,7 +1023,7 @@ void EditorUI::Draw(Application* app)
 
             isDrawn = true; // 描画した
         }
-        else if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg" || extension == ".json" || extension == ".cpp" || extension == ".h")
+        else if (extension == ".pfb" || extension == ".hlsl" || extension == ".txt" || extension == ".png" || extension == ".jpg" || extension == ".json" || extension == ".cpp" || extension == ".h" || extension == ".fbx")
         {
             ImGui::PushID(filename.c_str());
             ImVec4 btnColor = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
@@ -1007,7 +1096,7 @@ void EditorUI::Draw(Application* app)
 
 
 
-        /////////////////////////////
+        /////////////////////////////CONTENT_BROWSER_ITEM
         //
         // モード切り替え
         // 

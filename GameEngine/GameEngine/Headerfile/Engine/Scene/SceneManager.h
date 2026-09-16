@@ -10,4 +10,10 @@ public:
 	// ‚Ç‚±‚©‚ç‚Å‚à SceneManager::LoadScene()‚ÆŒÄ‚×‚é‚æ‚¤‚Éstatic‚·‚é
 	static void SaveScene(Application* app, const std::string& filename);
 	static void LoadScene(Application* app, const std::string& filename);
+
+	static void ExecuteLoadScene(Application* app);
+
+	static void LoadWithLoadingScreen(Application* app, const std::string& targetFilename);
+	static std::string s_targetScene; // –{“–‚É‘JˆÚ‚µ‚½‚¢ƒV[ƒ“
+
 };

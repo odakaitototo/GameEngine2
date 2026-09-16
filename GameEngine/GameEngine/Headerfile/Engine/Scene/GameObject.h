@@ -8,6 +8,8 @@
 #include "Engine/Component/ComponentBase.h"
 #include <Engine/Component/TransformComponent.h>
 #include <Engine/Component/MeshRendererComponent.h>
+#include <Engine/Component/ModelRendererComponent.h>
+#include <Engine/Component/UIRendererComponent.h>
 // 外部ファイル
 #include <../SourceFile/Engine/Json/json.hpp> // JSON
 
@@ -61,6 +63,22 @@ public: // コンポーネントを追加取得するためのもの (ComponentBase)
 		return nullptr; // 見つからなかったら空を返す
 	}
 
+	// 複数のコンポーネントを全て取得する機能
+	template <class T>
+	std::vector<std::shared_ptr<T>> GetComponents() const
+	{
+		std::vector<std::shared_ptr<T>> result;
+		for (auto& c : m_component)
+		{
+			auto casted = std::dynamic_pointer_cast<T>(c);
+			if (casted)
+			{
+				result.push_back(casted); // 見つかったものを全てリストに詰める
+			}
+		}
+		return result;
+	}
+
 
 public: // コンポーネントの追加
 
@@ -87,28 +105,74 @@ public: // コンポーネントの追加
 
 	DirectX::XMFLOAT4& GetColor() // 単色
 	{
-		return GetComponent<MeshRendererComponent>()->color;
+		auto mesh = GetComponent<MeshRendererComponent>();
+		if (mesh)
+		{
+			return mesh->color;
+		}
+
+		auto model = GetComponent<ModelRendererComponent>();
+		if (model)
+		{
+			return model->color;
+		}
+
+		static DirectX::XMFLOAT4 dummy = { 1,1,1,1 };
+		return dummy;
 	}
 
 
 	bool& GetUseSolidColor() // 虹色
 	{
-		return GetComponent<MeshRendererComponent>()->useSolidColor;
+		auto mesh = GetComponent<MeshRendererComponent>();
+		if (mesh) return mesh->useSolidColor;
+		auto model = GetComponent<ModelRendererComponent>();
+		if (model) return model->useSolidColor;
+
+		static bool dummy = false;
+		return dummy;
 	}
 
 	void SetMesh(std::shared_ptr<Mesh>mesh)
 	{
-		GetComponent<MeshRendererComponent>()->mesh = mesh;
+		auto meshRenderer = GetComponent<MeshRendererComponent>();
+		if (meshRenderer)
+		{
+			meshRenderer->mesh = mesh;
+		}
 	}
 
 	void SetTexture(std::shared_ptr<Texture>texture)
 	{
-		GetComponent<MeshRendererComponent>()->texture = texture;
+		auto meshRenderer = GetComponent<MeshRendererComponent>();
+		if (meshRenderer)
+		{
+			meshRenderer->texture = texture;
+		}
+
+		// Modelの方にもテクスチャをセットできるようにする
+		auto modelRenderer = GetComponent<ModelRendererComponent>();
+		if (modelRenderer)
+		{
+			modelRenderer->texture = texture;
+		}
+
+		// UI用のテクスチャをセットできるようにする
+		auto uiRenderer = GetComponent<UIRendererComponent>();
+		if (uiRenderer)
+		{
+			uiRenderer->texture = texture;
+		}
 	}
 
 	std::shared_ptr<Texture> GetTexture() const
 	{
-		return GetComponent<MeshRendererComponent>()->texture;
+		auto mesh = GetComponent<MeshRendererComponent>();
+		if (mesh) return mesh->texture;
+		auto model = GetComponent<ModelRendererComponent>();
+		if (model) return model->texture;
+
+		return nullptr;
 	}
 
 	void Draw(ID3D11DeviceContext* context);

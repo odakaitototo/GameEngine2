@@ -14,6 +14,8 @@ public:
 	void BeginScene(float r, float g, float b, float a); // 画面をクリア
 	void EndScene(); // 画面を表示
 
+	void Set3DMode();
+	void SetUIMode();
 
 	// ImGuiなどがDirectXの本体にアクセスするための窓口
 	ID3D11Device* GetDevice() const { return m_pDevice.Get(); }
@@ -42,7 +44,8 @@ private:// Zバッファ用の変数
 	ComPtr<ID3D11DepthStencilView> m_pDepthStencilView; // 記録する際に使うもの
 	ComPtr<ID3D11DepthStencilState> m_pDepthStencilState; // 手前の場合塗るというルール
 
-
+	ComPtr<ID3D11DepthStencilState> m_pDepthStencilState_UI; // Zテスト無効用
+	ComPtr<ID3D11BlendState> m_pBlendState_Alpha; // 透過画像用
 	
 private: // ビューボート化
 

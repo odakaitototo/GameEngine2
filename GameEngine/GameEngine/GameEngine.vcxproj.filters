@@ -118,6 +118,15 @@
     <Filter Include="ヘッダー ファイル\Game\Scripts\EngineTestScriipt">
       <UniqueIdentifier>{88800878-cd70-4ecc-93b3-4a567131c675}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Animation">
+      <UniqueIdentifier>{99abf9c2-c8ea-4363-8f50-d6e8d81d95cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\Animation">
+      <UniqueIdentifier>{dfb79891-c09c-47c9-8227-11e50fdf20ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Scripts\EngineTestScript">
+      <UniqueIdentifier>{aa064f62-7950-42fe-b64f-c5006cd06461}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headerfile\Engine\Core\Application.h">
@@ -201,8 +210,17 @@
     <ClInclude Include="Headerfile\Engine\System\Time\Time.h">
       <Filter>ヘッダー ファイル\Engine\System\Time</Filter>
     </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Animation\Animation.h">
+      <Filter>ヘッダー ファイル\Engine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Animation\Animator.h">
+      <Filter>ヘッダー ファイル\Engine\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Headerfile\Game\Script\EngineTestScriipt\TestController.h">
       <Filter>ヘッダー ファイル\Game\Scripts\EngineTestScriipt</Filter>
+    </ClInclude>
+    <ClInclude Include="Headerfile\Engine\Graphics\Model.h">
+      <Filter>ヘッダー ファイル\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -299,13 +317,25 @@
     <ClCompile Include="SourceFile\Engine\System\Time\Time.cpp">
       <Filter>ソース ファイル\Engine\System\Time</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Animation\Animation.cpp">
+      <Filter>ソース ファイル\Engine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Animation\Animator.cpp">
+      <Filter>ソース ファイル\Engine\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="SourceFile\Game\Script\EngineTestScriipt\TestController.cpp">
-      <Filter>ソース ファイル\Game\Scripts</Filter>
+      <Filter>ソース ファイル\Game\Scripts\EngineTestScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Engine\Graphics\Model.cpp">
+      <Filter>ソース ファイル\Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ShaderFile\SimpleShader.hlsl">
       <Filter>シェーダーファイル</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -105,3 +105,17 @@ DirectX::XMMATRIX OrbitCamera::GetProjectionMatrix() const
 {
 	return DirectX::XMLoadFloat4x4(&m_projMatrix);
 }
+
+/////////////////////////////////////////////////////////
+//
+//横回転だけを行う他のカメラ移動と干渉しない独立したもの
+//
+///////////////////////////////////////////////////////
+
+void OrbitCamera::RotatePitch(float deltaPitch)
+{
+	m_pitch += deltaPitch * m_rotateSpeed;
+
+	// 限界角度を超えないように制限を付ける
+	m_pitch = std::clamp(m_pitch, m_minPitch, m_maxPitch);
+}
