@@ -1,6 +1,7 @@
 [
     {
         "ParentIndex": -1,
+        "RendererType": "Mesh",
         "color": [
             1.0,
             1.0,
@@ -8,16 +9,76 @@
             1.0
         ],
         "name": "GameObject0",
-        "texturePath": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\renga.png",
+        "texturePath": "",
         "transform": {
             "position": [
-                0.0,
+                -1.323855996131897,
                 0.0,
                 0.0
             ],
             "rotation": [
                 0.0,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "ParentIndex": 0,
+        "RendererType": "Mesh",
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject2",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                3.0886149406433105,
                 0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "useSolidColor": false
+    },
+    {
+        "ParentIndex": 1,
+        "RendererType": "Mesh",
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "GameObject1",
+        "texturePath": "",
+        "transform": {
+            "position": [
+                0.0,
+                2.7767481803894043,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                -0.0,
                 0.0
             ],
             "scale": [

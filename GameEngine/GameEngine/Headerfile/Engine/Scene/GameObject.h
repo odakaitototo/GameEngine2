@@ -187,7 +187,7 @@ public: // JSON関係
 
 
 	public: // 親子関係
-		void SetParent(GameObject* parent); // 親を設定する
+		void SetParent(GameObject* parent, bool KeepWorldPosition = true); // 親を設定する
 		GameObject* GetParent() const
 		{
 			return m_parent; // 親を取得する

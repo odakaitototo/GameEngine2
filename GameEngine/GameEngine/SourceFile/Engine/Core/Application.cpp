@@ -511,8 +511,8 @@ void Application::InstantiatePrefab(const std::string& filename)
                 int actualParentIndex = startIndex + parentIdx;
                 int actualChildIndex = startIndex + i;
 
-                // 親子関係の復元
-                m_gameObjects[actualChildIndex]->SetParent(m_gameObjects[actualParentIndex].get());
+                // falseの時だけ親子関係の復元
+                m_gameObjects[actualChildIndex]->SetParent(m_gameObjects[actualParentIndex].get(),false);
             }
         }
     }

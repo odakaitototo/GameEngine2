@@ -495,14 +495,39 @@ void GameObject::UpdateTransform()
 }
 
 // 親子関係の付けはずし
-void GameObject::SetParent(GameObject* parent)
+void GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 {
-	// 結合する前に自分の座標を記憶しておく
-	UpdateTransform();
-	DirectX::XMMATRIX oldWorldMat = DirectX::XMLoadFloat4x4(&GetTransform().worldMatrix);
+	// 循環参照(無限ループ)を防止するもの
+	GameObject* checkNode = parent;
+	while (checkNode != nullptr)
+	{
+		if (checkNode == this)
+		{
+
+			return;
+		}
+
+		checkNode = checkNode->GetParent();
+	}
+
+
+
+
+	DirectX::XMMATRIX oldWorldMat;
+
+
+	if (keepWorldPosition) // ワールド座標を維持する場合のみ元の行列を記憶
+	{
+		// 結合する前に自分の座標を記憶しておく
+		UpdateTransform();
+		oldWorldMat = DirectX::XMLoadFloat4x4(&GetTransform().worldMatrix);
+
+	}
+
+	
 
 	// 結合解除
-	if (m_parent)
+	if (m_parent) // 新しい親に結合した際に前の親と座標の取り合いになるから
 	{
 
 		m_parent->RemoveChild(this);
@@ -517,39 +542,45 @@ void GameObject::SetParent(GameObject* parent)
 	if (m_parent)
 	{
 		m_parent->AddChild(this);
-		m_parent->UpdateTransform(); // 親オブジェクトの座標を更新する
+		if (keepWorldPosition)
+		{
+			m_parent->UpdateTransform(); // 親オブジェクトの座標を更新する
+		}
 	}
 
-	// 子オブジェクトの座標がずれないように親オブジェクトから見たローカル座標を逆算する
-	DirectX::XMMATRIX newLocalMat;
-
-	if (m_parent)
+	if (keepWorldPosition) // trueの時だけ実行
 	{
-		// 新しい親オブジェクトのワールド行列の逆行列を作り自分の絶対座標に掛け算する
-		DirectX::XMVECTOR det;
-		DirectX::XMMATRIX parentWorldMat = DirectX::XMLoadFloat4x4(&m_parent->GetTransform().worldMatrix);
-		DirectX::XMMATRIX invParentWorldMat = DirectX::XMMatrixInverse(&det, parentWorldMat);
+		// 子オブジェクトの座標がずれないように親オブジェクトから見たローカル座標を逆算する
+		DirectX::XMMATRIX newLocalMat;
 
-		newLocalMat = oldWorldMat * invParentWorldMat;
+		if (m_parent)
+		{
+			// 新しい親オブジェクトのワールド行列の逆行列を作り自分の絶対座標に掛け算する
+			DirectX::XMVECTOR det;
+			DirectX::XMMATRIX parentWorldMat = DirectX::XMLoadFloat4x4(&m_parent->GetTransform().worldMatrix);
+			DirectX::XMMATRIX invParentWorldMat = DirectX::XMMatrixInverse(&det, parentWorldMat);
+
+			newLocalMat = oldWorldMat * invParentWorldMat;
+		}
+		else
+		{
+			// 親がいなくなった場合絶対座標がそのままローカル座標に残る
+			newLocalMat = oldWorldMat;
+		}
+
+		// 計算した新しい行列から、位置・回転・スケールの数値を抜き出してTransformに上書きする
+		DirectX::XMFLOAT4X4 localFloat;
+		DirectX::XMStoreFloat4x4(&localFloat, newLocalMat);
+
+		float t[3], r[3], s[3];
+		ImGuizmo::DecomposeMatrixToComponents(&localFloat.m[0][0], t, r, s);
+
+		auto& trans = GetTransform();
+		trans.position = { t[0], t[1], t[2] };
+		trans.rotation = { r[0], r[1], r[2] };
+		trans.scale = { s[0], s[1], s[2] };
+
 	}
-	else
-	{
-		// 親がいなくなった場合絶対座標がそのままローカル座標に残る
-		newLocalMat = oldWorldMat;
-	}
-
-	// 計算した新しい行列から、位置・回転・スケールの数値を抜き出してTransformに上書きする
-	DirectX::XMFLOAT4X4 localFloat;
-	DirectX::XMStoreFloat4x4(&localFloat, newLocalMat);
-
-	float t[3], r[3], s[3];
-	ImGuizmo::DecomposeMatrixToComponents(&localFloat.m[0][0], t, r, s);
-
-	auto& trans = GetTransform();
-	trans.position = { t[0], t[1], t[2] };
-	trans.rotation = { r[0], r[1], r[2] };
-	trans.scale    = { s[0], s[1], s[2] };
-
 	// 最後に新しいTransformでもう一度行列を更新
 	UpdateTransform();
 }
