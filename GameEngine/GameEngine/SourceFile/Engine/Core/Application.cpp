@@ -453,7 +453,7 @@ void Application::SavePrefab(int index, const std::string& filename)
     }
 }
 
-void Application::InstantiatePrefab(const std::string& filename)
+void Application::InstantiatePrefab(const std::string& filename, bool useSpawnPos, DirectX::XMFLOAT3 spawnPos)
 {
     std::ifstream ifs(filename);
     if (!ifs)
@@ -493,9 +493,13 @@ void Application::InstantiatePrefab(const std::string& filename)
         if (m_gameObjects.size() == startIndex)
         {
             obj->SetName(obj->GetName() + "(Clone)");
+
+            if (useSpawnPos) // もし生成位置が指定されたら座標を上書きする
+            {
+                obj->GetTransform().position = spawnPos;
+            }
         }
 
-        // シーンに配置
         m_gameObjects.push_back(obj);
     }
 
@@ -921,4 +925,84 @@ Application* Application::GetInstance() // 自作スクリプトでApplication�
 void Application::SetEngineMode(EngineMode mode)
 {
     m_engineMode = mode;
+}
+
+DirectX::XMFLOAT3  Application::GetRaycastGroundPosition(float mouseX, float mouseY, float viewWidth, float viewHeight)
+{
+    DirectX::XMMATRIX view = m_camera.GetViewMatrix();
+    DirectX::XMMATRIX proj = m_camera.GetProjectionMatrix();
+    DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+
+    // 2Dマウス座標から3D空間への光線(Ray)のスタート地点と奥地点を計算
+    DirectX::XMVECTOR rayOrigin = DirectX::XMVector3Unproject(
+        DirectX::XMVectorSet(mouseX, mouseY, 0.0f, 0.0f),
+        0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
+        proj, view, world
+    );
+
+    DirectX::XMVECTOR farPoint = DirectX::XMVector3Unproject(
+        DirectX::XMVectorSet(mouseX, mouseY, 1.0f, 0.0f),
+        0, 0, viewWidth, viewHeight, 0.0f, 1.0f,
+        proj, view, world
+    );
+
+    DirectX::XMVECTOR rayDir = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(farPoint, rayOrigin));
+
+    // Vector型から扱いやすいFloat3型への変換
+    DirectX::XMFLOAT3 originF, dirF;
+    DirectX::XMStoreFloat3(&originF, rayOrigin);
+    DirectX::XMStoreFloat3(&dirF, rayDir);
+
+    // 光線がY＝0の地面とぶつかる距離(t)を計算
+    DirectX::XMFLOAT3 hitPos = { 0.0f,0.0f,0.0f };
+
+    // オブジェクトとの当たり判定
+    float minHitDistance = 1000000.0f;
+    bool isHitObject = false;
+    // シーン内の全オブジェクトをチェック
+    for (int i = 0; i < m_gameObjects.size(); i++)
+    {
+        auto& t = m_gameObjects[i]->GetTransform();
+        DirectX::XMMATRIX objWorld = DirectX::XMLoadFloat4x4(&t.worldMatrix);
+        // 基本となる当たり判定の箱（ローカル）を作り、オブジェクトの世界(ワールド空間)に変換する
+        DirectX::BoundingBox localBox(DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+        DirectX::BoundingBox worldBox;
+        localBox.Transform(worldBox, objWorld);
+        // 光線と箱がぶつかったかチェック
+        float distance = 0.0f;
+        if (worldBox.Intersects(rayOrigin, rayDir, distance))
+        {
+            // 一番手前にあるオブジェクトを優先して記憶する
+            if (distance < minHitDistance)
+            {
+                minHitDistance = distance;
+                isHitObject = true;
+            }
+        }
+    }
+    // 最終的な座標の決定
+    if (isHitObject)
+    {
+        // オブジェクトに当たった場合：光線のスタート位置 ＋ (光線の向き × 距離) で交点を割り出す
+        DirectX::XMVECTOR hitPoint = DirectX::XMVectorAdd(rayOrigin, DirectX::XMVectorScale(rayDir, minHitDistance));
+        DirectX::XMStoreFloat3(&hitPos, hitPoint);
+
+        // 中心座標が表面にめり込むのを防ぐため、少し上にずらす
+        hitPos.y += 0.5f;
+    }
+    else
+    {
+        // どのオブジェクトにも当たらなかった場合：今まで通り Y=0 の床で計算
+        if (dirF.y != 0.0f)
+        {
+            float t = -originF.y / dirF.y;
+            if (t >= 0.0f)
+            {
+                hitPos.x = originF.x + dirF.x * t;
+                hitPos.y = 0.0f;
+                hitPos.z = originF.z + dirF.z * t;
+            }
+        }
+    }
+    return hitPos;
 }

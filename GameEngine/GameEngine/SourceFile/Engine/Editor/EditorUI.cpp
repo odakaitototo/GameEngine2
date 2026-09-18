@@ -86,7 +86,17 @@ void EditorUI::Draw(Application* app)
             std::string filePath(path);
             if (filePath.find(".pfb") != std::string::npos)
             {
-                app->InstantiatePrefab(filePath);
+                ImVec2 mousePos = ImGui::GetMousePos();
+                ImVec2 imagePos = ImGui::GetItemRectMin(); // 3D画面の左上の座標
+                ImVec2 imageSize = ImGui::GetItemRectSize(); // 3D画面サイズ
+
+                float localMouseX = mousePos.x - imagePos.x;
+                float localMouseY = mousePos.y - imagePos.y;
+
+                // 光線を飛ばして地面の3D座標をゲットする
+                DirectX::XMFLOAT3 spawnPos = app->GetRaycastGroundPosition(localMouseX, localMouseY, imageSize.x, imageSize.y);
+
+                app->InstantiatePrefab(filePath, true,spawnPos);
             }
         }
         ImGui::EndDragDropTarget();

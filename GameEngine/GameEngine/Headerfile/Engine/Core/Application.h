@@ -89,7 +89,7 @@ public: // 保存と読み込みの関数
 
     // プレハブの保存と読み込みの関数
     void SavePrefab(int index, const std::string& filename);
-    void InstantiatePrefab(const std::string& filename);
+    void InstantiatePrefab(const std::string& filename, bool useSpawnPos = false, DirectX::XMFLOAT3 spawnPos = {0.0f,0.0f,0.0f});
 
 public: // ファイルのドロップ関係
 
@@ -104,6 +104,7 @@ public: // ビューポート関係
 public: // オブジェクト関係
 
     void PickObject(float mouseX, float mouseY, float viewWidth, float viewHeight); // マウスクリックでオブジェクトを選択する関数
+    DirectX::XMFLOAT3 GetRaycastGroundPosition(float mouseX, float mouseY, float viewWidth, float);
 
     //ゲームオブジェクトのリスト（スマートポインターで完全に管理）
     std::vector<std::shared_ptr<GameObject>> m_gameObjects;
