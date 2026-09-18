@@ -190,8 +190,7 @@
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Scene\\GameObject.cpp",
               "ViewState": "AgIAAO8BAAAAAAAAAAAAAP0BAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-06-19T11:48:03.9Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-19T11:48:03.9Z"
             },
             {
               "$type": "Document",
@@ -199,9 +198,9 @@
               "Title": "Application.cpp",
               "DocumentMoniker": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp",
-              "ViewState": "AgIAAPADAAAAAAAAAAAAAPADAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
+              "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Core\\Application.cpp*",
+              "ViewState": "AgIAAPkDAAAAAAAAAAAAAAoEAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-06-10T00:46:56.136Z",
               "EditorCaption": ""
@@ -216,8 +215,7 @@
               "RelativeToolTip": "GameEngine\\Headerfile\\Engine\\Core\\Application.h",
               "ViewState": "AgIAAGAAAAAAAAAAAAAAAGoAAABjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-03T07:56:01.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-03T07:56:01.179Z"
             },
             {
               "$type": "Document",
@@ -227,10 +225,9 @@
               "RelativeDocumentMoniker": "GameEngine\\SourceFile\\Engine\\Editor\\EditorUI.cpp",
               "ToolTip": "C:\\HAL\\Game\\DX\\GameEngine\\GameEngine\\GameEngine\\SourceFile\\Engine\\Editor\\EditorUI.cpp",
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Editor\\EditorUI.cpp",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAAAF8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAAGIAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-08-01T14:29:57.401Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-01T14:29:57.401Z"
             },
             {
               "$type": "Document",
@@ -242,8 +239,7 @@
               "RelativeToolTip": "GameEngine\\SourceFile\\Engine\\Animation\\Animation.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-09-16T02:28:48.026Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-16T02:28:48.026Z"
             },
             {
               "$type": "Document",

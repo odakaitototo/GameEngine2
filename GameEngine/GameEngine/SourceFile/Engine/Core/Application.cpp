@@ -959,6 +959,8 @@ DirectX::XMFLOAT3  Application::GetRaycastGroundPosition(float mouseX, float mou
     // オブジェクトとの当たり判定
     float minHitDistance = 1000000.0f;
     bool isHitObject = false;
+    DirectX::XMMATRIX hitObjectWorld; // 当たったオブジェクトの行列を記憶するためのもの
+
     // シーン内の全オブジェクトをチェック
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
@@ -977,18 +979,43 @@ DirectX::XMFLOAT3  Application::GetRaycastGroundPosition(float mouseX, float mou
             {
                 minHitDistance = distance;
                 isHitObject = true;
+                hitObjectWorld = objWorld; // 一番手前のオブジェクトの行列を保存
             }
         }
     }
     // 最終的な座標の決定
     if (isHitObject)
     {
-        // オブジェクトに当たった場合：光線のスタート位置 ＋ (光線の向き × 距離) で交点を割り出す
         DirectX::XMVECTOR hitPoint = DirectX::XMVectorAdd(rayOrigin, DirectX::XMVectorScale(rayDir, minHitDistance));
-        DirectX::XMStoreFloat3(&hitPos, hitPoint);
 
-        // 中心座標が表面にめり込むのを防ぐため、少し上にずらす
-        hitPos.y += 0.5f;
+       // どの面に当たったかを判断するため、交点を「当たった箱のローカル空間」に逆変換する
+        DirectX::XMVECTOR det;
+        DirectX::XMMATRIX invWorld = DirectX::XMMatrixInverse(&det, hitObjectWorld);
+        DirectX::XMFLOAT3 localHit;
+        DirectX::XMStoreFloat3(&localHit, DirectX::XMVector3TransformCoord(hitPoint, invWorld));
+
+        DirectX::XMFLOAT3 normal = { 0,0,0 };
+        float absX = std::abs(localHit.x);
+        float absY = std::abs(localHit.y);
+        float absZ = std::abs(localHit.z);
+
+        if (absX > absY && absX > absZ)
+        {
+            normal.x = (localHit.x > 0) ? 1.0f : -1.0f; //右か左
+        }
+        else if (absY > absX && absY > absZ)
+        {
+            normal.y = (localHit.y > 0) ? 1.0f : -1.0f; // 上か下
+        }
+        else
+        {
+            normal.z = (localHit.z > 0) ? 1.0f : -1.0f; // 前か後ろ
+        }
+
+        // ④ 当たった箱の「中心座標」に「法線方向(+1.0)」を足したものが、隣の完璧なスナップ位置！
+        DirectX::XMVECTOR objPos = hitObjectWorld.r[3]; // 箱のワールド中心座標を抽出
+        DirectX::XMVECTOR snapPosVec = DirectX::XMVectorAdd(objPos, DirectX::XMVectorSet(normal.x, normal.y, normal.z, 0.0f));
+        DirectX::XMStoreFloat3(&hitPos, snapPosVec);
     }
     else
     {

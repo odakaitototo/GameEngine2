@@ -96,6 +96,9 @@ void EditorUI::Draw(Application* app)
                 // 光線を飛ばして地面の3D座標をゲットする
                 DirectX::XMFLOAT3 spawnPos = app->GetRaycastGroundPosition(localMouseX, localMouseY, imageSize.x, imageSize.y);
 
+                
+
+
                 app->InstantiatePrefab(filePath, true,spawnPos);
             }
         }
