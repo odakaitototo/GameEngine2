@@ -100,6 +100,7 @@ void EditorUI::Draw(Application* app)
 
 
                 app->InstantiatePrefab(filePath, true,spawnPos);
+                app->m_lastPrefabPath = filePath; // ドロップされたパスを記憶する
             }
         }
         ImGui::EndDragDropTarget();
@@ -113,6 +114,22 @@ void EditorUI::Draw(Application* app)
     // 画像がクリックされたかどうかの状態だけを保存しておく
     bool isImageHovered = ImGui::IsItemHovered();
     bool isMouseClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    // 連続設置モード（Shift + 左クリック）
+    if (isImageHovered && isMouseClicked && ImGui::GetIO().KeyShift)
+    {
+        // 記憶しているプレハブがあれば生成を実行
+        if (!app->m_lastPrefabPath.empty())
+        {
+            ImVec2 mousePos = ImGui::GetMousePos();
+            float localMouseX = mousePos.x - imagePos.x;
+            float localMouseY = mousePos.y - imagePos.y;
+
+            DirectX::XMFLOAT3 spawnPos = app->GetRaycastGroundPosition(localMouseX, localMouseY, imageSize.x, imageSize.y);
+
+            app->InstantiatePrefab(app->m_lastPrefabPath, true, spawnPos);
+        }
+    }
 
 
 

@@ -118,7 +118,7 @@ public: // ショートカットキー関係
     // Ctrl+V（複製）
     void ObujectDuplication(); // 「Ctrl+V」を押した時に複製する
 
-
+    std::string m_lastPrefabPath = ""; // 最後に生成したプレハブのパスを記憶
 
 
 public: // モード関係
